@@ -61,10 +61,10 @@ $("#danmu_dialog").dialog();
  //1.0.1
  var myFirebaseRef = new Firebase("https://popchrome.firebaseio.com/");
  
-myDataRef.on('child_added', function(snapshot) {
+/* myDataRef.on('child_added', function(snapshot) {
 	var message = snapshot.val();
 	alert(message);
-  });
+  }); */
  
  $("#danMuUserBtn").click(function() {
 	//alert("test");
