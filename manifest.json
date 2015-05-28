@@ -17,6 +17,9 @@
   "matches": [ "<all_urls>"],
   "css": ["css/jquery-ui.css"],
   "js":["lib/jquery-2.1.3.min.js","js/firebase.js","js/jquery-ui.js", "js/jquery.danmu.js","content_script.js"]
-  }]
+  }],
+
+  //using chrome API chrome.extension.getURL to separate dialog html view
+   "web_accessible_resources": ["danMu.html"]
   
 }
