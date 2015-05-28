@@ -6,10 +6,44 @@
 	
  */
 
+
+
+
+
+/**
+
+1.0.2 2015/05/28 ismail try DOMSubtreeModified solution
+
+**/
+var rect={};
+
+  $("body").bind("DOMSubtreeModified", function() {
+  //console.log("test");
+  var videoObj = $("video");
+  //console.dir(videoObj);
+  videoObj[0].getBoundingClientRect();
+  if(videoObj != undefined){
+    /*rect.left= video.offset().left;
+    rect.top= video.offset().top;
+    rect.height=video.height();
+    rect.width=video.width();*/
+    rect = videoObj[0].getBoundingClientRect();
+    //console.dir(rect);
+  }
+  else
+    return;
+
+});
+
+
+
+
 $(function() {
   
-var rect={};
+
 //rect = getVideoPos();
+
+/*
 document.body.addEventListener('click', function(){  
   
   //rect = getVideoPos();
@@ -28,33 +62,33 @@ document.body.addEventListener('click', function(){
    //$('#danmu').danmu("add_danmu",a_danmu); 
 
 }); 
+*/
 
 
 
 
 
 
-
-var htmlTag = " <select  name=\"color\" id=\"danMuUserColor\" > <option value=\"white\">白色</option>  "+
-"               <option value=\"red\">紅色</option>                             "+
-"               <option value=\"green\">綠色</option>                           "+
-"               <option value=\"blue\">藍色</option>                            "+
-"               <option value=\"yellow\">黃色</option>                          "+
+var htmlTag = " <select  name='color' id='danMuUserColor' > <option value='white'>白色</option>  "+
+"               <option value='red'>紅色</option>                             "+
+"               <option value='green'>綠色</option>                           "+
+"               <option value='blue'>藍色</option>                            "+
+"               <option value='yellow'>黃色</option>                          "+
 "               </select>                                                       "+
-"               <select name=\"size\" id=\"danMuUserTextSize\" >                        "+
-"               <option value=\"1\">大文字</option>                             "+
-"               <option value=\"0\">小文字</option>                             "+
+"               <select name='size' id='danMuUserTextSize' >                        "+
+"               <option value='1'>大文字</option>                             "+
+"               <option value='0'>小文字</option>                             "+
 "               </select>                                                       "+
-"               <select name=\"position\" id=\"danMuUserPosition\"   >                   "+
-"               <option value=\"0\">滾動</option>                               "+
-"               <option value=\"1\">頂端</option>                               "+
-"               <option value=\"2\">底端</option>                               "+
+"               <select name='position' id='danMuUserPosition'   >                   "+
+"               <option value='0'>滾動</option>                               "+
+"               <option value='1'>頂端</option>                               "+
+"               <option value='2'>底端</option>                               "+
 "               </select>                                                       "+
-"           <input type=\"textarea\" id=\"danMuUserText\" max=300 />                     "+
-"            <button type=\"button\" id=\"danMuUserBtn\" >送出</button>       "; 
+"           <input type='textarea' id='danMuUserText' max=300 />                     "+
+"            <button type='button' id='danMuUserBtn' >送出</button>       "; 
 
-$("body").prepend("<div id=\"danmu\" </div>");
-$("body").prepend("<div id=\"danmu_dialog\" title=\"彈幕視窗\">  " + htmlTag );  
+$("body").prepend("<div id='danmu' </div>");
+$("body").prepend("<div id='danmu_dialog' title='彈幕視窗'>  " + htmlTag );  
 $("#danmu_dialog").dialog();
  console.log("Danmu Start");
  
