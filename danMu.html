@@ -1,4 +1,6 @@
 
+
+<div id='dialogContext'>
 <select  name='color' id='danMuUserColor' > <option value='white'>白色</option>  ' 
                        <option value='red'>紅色</option>                              
                        <option value='green'>綠色</option>                            
@@ -15,4 +17,96 @@
                        <option value='2'>底端</option>                                
                        </select>                                                        
                    <input type='textarea' id='danMuUserText' max=300 />                      
-                    <button type='button' id='danMuUserBtn' >送出</button>      
+                    <button type='button' id='danMuUserBtn' ">送出</button>      
+</div>
+
+
+<script type="text/javascript">
+ 
+  $('#danMuUserText').keypress(function (e) {
+    if (e.keyCode == 13) {
+      sendDanmuFunc();
+    }
+  });
+
+
+  $("#danMuUserBtn").click(function () {
+    sendDanmuFunc(); // v1.0.2.1
+  });
+
+
+function sendDanmuFunc() {
+  var text = document.getElementById('danMuUserText').value;
+  var color = document.getElementById('danMuUserColor').value;
+  var position = document.getElementById('danMuUserPosition').value;
+  var time = $('#danmu').data("nowtime") + 3;
+  var size = document.getElementById('danMuUserTextSize').value;
+  var text_obj = '{ "text":"' + text + '","color":"' + color + '","size":"' + size + '","position":"' + position + '","time":' + time + '}';
+  //$.post("stone.php",{danmu:text_obj});
+  var text_obj = '{ "text":"' + text + '","color":"' + color + '","size":"' + size + '","position":"' + position + '","time":' + time + ',"isnew":""}';
+  var new_obj = eval('(' + text_obj + ')');
+
+  var a_danmu = {
+    "text" : text,
+    "color" : color,
+    "size" : size,
+    "position" : position,
+    "time" : time,
+    "isnew" : " "
+  };
+
+  $('#danmu').danmu("add_danmu", a_danmu);
+  document.getElementById('danMuUserText').value = '';
+  sendToFireBase(a_danmu);
+}
+
+//1.0.3
+function sendToFireBase(inputDanmuObj) {
+
+  var tmpUrl = document.URL;
+  tmpUrl = tmpUrl.replace(/\./g, "{dot}");
+  tmpUrl = tmpUrl.replace(/\#/g, "{sharp}");
+  tmpUrl = tmpUrl.replace(/\$/g, "{dollar}");
+  tmpUrl = tmpUrl.replace(/\[]/g, "{left}");
+  tmpUrl = tmpUrl.replace(/\]/g, "{right}");
+  tmpUrl = tmpUrl.replace(/\:/g, "{colon}");
+  tmpUrl = tmpUrl.replace(/\//g, "{slash}");
+  console.log(tmpUrl);
+
+  var randomSubName = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+      var r = Math.random() * 16 | 0,
+      v = c == 'x' ? r : (r & 0x3 | 0x8);
+      return v.toString(16);
+    });
+  var usersRef = myFirebaseRef.child("popChrome");
+  var popChromeRef = usersRef.child(tmpUrl);
+  var contentRef = popChromeRef.child(randomSubName);
+
+  /* "text" : text,
+  "color" : color,
+  "size" : size,
+  "position" : position,
+  "time" : time,
+  "isnew" : " " */
+
+  //[Todo] it might be injected so we need a white list here.
+  var content = "text:" + inputDanmuObj.text +
+    ",color:" + inputDanmuObj.color +
+    ",size:" + inputDanmuObj.size +
+    ",position:" + inputDanmuObj.position +
+    ",time:" + inputDanmuObj.time;
+
+  contentRef.set({
+    content
+  });
+}
+
+
+chrome.runtime.onMessage.addListener(
+    function(request, sender, sendResponse) {
+        console.dir(sender);
+        alert("what the fuck");
+    });
+
+
+</script>
