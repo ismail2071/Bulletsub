@@ -26,3 +26,12 @@ function onClickHandler(info, tab) {
 };
 
 
+/*chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
+   if(changeInfo && changeInfo.status == "complete"){
+		chrome.tabs.executeScript(tabId, {file: "content_script.js"});
+		
+   }
+   
+}); */
+
+
