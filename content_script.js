@@ -7,10 +7,16 @@
 1.0.3		2015/05/17	kusogray	send to firebase
 1.0.4		2015/05/24	kusogray	send / receive msg from background.js to content_script.js
 1.0.5		2015/05/24	kusogray	get json from firebase
-1.0.6 		2015/05/28 ismail try DOMSubtreeModified solution
-*1.0.7 		2015/05/28 ismail   separate dialog html view
-
+1.0.6 		2015/05/28  ismail try DOMSubtreeModified solution
+1.0.7 		2015/05/28  ismail   separate dialog html view
+1.0.8		2015/05/29  ismail support flash in some cases & onPasue,onResume danmu
+*1.0.9		2015/05/31  ismail mouse right key event
  */
+
+
+
+
+ 
 
 //1.0.1
 var myFirebaseRef = new Firebase("https://popchrome.firebaseio.com/");
@@ -28,60 +34,40 @@ chrome.runtime.onMessage.addListener(
         });
     });
 
-/**
 
-1.0.6 2015/05/28 ismail try DOMSubtreeModified solution
-
- **/
 var rect = {};
+var videoProps = {};
 
-var videoProps={};
 
 
-$("body").bind("DOMSubtreeModified", function() {
+//1.0.9
+$( "body" ).mousedown(function(e){ 
 
-    var videoObj = $("video");
-    //console.dir(videoObj);
-    //videoObj[0].getBoundingClientRect();
-    //console.log("changed" + videoObj[0]);
+if( e.button == 2 ) { 
 
-    //html5
-    if (videoObj.length > 0) {
-        rect = videoObj[0].getBoundingClientRect();
-        //console.log(videoObj[0].src);
-        videoProps.type='html5';
-        videoProps.obj=videoObj[0];
-        chrome.runtime.sendMessage({url: videoObj[0].src}, function(response) {
-  			console.log(response);
-		});
-    } 
-	//flash
-    else {
+    var videoObj=e.target;
+    console.dir(videoObj);
+    if( (videoObj.nodeName=="video") || (videoObj.getAttribute('type') == 'application/x-shockwave-flash') ){
 
-        var node_list = $("object");
-        var videoNode = [];
-
-        for (var i = 0; i < node_list.length; i++) {
-            var node = node_list[i];
-
-            if (node.getAttribute('type') == 'application/x-shockwave-flash')
-                videoNode.push(node);
-        }
-
-        if (rect) {
-            rect = videoNode[0].getBoundingClientRect();
-            console.log(videoNode[0].data);
-            //console.dir(rect);
-        }
-        videoProps.type='flash';
-        videoProps.obj=videoNode[0];
+        rect = videoObj.getBoundingClientRect();
+        videoProps.obj = videoObj;
+        videoProps.type = (videoObj.nodeName=="video") ? 'html5':'flash';
     }
+    else 
+    	return;
+}
 
 });
+
+
+
 
 var htmlTagFlag = false;
 
 $(function() {
+
+
+
 
     /*jQuery(document).ready(function () {
 	jQuery('video').bind('contextmenu', function () {
@@ -100,12 +86,15 @@ $(function() {
 
     $("body").prepend("<div id='danmu' </div>");
     $("body").prepend("<div id='danmu_dialog' title='彈幕視窗''>");
+
+
+
     $("#danmu_dialog").load(chrome.extension.getURL("danMu.html"));
 
     //$("#danmu_dialog").dialog();
     $("#danmu_dialog").hide();
 
-    $('video').bind('contextmenu', function() {
+    videoProps.obj.bind('contextmenu', function() {
 
         event.preventDefault();
         $("<div class='custom-popchrome-menu'>開啟彈幕視窗</div>")
@@ -165,18 +154,18 @@ $(function() {
 	}
 	});*/
 
-    
-	
-	videoProps.obj.onpause=function(){
 
-		$("#danmu").danmu('danmu_pause'); 
-	};
 
-	videoProps.obj.onplay=function(){
+    videoProps.obj.onpause = function() {
 
-		$('#danmu').danmu('danmu_resume'); 
+        $("#danmu").danmu('danmu_pause');
+    };
 
-	}
+    videoProps.obj.onplay = function() {
+
+        $('#danmu').danmu('danmu_resume');
+
+    }
 
     //var rect = {};
     //rect = getVideoPos();
