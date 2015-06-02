@@ -7,10 +7,11 @@
 1.0.3		2015/05/17	kusogray	send to firebase
 1.0.4		2015/05/24	kusogray	send / receive msg from background.js to content_script.js
 1.0.5		2015/05/24	kusogray	get json from firebase
-1.0.6 		2015/05/28  ismail try DOMSubtreeModified solution
-1.0.7 		2015/05/28  ismail   separate dialog html view
-1.0.8		2015/05/29  ismail support flash in some cases & onPasue,onResume danmu
- *1.0.9		2015/05/31  ismail mouse right key event
+1.0.6 		2015/05/28  ismail		try DOMSubtreeModified solution
+1.0.7 		2015/05/28  ismail  	separate dialog html view
+1.0.8		2015/05/29  ismail 		support flash in some cases & onPasue,onResume danmu
+1.0.9		2015/05/31  ismail		mouse right key event
+*1.0.10		2015/05/31  ismail 		dunmu display event bind to click menu
  */
 
 //1.0.1
@@ -117,6 +118,56 @@ $(function () {
 					htmlTagFlag = true;
 				}
 
+								console.log("Danmu Start");
+
+					/* myDataRef.on('child_added', function(snapshot) {
+					var message = snapshot.val();
+					alert(message);
+					}); */
+
+					var a_danmu = {
+						"text" : "豆喔!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!",
+						"color" : "red",
+						"size" : "1",
+						"position" : "0",
+						"time" : 1,
+						"isnew" : " "
+					};
+
+					console.log("Danmu init.");
+					//console.dir(rect);
+					//console.log("top:" + rect.top + " left:" + rect.left);
+
+					$("#danmu").danmu({
+						left : rect.left,
+						top : rect.top,
+						height : rect.height,
+						width : rect.width,
+						zindex : 1000,
+						speed : 30000,
+						opacity : 1,
+						font_size_small : 16,
+						font_size_big : 24,
+						top_botton_danmu_time : 6000
+					});
+
+					$('#danmu').danmu('danmu_resume');
+					$('#danmu').danmu("add_danmu", a_danmu);
+
+					console.log("Danmu Finish");
+
+					videoProps.obj.onpause = function () {
+
+					$("#danmu").danmu('danmu_pause');
+					};
+
+					videoProps.obj.onplay = function () {
+
+					$('#danmu').danmu('danmu_resume');
+
+					}
+
+
 				$("#danmu_dialog").dialog();
 			}
 		}
@@ -141,65 +192,9 @@ $(function () {
 	}
 	});*/
 
-	videoProps.obj.onpause = function () {
-
-		$("#danmu").danmu('danmu_pause');
-	};
-
-	videoProps.obj.onplay = function () {
-
-		$('#danmu').danmu('danmu_resume');
-
-	}
-
-	//var rect = {};
-	//rect = getVideoPos();
-	/*document.body.addEventListener('click', function () {
-
-	//rect = getVideoPos();
-
-	var time = $('#danmu').data("nowtime")
-	console.log("clicked!!" + time);
 
 
-	});*/
 
-	console.log("Danmu Start");
-
-	/* myDataRef.on('child_added', function(snapshot) {
-	var message = snapshot.val();
-	alert(message);
-	}); */
-
-	var a_danmu = {
-		"text" : "豆喔!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!",
-		"color" : "red",
-		"size" : "1",
-		"position" : "0",
-		"time" : 1,
-		"isnew" : " "
-	};
-
-	console.log("Danmu init.");
-	//console.dir(rect);
-	//console.log("top:" + rect.top + " left:" + rect.left);
-
-	$("#danmu").danmu({
-		left : rect.left,
-		top : rect.top,
-		height : rect.height,
-		width : rect.width,
-		zindex : 1000,
-		speed : 30000,
-		opacity : 1,
-		font_size_small : 16,
-		font_size_big : 24,
-		top_botton_danmu_time : 6000
-	});
-
-	$('#danmu').danmu('danmu_resume');
-	$('#danmu').danmu("add_danmu", a_danmu);
-
-	console.log("Danmu Finish");
+	
 
 });
