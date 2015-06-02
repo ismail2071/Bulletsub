@@ -11,7 +11,8 @@
 1.0.7 		2015/05/28  ismail  	separate dialog html view
 1.0.8		2015/05/29  ismail 		support flash in some cases & onPasue,onResume danmu
 1.0.9		2015/05/31  ismail		mouse right key event
-*1.0.10		2015/05/31  ismail 		dunmu display event bind to click menu
+1.0.10		2015/05/31  ismail 		danmu display event bind to click menu
+1.0.11		2015/06/02  kusogray 	flash context menu
  */
 
 //1.0.1
@@ -48,6 +49,28 @@ $("body").mousedown(function (e) {
 
 			if(videoProps.obj === $('video')){
 				test =  1;
+			}else{
+				// 1.0.11
+				//$('embed[type="application/x-shockwave-flash"]')
+				$('embed[type="application/x-shockwave-flash"]').bind('contextmenu', function () {
+				//$('.swfObject').bind('contextmenu', function () {
+					event.preventDefault();
+					$("<div class='custom-popchrome-menu'>開啟彈幕視窗</div>")
+					.appendTo("body")
+					.css({
+						top : event.pageY + "px",
+						left : event.pageX + "px"
+					});
+					$(".custom-popchrome-menu").css("z-index", "1000");
+					$(".custom-popchrome-menu").css("position", "absolute");
+					$(".custom-popchrome-menu").css("position", "absolute");
+					$(".custom-popchrome-menu").css("background-color", "#C0C0C0");
+					//$(".custom-popchrome-menu").css("background-color","#C0C0C0");
+					$(".custom-popchrome-menu").css("border", "1px solid black");
+					$(".custom-popchrome-menu").css("padding", "2px");
+					$(".custom-popchrome-menu").css("height", "20");
+					return false;
+				});
 			}
 			
 			$('video').off('contextmenu');
