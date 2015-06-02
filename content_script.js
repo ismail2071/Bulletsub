@@ -13,6 +13,7 @@
 1.0.9		2015/05/31  ismail		mouse right key event
 1.0.10		2015/05/31  ismail 		danmu display event bind to click menu
 1.0.11		2015/06/02  kusogray 	flash context menu
+1.0.12		2015/06/03  ismail		refine
  */
 
 //1.0.1
@@ -40,21 +41,21 @@ $("body").mousedown(function (e) {
 	if (e.button == 2) {
 
 		var videoObj = e.target;
-		console.dir(videoObj);
+		//console.dir(videoObj);
 		if ((videoObj.nodeName.toUpperCase() == "video".toUpperCase()) || (videoObj.getAttribute('type') == 'application/x-shockwave-flash')) {
 
 			rect = videoObj.getBoundingClientRect();
 			videoProps.obj = videoObj;
-			videoProps.type = (videoObj.nodeName == "video") ? 'html5' : 'flash';
+			videoProps.type = (videoObj.nodeName.toUpperCase() == "video".toUpperCase()) ? 'html5' : 'flash';
+			videoProps.target = (videoProps.type=='html5')?$(videoObj):$(videoObj.nodeName+"[type='application/x-shockwave-flash']");
 
-			if(videoProps.obj === $('video')){
-				test =  1;
-			}else{
 				// 1.0.11
-				//$('embed[type="application/x-shockwave-flash"]')
-				$('embed[type="application/x-shockwave-flash"]').bind('contextmenu', function () {
-				//$('.swfObject').bind('contextmenu', function () {
+				
+				videoProps.target.bind('contextmenu', function () {
 					event.preventDefault();
+
+					//$("<menu type='context' id='menu' class='custom-popchrome-menu'><menuitem label='開啟彈幕視窗'></menuitem><menu> ").appendTo("body")
+					
 					$("<div class='custom-popchrome-menu'>開啟彈幕視窗</div>")
 					.appendTo("body")
 					.css({
@@ -71,36 +72,8 @@ $("body").mousedown(function (e) {
 					$(".custom-popchrome-menu").css("height", "20");
 					return false;
 				});
-			}
 			
-			$('video').off('contextmenu');
-			$('video').bind('contextmenu', function () {
-
-				event.preventDefault();
-				$("<div class='custom-popchrome-menu'>開啟彈幕視窗</div>")
-				.appendTo("body")
-				.css({
-					top : event.pageY + "px",
-					left : event.pageX + "px"
-				});
-				$(".custom-popchrome-menu").css("z-index", "1000");
-				$(".custom-popchrome-menu").css("position", "absolute");
-				$(".custom-popchrome-menu").css("position", "absolute");
-				$(".custom-popchrome-menu").css("background-color", "#C0C0C0");
-				//$(".custom-popchrome-menu").css("background-color","#C0C0C0");
-				$(".custom-popchrome-menu").css("border", "1px solid black");
-				$(".custom-popchrome-menu").css("padding", "2px");
-				$(".custom-popchrome-menu").css("height", "20");
-
-				return false; // video preventDefault
-
-
-				/* z-index:1000;
-				position: absolute;
-				background-color:#C0C0C0;
-				border: 1px solid black;
-				padding: 2px;*/
-			});
+			
 		} else
 			return;
 	}
