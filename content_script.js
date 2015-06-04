@@ -14,6 +14,7 @@
 1.0.10		2015/05/31  ismail 		danmu display event bind to click menu
 1.0.11		2015/06/02  kusogray 	flash context menu
 1.0.12		2015/06/03  ismail		refine
+1.0.13		2015/06/04	ismail		calculate object offset from top for scroll websites(e.g. facebook)
  */
 
 //1.0.1
@@ -41,13 +42,19 @@ $("body").mousedown(function (e) {
 	if (e.button == 2) {
 
 		var videoObj = e.target;
-		//console.dir(videoObj);
+
+
+		console.dir(videoObj);
 		if ((videoObj.nodeName.toUpperCase() == "video".toUpperCase()) || (videoObj.getAttribute('type') == 'application/x-shockwave-flash')) {
 
 			rect = videoObj.getBoundingClientRect();
+
+			
 			videoProps.obj = videoObj;
 			videoProps.type = (videoObj.nodeName.toUpperCase() == "video".toUpperCase()) ? 'html5' : 'flash';
 			videoProps.target = (videoProps.type=='html5')?$(videoObj):$(videoObj.nodeName+"[type='application/x-shockwave-flash']");
+			
+
 
 				// 1.0.11
 				
@@ -134,9 +141,13 @@ $(function () {
 					//console.dir(rect);
 					//console.log("top:" + rect.top + " left:" + rect.left);
 
+					//
+					//1.0.13
+					var offset = videoProps.target.offset().top;
+
 					$("#danmu").danmu({
 						left : rect.left,
-						top : rect.top,
+						top : (rect.top+offset),
 						height : rect.height,
 						width : rect.width,
 						zindex : 1000,
