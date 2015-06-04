@@ -142,12 +142,14 @@ $(function () {
 					//console.log("top:" + rect.top + " left:" + rect.left);
 
 					//
-					//1.0.13
+					//1.0.14
+					// rect.top is a dynamic value means the distance from object to current view top
+					// #! we don't need to plus it with offset, offset is just sufficient
 					var offset = videoProps.target.offset().top;
-
+					console.log(offset+"+"+rect.top);
 					$("#danmu").danmu({
 						left : rect.left,
-						top : (rect.top+offset),
+						top : (offset),
 						height : rect.height,
 						width : rect.width,
 						zindex : 1000,
