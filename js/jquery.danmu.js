@@ -283,6 +283,7 @@ var cyntax = {
 						,"opacity": $(element).data("opacity")
 						,"white-space":"nowrap"
 						,"font-weight":"bold"
+						,"z-index":"2147483647"
 					});
 					if (danmus[i].color<"#777777")
 						$("#linshi").css({
@@ -364,7 +365,7 @@ Danmu.DEFAULTS = {
 		top: 0 , 
 		height: 360,
 		width: 640,
-		zindex :100,
+		zindex :2147483647,
 		speed:20000,
 		sumtime:65535	,
 		danmuss:{},

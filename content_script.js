@@ -15,6 +15,7 @@
 1.0.11		2015/06/02  kusogray 	flash context menu
 1.0.12		2015/06/03  ismail		refine
 1.0.13		2015/06/04	ismail		calculate object offset from top for scroll websites(e.g. facebook)
+1.0.14		2015/06/08	kusogray	listen to html5 player full screen event
  */
 
 //1.0.1
@@ -43,49 +44,45 @@ $("body").mousedown(function (e) {
 
 		var videoObj = e.target;
 
-
 		console.dir(videoObj);
 		if ((videoObj.nodeName.toUpperCase() == "video".toUpperCase()) || (videoObj.getAttribute('type') == 'application/x-shockwave-flash')) {
 
 			rect = videoObj.getBoundingClientRect();
 
-			
 			videoProps.obj = videoObj;
 			videoProps.type = (videoObj.nodeName.toUpperCase() == "video".toUpperCase()) ? 'html5' : 'flash';
-			videoProps.target = (videoProps.type=='html5')?$(videoObj):$(videoObj.nodeName+"[type='application/x-shockwave-flash']");
-			
+			videoProps.target = (videoProps.type == 'html5') ? $(videoObj) : $(videoObj.nodeName + "[type='application/x-shockwave-flash']");
 
+			// 1.0.11
 
-				// 1.0.11
-				
-				videoProps.target.bind('contextmenu', function () {
-					event.preventDefault();
+			videoProps.target.bind('contextmenu', function () {
+				event.preventDefault();
 
-					//$("<menu type='context' id='menu' class='custom-popchrome-menu'><menuitem label='開啟彈幕視窗'></menuitem><menu> ").appendTo("body")
-					
-					$("<div class='custom-popchrome-menu'>開啟彈幕視窗</div>")
-					.appendTo("body")
-					.css({
-						top : event.pageY + "px",
-						left : event.pageX + "px"
-					});
-					$(".custom-popchrome-menu").css("z-index", "1000");
-					$(".custom-popchrome-menu").css("position", "absolute");
-					$(".custom-popchrome-menu").css("position", "absolute");
-					$(".custom-popchrome-menu").css("background-color", "#C0C0C0");
-					//$(".custom-popchrome-menu").css("background-color","#C0C0C0");
-					$(".custom-popchrome-menu").css("border", "1px solid black");
-					$(".custom-popchrome-menu").css("padding", "2px");
-					$(".custom-popchrome-menu").css("height", "20");
-					return false;
+				//$("<menu type='context' id='menu' class='custom-popchrome-menu'><menuitem label='開啟彈幕視窗'></menuitem><menu> ").appendTo("body")
+
+				$("<div class='custom-popchrome-menu'>開啟彈幕視窗</div>")
+				.appendTo("body")
+				.css({
+					top : event.pageY + "px",
+					left : event.pageX + "px"
 				});
-			
-			
+				$(".custom-popchrome-menu").css("z-index", "1000");
+				$(".custom-popchrome-menu").css("position", "absolute");
+				$(".custom-popchrome-menu").css("background-color", "#C0C0C0");
+				//$(".custom-popchrome-menu").css("background-color","#C0C0C0");
+				$(".custom-popchrome-menu").css("border", "1px solid black");
+				$(".custom-popchrome-menu").css("padding", "2px");
+				$(".custom-popchrome-menu").css("height", "20");
+				return false;
+			});
+
 		} else
 			return;
 	}
 
 });
+
+
 
 var htmlTagFlag = false;
 
@@ -105,8 +102,11 @@ $(function () {
 	alert("child is appended");
 	});*/
 
-	$("body").prepend("<div id='danmu' </div>");
-	$("body").prepend("<div id='danmu_dialog' title='彈幕視窗''>");
+	$("body").append("<div id='testOver' style=\"z-index:2147483647 ;position:absolute; top: 10px; right: 10px;  border: 1px solid red; display: block; background: #FFF; \"> xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</div>");
+
+	//$( "video" ).parent().append("<div id='danmu' style=\"z-index:2147483647;position:absolute;\" </div>");
+	$("body").append("<div id='danmu' style=\"z-index:2147483647;position:absolute;\" </div>");
+	$("body").prepend("<div id='danmu_dialog' style=\"z-index:2147483647;\" title='彈幕視窗''>");
 
 	$("#danmu_dialog").load(chrome.extension.getURL("danMu.html"));
 
@@ -121,61 +121,60 @@ $(function () {
 					htmlTagFlag = true;
 				}
 
-								console.log("Danmu Start");
+				console.log("Danmu Start");
 
-					/* myDataRef.on('child_added', function(snapshot) {
-					var message = snapshot.val();
-					alert(message);
-					}); */
+				/* myDataRef.on('child_added', function(snapshot) {
+				var message = snapshot.val();
+				alert(message);
+				}); */
 
-					var a_danmu = {
-						"text" : "豆喔!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!",
-						"color" : "red",
-						"size" : "1",
-						"position" : "0",
-						"time" : 1,
-						"isnew" : " "
-					};
+				var a_danmu = {
+					"text" : "豆喔!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!",
+					"color" : "red",
+					"size" : "1",
+					"position" : "0",
+					"time" : 1,
+					"isnew" : " "
+				};
 
-					console.log("Danmu init.");
-					//console.dir(rect);
-					//console.log("top:" + rect.top + " left:" + rect.left);
+				console.log("Danmu init.");
+				//console.dir(rect);
+				//console.log("top:" + rect.top + " left:" + rect.left);
 
-					//
-					//1.0.14
-					// rect.top is a dynamic value means the distance from object to current view top
-					// #! we don't need to plus it with offset, offset is just sufficient
-					var offset = videoProps.target.offset().top;
-					console.log(offset+"+"+rect.top);
-					$("#danmu").danmu({
-						left : rect.left,
-						top : (offset),
-						height : rect.height,
-						width : rect.width,
-						zindex : 1000,
-						speed : 30000,
-						opacity : 1,
-						font_size_small : 16,
-						font_size_big : 24,
-						top_botton_danmu_time : 6000
-					});
+				//
+				//1.0.14
+				// rect.top is a dynamic value means the distance from object to current view top
+				// #! we don't need to plus it with offset, offset is just sufficient
+				var offset = videoProps.target.offset().top;
+				console.log(offset + "+" + rect.top);
+				$("#danmu").danmu({
+					left : rect.left,
+					top : (offset),
+					height : rect.height,
+					width : rect.width,
+					zindex : 2147483647,
+					speed : 30000,
+					opacity : 1,
+					font_size_small : 16,
+					font_size_big : 24,
+					top_botton_danmu_time : 6000
+				});
 
-					$('#danmu').danmu('danmu_resume');
-					$('#danmu').danmu("add_danmu", a_danmu);
+				$('#danmu').danmu('danmu_resume');
+				$('#danmu').danmu("add_danmu", a_danmu);
 
-					console.log("Danmu Finish");
+				console.log("Danmu Finish");
 
-					videoProps.obj.onpause = function () {
+				videoProps.obj.onpause = function () {
 
 					$("#danmu").danmu('danmu_pause');
-					};
+				};
 
-					videoProps.obj.onplay = function () {
+				videoProps.obj.onplay = function () {
 
 					$('#danmu').danmu('danmu_resume');
 
-					}
-
+				}
 
 				$("#danmu_dialog").dialog();
 			}
@@ -201,9 +200,29 @@ $(function () {
 	}
 	});*/
 
-
-
-
-	
-
 });
+
+
+// 1.0.14
+// listen to html5 player full screen event
+
+
+document.addEventListener("fullscreenchange", function (e) {
+	//fullscreenState.innerHTML = (document.fullscreen) ? "" : "not ";
+	console.log('Event1: ' + document.fullscreen);
+}, false);
+
+document.addEventListener("mozfullscreenchange", function (e) {
+	//fullscreenState.innerHTML = (document.mozFullScreen) ? "" : "not ";
+	console.log('Event2: ' + document.mozFullScreen);
+}, false);
+
+document.addEventListener("webkitfullscreenchange", function (e) {
+	//fullscreenState.innerHTML = (document.webkitIsFullScreen) ? "" : "not ";
+	console.log('Event3: ' + document.webkitIsFullScreen);
+}, false);
+
+document.addEventListener("msfullscreenchange", function (e) {
+	//fullscreenState.innerHTML = (document.msFullscreenElement) ? "" : "not ";
+	console.log('Event4: ' + document.msFullscreenElement);
+}, false);
