@@ -16,6 +16,8 @@
 1.0.12		2015/06/03  ismail		refine
 1.0.13		2015/06/04	ismail		calculate object offset from top for scroll websites(e.g. facebook)
 1.0.14		2015/06/08	kusogray	listen to html5 player full screen event
+1.0.15		2015/06/10	kusogray	danmu as list vo and add a "from" attribute
+1.0.16		2015/06/10	kusogray	get js back from danMu.html
  */
 
 //1.0.1
@@ -36,6 +38,73 @@ chrome.runtime.onMessage.addListener(
 
 var rect = {};
 var videoProps = {};
+
+function sendDanmuFunc() {
+	var text = document.getElementById('danMuUserText').value;
+	var color = document.getElementById('danMuUserColor').value;
+	var position = document.getElementById('danMuUserPosition').value;
+	var time = $('#danmu').data("nowtime") + 3;
+	var size = document.getElementById('danMuUserTextSize').value;
+	var text_obj = '{ "text":"' + text + '","color":"' + color + '","size":"' + size + '","position":"' + position + '","time":' + time + '}';
+	//$.post("stone.php",{danmu:text_obj});
+	var text_obj = '{ "text":"' + text + '","color":"' + color + '","size":"' + size + '","position":"' + position + '","time":' + time + ',"isnew":""}';
+	var new_obj = eval('(' + text_obj + ')');
+
+	var a_danmu = {
+		"text" : text,
+		"color" : color,
+		"size" : size,
+		"position" : position,
+		"time" : time,
+		"isnew" : " ",
+		"from" : "self"
+	};
+
+	$('#danmu').danmu("add_danmu", a_danmu);
+	document.getElementById('danMuUserText').value = '';
+	sendToFireBase(a_danmu);
+}
+
+//1.0.3
+function sendToFireBase(inputDanmuObj) {
+
+	var tmpUrl = document.URL;
+	tmpUrl = tmpUrl.replace(/\./g, "{dot}");
+	tmpUrl = tmpUrl.replace(/\#/g, "{sharp}");
+	tmpUrl = tmpUrl.replace(/\$/g, "{dollar}");
+	tmpUrl = tmpUrl.replace(/\[]/g, "{left}");
+	tmpUrl = tmpUrl.replace(/\]/g, "{right}");
+	tmpUrl = tmpUrl.replace(/\:/g, "{colon}");
+	tmpUrl = tmpUrl.replace(/\//g, "{slash}");
+	console.log(tmpUrl);
+
+	var randomSubName = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+			var r = Math.random() * 16 | 0,
+			v = c == 'x' ? r : (r & 0x3 | 0x8);
+			return v.toString(16);
+		});
+	var usersRef = myFirebaseRef.child("popChrome");
+	var popChromeRef = usersRef.child(tmpUrl);
+	var contentRef = popChromeRef.child(randomSubName);
+
+	/* "text" : text,
+	"color" : color,
+	"size" : size,
+	"position" : position,
+	"time" : time,
+	"isnew" : " " */
+
+	//[Todo] it might be injected so we need a white list here.
+	var content = "text:" + inputDanmuObj.text +
+		",color:" + inputDanmuObj.color +
+		",size:" + inputDanmuObj.size +
+		",position:" + inputDanmuObj.position +
+		",time:" + inputDanmuObj.time;
+
+	contentRef.set({
+		content
+	});
+}
 
 //1.0.9
 $("body").mousedown(function (e) {
@@ -82,7 +151,17 @@ $("body").mousedown(function (e) {
 
 });
 
-
+//1.0.15
+var g_danmuList = [];
+/*var a_danmu = {
+"text" : "豆喔!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!",
+"color" : "red",
+"size" : "1",
+"position" : "0",
+"time" : 1,
+"isnew" : " ",
+"from" : "self" // db, new_db
+};*/
 
 var htmlTagFlag = false;
 
@@ -102,16 +181,32 @@ $(function () {
 	alert("child is appended");
 	});*/
 
-	$("body").append("<div id='testOver' style=\"z-index:2147483647 ;position:absolute; top: 10px; right: 10px;  border: 1px solid red; display: block; background: #FFF; \"> xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</div>");
+	//$("body").append("<div id='testOver' style=\"z-index:2147483647 ;position:absolute; top: 10px; right: 10px;  border: 1px solid red; display: block; background: #FFF; \"> xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</div>");
 
 	//$( "video" ).parent().append("<div id='danmu' style=\"z-index:2147483647;position:absolute;\" </div>");
 	$("body").append("<div id='danmu' style=\"z-index:2147483647;position:absolute;\" </div>");
 	$("body").prepend("<div id='danmu_dialog' style=\"z-index:2147483647;\" title='彈幕視窗''>");
 
-	$("#danmu_dialog").load(chrome.extension.getURL("danMu.html"));
+	//1.0.16
+	$("#danmu_dialog").load(chrome.extension.getURL("danMu.html"), function () {
+		$('#danMuUserText').keypress(function (e) {
+			if (e.keyCode == 13) {
+				sendDanmuFunc();
+			}
+		});
 
-	//$("#danmu_dialog").dialog();
+		$("#danMuUserBtn").click(function () {
+			sendDanmuFunc(); // v1.0.2.1
+		});
+	});
+
 	$("#danmu_dialog").hide();
+
+	chrome.runtime.onMessage.addListener(
+		function (request, sender, sendResponse) {
+		console.dir(sender);
+		alert("what the fuck");
+	});
 
 	$(document).mousedown(function (event) {
 		if (event.which == 1) {
@@ -134,8 +229,10 @@ $(function () {
 					"size" : "1",
 					"position" : "0",
 					"time" : 1,
-					"isnew" : " "
+					"isnew" : " ",
+					"from" : "self"
 				};
+				g_danmuList.push(a_danmu);
 
 				console.log("Danmu init.");
 				//console.dir(rect);
@@ -161,7 +258,11 @@ $(function () {
 				});
 
 				$('#danmu').danmu('danmu_resume');
-				$('#danmu').danmu("add_danmu", a_danmu);
+
+				// add by list
+				for (var i = 0; i < g_danmuList.length; i++) {
+					$('#danmu').danmu("add_danmu", g_danmuList[i]);
+				}
 
 				console.log("Danmu Finish");
 
@@ -201,7 +302,6 @@ $(function () {
 	});*/
 
 });
-
 
 // 1.0.14
 // listen to html5 player full screen event
