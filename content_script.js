@@ -18,6 +18,7 @@
 1.0.14		2015/06/08	kusogray	listen to html5 player full screen event
 1.0.15		2015/06/10	kusogray	danmu as list vo and add a "from" attribute
 1.0.16		2015/06/10	kusogray	get js back from danMu.html
+1.0.17		2015/06/11	kusogray	change Facebook flash to html5
  */
 
 //1.0.1
@@ -38,6 +39,46 @@ chrome.runtime.onMessage.addListener(
 
 var rect = {};
 var videoProps = {};
+
+// 1.0.17
+function convertVideos() {
+  var embeds = document.getElementsByTagName('embed');
+
+  for (var i = embeds.length - 1; i >= 0; i--) {
+  
+    if (embeds[i].type = "application/x-shockwave-flash") {
+      var flashVideo = embeds[i];
+      var flashVars = flashVideo.attributes['flashvars'].value;
+      var decodedVars = decodeURIComponent(flashVars);
+
+      // Hidden in the vars is the URL for HD mp4 video source.
+      var n = decodedVars.match(/\"hd_src\":\"([^\"]+)\",/i);
+      var hdSrcUrl = n[1].split("\\").join(""); 
+
+      var video = document.createElement('video');
+      video.src = hdSrcUrl;
+      video.controls = true;
+      video.style.width = "100%";
+      
+      // Facebook has a super-deep, crazy DOM Structure. 
+      // Go up to the same level of play button overlay (hopefully).
+      var container = flashVideo.parentNode.parentNode.parentNode.parentNode;
+
+      // Make the HTML5 video the only child node
+      while( container.hasChildNodes() ){
+        container.removeChild(container.lastChild);
+      }
+      container.appendChild(video);
+    }
+  };
+}
+
+//1.0.17 current use only in FB
+var tmpUrl = document.URL;
+if( tmpUrl.indexOf('www.facebook.com')> -1){
+	setInterval(convertVideos, 3000); // can change a way to trigger it
+}
+
 
 function sendDanmuFunc() {
 	var text = document.getElementById('danMuUserText').value;
