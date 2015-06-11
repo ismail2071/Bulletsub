@@ -5,7 +5,7 @@ chrome.runtime.onInstalled.addListener(function() {
   var id = chrome.contextMenus.create({"title": title, "contexts":[context],
                                          "id": "context" + context});  
 										 
-var child1 = chrome.contextMenus.create({"title": "開啟彈幕視窗", "parentId": id, "onclick": onClickHandler, "contexts": [context]});
+var child1 = chrome.contextMenus.create({"title": "開啟彈幕視窗", "parentId": id, "onclick": openInputBox, "contexts": [context]});
 var child2 = chrome.contextMenus.create({"title": "開啟彈幕", "parentId": id, "onclick": onClickHandler, "contexts": [context]});									 
 var child3 = chrome.contextMenus.create({"title": "關閉彈幕", "parentId": id, "onclick": onClickHandler, "contexts": [context]});									 
 										 
@@ -15,13 +15,24 @@ var child3 = chrome.contextMenus.create({"title": "關閉彈幕", "parentId": id
 //chrome.contextMenus.onClicked.addListener(onClickHandler);
 
 // The onClicked callback function.
+function openInputBox(info, tab) {
+  /*var sText = info.selectionText;
+  var url = "https://www.google.com/search?q=" + encodeURIComponent(sText);  
+  window.open(url, '_blank');*/
+ console.dir(info);
+  alert("21 "+tab.id);
+  chrome.tabs.sendMessage(tab.id, {open: true}, function(response) {
+  });
+};
+
+
 function onClickHandler(info, tab) {
   /*var sText = info.selectionText;
   var url = "https://www.google.com/search?q=" + encodeURIComponent(sText);  
   window.open(url, '_blank');*/
-  alert(tab.id);
-  chrome.tabs.sendMessage(tab.id, {greeting: "hello"}, function(response) {
-   alert("test");
+ console.dir(info);
+  alert("22 "+tab.id);
+  chrome.tabs.sendMessage(tab.id, {open: "danmu"}, function(response) {
   });
 };
 

@@ -19,40 +19,45 @@
 1.0.15		2015/06/10	kusogray	danmu as list vo and add a "from" attribute
 1.0.16		2015/06/10	kusogray	get js back from danMu.html
 1.0.17		2015/06/11	kusogray	change Facebook flash to html5
+1.0.18		2015/06/12	ismail		right click flash will attempt convert html5 and refine some danmu window
  */
 
 //1.0.1
 var myFirebaseRef = new Firebase("https://popchrome.firebaseio.com/");
 
+
 // 1.0.4
 chrome.runtime.onMessage.addListener(
 	function (request, sender, sendResponse) {
-	alert("test3");
-	console.log(sender.tab ?
-		"from a content script:" + sender.tab.url :
-		"from the extension");
-	// if (request.greeting == "hello")
-	sendResponse({
-		farewell : "goodbye"
-	});
+		if (request.open){
+			alert("start");
+			renderInputBox();
+		}
+	//sendResponse({farewell : "goodbye"});
 });
 
 var rect = {};
 var videoProps = {};
 
-// 1.0.17
-function convertVideos() {
-  var embeds = document.getElementsByTagName('embed');
+// 1.0.17 1.0.18
+function convertVideos(convertTarget) {
+  var embeds = document.getElementsByTagName(convertTarget);
 
+  //var embeds = convertTarget;
+  console.log("tagname: "+convertTarget+" converting....");
+  //console.dir(embeds);
   for (var i = embeds.length - 1; i >= 0; i--) {
   
     if (embeds[i].type = "application/x-shockwave-flash") {
       var flashVideo = embeds[i];
       var flashVars = flashVideo.attributes['flashvars'].value;
+      console.dir(embeds[i]);
+      console.dir(flashVars);
       var decodedVars = decodeURIComponent(flashVars);
 
       // Hidden in the vars is the URL for HD mp4 video source.
       var n = decodedVars.match(/\"hd_src\":\"([^\"]+)\",/i);
+      console.dir(n);
       var hdSrcUrl = n[1].split("\\").join(""); 
 
       var video = document.createElement('video');
@@ -74,11 +79,12 @@ function convertVideos() {
 }
 
 //1.0.17 current use only in FB
+/*
 var tmpUrl = document.URL;
 if( tmpUrl.indexOf('www.facebook.com')> -1){
 	setInterval(convertVideos, 3000); // can change a way to trigger it
 }
-
+*/
 
 function sendDanmuFunc() {
 	var text = document.getElementById('danMuUserText').value;
@@ -157,12 +163,16 @@ $("body").mousedown(function (e) {
 		console.dir(videoObj);
 		if ((videoObj.nodeName.toUpperCase() == "video".toUpperCase()) || (videoObj.getAttribute('type') == 'application/x-shockwave-flash')) {
 
+
+
 			rect = videoObj.getBoundingClientRect();
 
 			videoProps.obj = videoObj;
 			videoProps.type = (videoObj.nodeName.toUpperCase() == "video".toUpperCase()) ? 'html5' : 'flash';
 			videoProps.target = (videoProps.type == 'html5') ? $(videoObj) : $(videoObj.nodeName + "[type='application/x-shockwave-flash']");
 
+			if(videoProps.type=="flash")
+				convertVideos(videoObj.nodeName);
 			// 1.0.11
 
 			videoProps.target.bind('contextmenu', function () {
@@ -228,26 +238,7 @@ $(function () {
 	$("body").append("<div id='danmu' style=\"z-index:2147483647;position:absolute;\" </div>");
 	$("body").prepend("<div id='danmu_dialog' style=\"z-index:2147483647;\" title='彈幕視窗''>");
 
-	//1.0.16
-	$("#danmu_dialog").load(chrome.extension.getURL("danMu.html"), function () {
-		$('#danMuUserText').keypress(function (e) {
-			if (e.keyCode == 13) {
-				sendDanmuFunc();
-			}
-		});
-
-		$("#danMuUserBtn").click(function () {
-			sendDanmuFunc(); // v1.0.2.1
-		});
-	});
-
-	$("#danmu_dialog").hide();
-
-	chrome.runtime.onMessage.addListener(
-		function (request, sender, sendResponse) {
-		console.dir(sender);
-		alert("what the fuck");
-	});
+	renderInputBox();
 
 	$(document).mousedown(function (event) {
 		if (event.which == 1) {
@@ -367,3 +358,24 @@ document.addEventListener("msfullscreenchange", function (e) {
 	//fullscreenState.innerHTML = (document.msFullscreenElement) ? "" : "not ";
 	console.log('Event4: ' + document.msFullscreenElement);
 }, false);
+
+	//1.0.16
+
+	//1.0.18 
+	function renderInputBox(){
+
+	$("#danmu_dialog").load(chrome.extension.getURL("danMu.html"), function () {
+		$('#danMuUserText').keypress(function (e) {
+			if (e.keyCode == 13) {
+				sendDanmuFunc();
+			}
+		});
+
+		$("#danMuUserBtn").click(function () {
+			sendDanmuFunc(); // v1.0.2.1
+		});
+	});
+
+	$("#danmu_dialog").hide();
+
+	}
