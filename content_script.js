@@ -20,19 +20,22 @@
 1.0.16		2015/06/10	kusogray	get js back from danMu.html
 1.0.17		2015/06/11	kusogray	change Facebook flash to html5
 1.0.18		2015/06/12	ismail		right click flash will attempt convert html5 and refine some danmu window
+1.0.19		2015/06/29  kusogray	two dialog issue
  */
 
 //1.0.1
 var myFirebaseRef = new Firebase("https://popchrome.firebaseio.com/");
 
+//1.0.19
+var danmuWindowExist = false;
 
 // 1.0.4
 chrome.runtime.onMessage.addListener(
 	function (request, sender, sendResponse) {
-		if (request.open){
-			alert("start");
-			renderInputBox();
-		}
+	if (request.open) {
+		alert("start");
+		renderInputBox();
+	}
 	//sendResponse({farewell : "goodbye"});
 });
 
@@ -41,50 +44,50 @@ var videoProps = {};
 
 // 1.0.17 1.0.18
 function convertVideos(convertTarget) {
-  var embeds = document.getElementsByTagName(convertTarget);
+	var embeds = document.getElementsByTagName(convertTarget);
 
-  //var embeds = convertTarget;
-  console.log("tagname: "+convertTarget+" converting....");
-  //console.dir(embeds);
-  for (var i = embeds.length - 1; i >= 0; i--) {
-  
-    if (embeds[i].type = "application/x-shockwave-flash") {
-      var flashVideo = embeds[i];
-      var flashVars = flashVideo.attributes['flashvars'].value;
-      console.dir(embeds[i]);
-      console.dir(flashVars);
-      var decodedVars = decodeURIComponent(flashVars);
+	//var embeds = convertTarget;
+	console.log("tagname: " + convertTarget + " converting....");
+	//console.dir(embeds);
+	for (var i = embeds.length - 1; i >= 0; i--) {
 
-      // Hidden in the vars is the URL for HD mp4 video source.
-      var n = decodedVars.match(/\"hd_src\":\"([^\"]+)\",/i);
-      console.dir(n);
-      var hdSrcUrl = n[1].split("\\").join(""); 
+		if (embeds[i].type = "application/x-shockwave-flash") {
+			var flashVideo = embeds[i];
+			var flashVars = flashVideo.attributes['flashvars'].value;
+			console.dir(embeds[i]);
+			console.dir(flashVars);
+			var decodedVars = decodeURIComponent(flashVars);
 
-      var video = document.createElement('video');
-      video.src = hdSrcUrl;
-      video.controls = true;
-      video.style.width = "100%";
-      
-      // Facebook has a super-deep, crazy DOM Structure. 
-      // Go up to the same level of play button overlay (hopefully).
-      var container = flashVideo.parentNode.parentNode.parentNode.parentNode;
+			// Hidden in the vars is the URL for HD mp4 video source.
+			var n = decodedVars.match(/\"hd_src\":\"([^\"]+)\",/i);
+			console.dir(n);
+			var hdSrcUrl = n[1].split("\\").join("");
 
-      // Make the HTML5 video the only child node
-      while( container.hasChildNodes() ){
-        container.removeChild(container.lastChild);
-      }
-      container.appendChild(video);
-    }
-  };
+			var video = document.createElement('video');
+			video.src = hdSrcUrl;
+			video.controls = true;
+			video.style.width = "100%";
+
+			// Facebook has a super-deep, crazy DOM Structure.
+			// Go up to the same level of play button overlay (hopefully).
+			var container = flashVideo.parentNode.parentNode.parentNode.parentNode;
+
+			// Make the HTML5 video the only child node
+			while (container.hasChildNodes()) {
+				container.removeChild(container.lastChild);
+			}
+			container.appendChild(video);
+		}
+	};
 }
 
 //1.0.17 current use only in FB
 /*
 var tmpUrl = document.URL;
 if( tmpUrl.indexOf('www.facebook.com')> -1){
-	setInterval(convertVideos, 3000); // can change a way to trigger it
+setInterval(convertVideos, 3000); // can change a way to trigger it
 }
-*/
+ */
 
 function sendDanmuFunc() {
 	var text = document.getElementById('danMuUserText').value;
@@ -163,15 +166,13 @@ $("body").mousedown(function (e) {
 		console.dir(videoObj);
 		if ((videoObj.nodeName.toUpperCase() == "video".toUpperCase()) || (videoObj.getAttribute('type') == 'application/x-shockwave-flash')) {
 
-
-
 			rect = videoObj.getBoundingClientRect();
 
 			videoProps.obj = videoObj;
 			videoProps.type = (videoObj.nodeName.toUpperCase() == "video".toUpperCase()) ? 'html5' : 'flash';
 			videoProps.target = (videoProps.type == 'html5') ? $(videoObj) : $(videoObj.nodeName + "[type='application/x-shockwave-flash']");
 
-			if(videoProps.type=="flash")
+			if (videoProps.type == "flash")
 				convertVideos(videoObj.nodeName);
 			// 1.0.11
 
@@ -309,7 +310,14 @@ $(function () {
 
 				}
 
+				//1.0.19
+				if (danmuWindowExist) {
+					$("#danmu_dialog").dialog('close');
+					danmuWindowExist = false;
+				} 
 				$("#danmu_dialog").dialog();
+				danmuWindowExist = true;
+				
 			}
 		}
 
@@ -359,10 +367,10 @@ document.addEventListener("msfullscreenchange", function (e) {
 	console.log('Event4: ' + document.msFullscreenElement);
 }, false);
 
-	//1.0.16
+//1.0.16
 
-	//1.0.18 
-	function renderInputBox(){
+//1.0.18
+function renderInputBox() {
 
 	$("#danmu_dialog").load(chrome.extension.getURL("danMu.html"), function () {
 		$('#danMuUserText').keypress(function (e) {
@@ -378,4 +386,4 @@ document.addEventListener("msfullscreenchange", function (e) {
 
 	$("#danmu_dialog").hide();
 
-	}
+}
