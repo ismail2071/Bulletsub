@@ -1,26 +1,75 @@
+<style type="text/css">
+  
+  #upper  {
+  display: inline-block;
+}
+
+</style>
 
 
-
-<div id='dialogContext' >
-<select  name='color' id='danMuUserColor' > <option value='white'>白色</option>  ' 
-                       <option value='red'>紅色</option>                              
-                       <option value='green'>綠色</option>                            
-                       <option value='blue'>藍色</option>                             
-                       <option value='yellow'>黃色</option>                           
-                       </select>                                                        
-                       <select name='size' id='danMuUserTextSize' >                         
-                       <option value='1'>大文字</option>                              
-                       <option value='0'>小文字</option>                             
-                       </select>                                                        
-                       <select name='position' id='danMuUserPosition'   >                    
-                       <option value='0'>滾動</option>                                
-                       <option value='1'>頂端</option>                               
-                       <option value='2'>底端</option>                                
-                       </select>                                                        
-                   <input type='textarea' id='danMuUserText' max=300 />                      
-                    <button type='button' id='danMuUserBtn' ">送出</button>      
+<div id='upper'>
+<label>COLOR:</label>
+  <table id="Palette" style="border-collapse:separate;border-spacing:4px;"><tbody>
+  </tbody></table>
+</div>
+<div id='upper'>
+<label>SIZE:</label>
+  <table id="danmusize" style="border-collapse:separate;border-spacing:4px;"><tbody>
+  </tbody></table>
+</div>
+<div id='upper'>
+<label>POSITION:</label>
+  <table id="pos" style="border-collapse:separate;border-spacing:4px;"><tbody>
+  </tbody></table>
 </div>
 
-<style type="text/css">
-#video{ position: relative; }
-</style>
+<form class="form-inline" id="lower">
+ <div class="form-group">
+    <input type="text" class="form-control" id="danMuUserText" placeholder="DANMU!!">
+  </div>
+  <button type="button" id="danMuUserBtn"  class="btn btn-info btn-sm">SUBMIT</button>
+</form>
+
+<script type="text/javascript">
+  
+  function cssstyle (color,size) {
+        return "background-color:"+color+";padding:5px;border-color:black;font-size:"+ size+";border-style:solid;border-width:1px;";
+  }
+
+  var colors=[["White","Red","Orange"],["Blue","Navy","Purple"],["Green","Yellow","Black"]];
+  var size =[{"text":'BIG','size':'25px'},{"text":'small','size':'8px'}];
+  var pos =["Random","Upper","Center","Lower"];
+
+             
+
+
+for (var i = 0; i <3; i++) {
+  $("#Palette").append("<tr>");
+  colors[i].map(
+  function(color){
+    var styleStr = cssstyle(color,'8px');
+    $("#Palette tbody").append("<td id="+color+" style="+styleStr+">&nbsp;</td>");   
+  });
+$("#Palette").append("</tr>");
+};
+
+  size.map(
+  function(sizeObj){
+    var styleStr = cssstyle("White",sizeObj.size);
+    $("#danmusize tbody").append("<tr><td id="+sizeObj.text+" style="+styleStr+">"+sizeObj.text+"</td></tr>"); 
+  });
+
+
+  pos.map(
+  function(postext){
+    var styleStr = cssstyle("White",postext);
+    $("#pos tbody").append("<tr><td id="+postext+" style="+styleStr+">"+postext+"</td></tr>"); 
+  });
+
+$("#lower").submit(function(e){
+    return false;
+});
+
+</script>
+
+
