@@ -1,8 +1,30 @@
 <style type="text/css">
   
-  #upper  {
+  #danmu_upper  {
   display: inline-block;
 }
+
+  #danmu_lower  {
+  display: inline-block;
+}
+
+.btn-custom {
+  background-color: hsl(199, 77%, 33%) !important;
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#1a93cb", endColorstr="#136b94");
+  background-image: -khtml-gradient(linear, left top, left bottom, from(#1a93cb), to(#136b94));
+  background-image: -moz-linear-gradient(top, #1a93cb, #136b94);
+  background-image: -ms-linear-gradient(top, #1a93cb, #136b94);
+  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #1a93cb), color-stop(100%, #136b94));
+  background-image: -webkit-linear-gradient(top, #1a93cb, #136b94);
+  background-image: -o-linear-gradient(top, #1a93cb, #136b94);
+  background-image: linear-gradient(#1a93cb, #136b94);
+  border-color: #136b94 #136b94 hsl(199, 77%, 30%);
+  color: #fff !important;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.19);
+  -webkit-font-smoothing: antialiased;
+}
+
 
 </style>
 
@@ -10,28 +32,27 @@
 <text id="danMuUserTextSize" style="display:none"></text>
 <text id="danMuUserPosition" style="display:none"></text>
 
-<div id='upper'>
+<div id='danmu_upper'>
 <label>COLOR:</label>
   <table id="Palette" style="border-collapse:separate;border-spacing:4px;"><tbody>
   </tbody></table>
 </div>
-<div id='upper'>
+<div id='danmu_upper'>
 <label>SIZE:</label>
   <table id="danmusize" style="border-collapse:separate;border-spacing:4px;"><tbody>
   </tbody></table>
 </div>
-<div id='upper'>
+<div id='danmu_upper'>
 <label>POSITION:</label>
   <table id="pos" style="border-collapse:separate;border-spacing:4px;"><tbody>
   </tbody></table>
 </div>
 
-<form class="form-inline" id="lower">
- <div class="form-group">
-    <input type="text" class="form-control" id="danMuUserText" placeholder="DANMU!!">
+<BR>
+ <div id="danmu_lower">
+  <input type="text" class="form-control" id="danMuUserText" placeholder="DANMU!!">
+  <button type="button" id="danMuUserBtn"  class="btn-custom">SUBMIT</button>
   </div>
-  <button type="button" id="danMuUserBtn"  class="btn btn-info btn-sm">SUBMIT</button>
-</form>
 
 <script type="text/javascript">
   
@@ -40,8 +61,8 @@
   }
 
   var colors=[["White","Red","Orange"],["Blue","Navy","Purple"],["Green","Yellow","Black"]];
-  var size =[{"text":'BIG','size':'25px'},{"text":'small','size':'8px'}];
-  var pos =["Random","Upper","Center","Lower"];
+  var size =[{"text":'BIG','size':'25px','value':'1'},{"text":'small','size':'8px','value':'0'}];
+  var pos =[["Random","0"],["Upper","1"],["Lower","2"]];
   var type = [["Palette","danMuUserColor"],["danmusize","danMuUserTextSize"],["pos","danMuUserPosition"]];
              
 
@@ -51,7 +72,7 @@ for (var i = 0; i <3; i++) {
   colors[i].map(
   function(color){
     var styleStr = cssstyle(color,'8px');
-    $("#Palette tbody").append("<td id="+color+" style="+styleStr+">&nbsp;</td>");   
+    $("#Palette tbody").append("<td id="+color+" style="+styleStr+" class="+color+" >&nbsp;</td>");   
   });
 $("#Palette").append("</tr>");
 };
@@ -59,19 +80,15 @@ $("#Palette").append("</tr>");
   size.map(
   function(sizeObj){
     var styleStr = cssstyle("White",sizeObj.size);
-    $("#danmusize tbody").append("<tr><td id="+sizeObj.text+" style="+styleStr+">"+sizeObj.text+"</td></tr>"); 
+    $("#danmusize tbody").append("<tr><td id="+sizeObj.text+" style="+styleStr+" class="+sizeObj.value+" >"+sizeObj.text+"</td></tr>"); 
   });
 
 
   pos.map(
   function(postext){
-    var styleStr = cssstyle("White",postext);
-    $("#pos tbody").append("<tr><td id="+postext+" style="+styleStr+">"+postext+"</td></tr>"); 
+    var styleStr = cssstyle("White",postext[0]);
+    $("#pos tbody").append("<tr><td id="+postext[0]+" style="+styleStr+" class="+postext[1]+" >"+postext[0]+"</td></tr>"); 
   });
-
-$("#lower").submit(function(e){
-    return false;
-});
 
 
 type.map(
@@ -81,7 +98,7 @@ type.map(
     $("#"+typeObj[0]+" tbody td").css("border-width","1px");
     $(this).css("border-color","red");
     $(this).css("border-width","2px");
-    $("#"+typeObj[1]).val($(this).attr('id'));
+    $("#"+typeObj[1]).val($(this).attr('class'));
     console.log($("#"+typeObj[1]).val());
 });
 
