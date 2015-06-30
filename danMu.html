@@ -6,6 +6,9 @@
 
 </style>
 
+<text id="danMuUserColor" style="display:none"></text>
+<text id="danMuUserTextSize" style="display:none"></text>
+<text id="danMuUserPosition" style="display:none"></text>
 
 <div id='upper'>
 <label>COLOR:</label>
@@ -39,7 +42,7 @@
   var colors=[["White","Red","Orange"],["Blue","Navy","Purple"],["Green","Yellow","Black"]];
   var size =[{"text":'BIG','size':'25px'},{"text":'small','size':'8px'}];
   var pos =["Random","Upper","Center","Lower"];
-
+  var type = [["Palette","danMuUserColor"],["danmusize","danMuUserTextSize"],["pos","danMuUserPosition"]];
              
 
 
@@ -69,6 +72,23 @@ $("#Palette").append("</tr>");
 $("#lower").submit(function(e){
     return false;
 });
+
+
+type.map(
+  function(typeObj){
+    $("#"+typeObj[0]+" tbody td").click(function() {     // function_td
+    $("#"+typeObj[0]+" tbody td").css("border-color","black");
+    $("#"+typeObj[0]+" tbody td").css("border-width","1px");
+    $(this).css("border-color","red");
+    $(this).css("border-width","2px");
+    $("#"+typeObj[1]).val($(this).attr('id'));
+    console.log($("#"+typeObj[1]).val());
+});
+
+  });
+
+
+
 
 </script>
 
