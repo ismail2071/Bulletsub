@@ -421,6 +421,13 @@ Danmu.prototype.add_danmu = function(arg){
 
 };
 
+
+Danmu.prototype.danmu_updateVideoPos = function(arg){
+	this.$element.css("left",arg.time);
+	this.$element.css("top",arg.top);
+	this.$element.css("width",arg.width);
+	this.$element.css("height",arg.height);
+};
 	
 function Plugin(option,arg) {
     return this.each(function () {

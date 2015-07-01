@@ -21,6 +21,7 @@
 1.0.17		2015/06/11	kusogray	change Facebook flash to html5
 1.0.18		2015/06/12	ismail		right click flash will attempt convert html5 and refine some danmu window
 1.0.19		2015/06/29  kusogray	two dialog issue
+1.0.20		2015/06/29  kusogray	fix multi video danmu pos
  */
 
 //1.0.1
@@ -277,18 +278,31 @@ $(function () {
 				// #! we don't need to plus it with offset, offset is just sufficient
 				var offset = videoProps.target.offset().top;
 				console.log(offset + "+" + rect.top);
-				$("#danmu").danmu({
-					left : rect.left,
-					top : (offset),
-					height : rect.height,
-					width : rect.width,
-					zindex : 2147483647,
-					speed : 30000,
-					opacity : 1,
-					font_size_small : 16,
-					font_size_big : 24,
-					top_botton_danmu_time : 6000
-				});
+				
+				//1.0.20
+				if (!danmuWindowExist) {
+					$("#danmu").danmu({
+						left : rect.left,
+						top : (offset),
+						height : rect.height,
+						width : rect.width,
+						zindex : 2147483647,
+						speed : 30000,
+						opacity : 1,
+						font_size_small : 16,
+						font_size_big : 24,
+						top_botton_danmu_time : 6000
+					});
+				} else {
+					var videoPosProp = {
+						"left" : rect.left,
+						"top" : offset,
+						"width" : rect.width,
+						"height" : rect.height
+					};
+					$('#danmu').danmu("danmu_updateVideoPos", videoPosProp);
+					//$("#danmu").danmu_updateVideoPos(videoPosProp);
+				}
 
 				$('#danmu').danmu('danmu_resume');
 
@@ -314,10 +328,10 @@ $(function () {
 				if (danmuWindowExist) {
 					$("#danmu_dialog").dialog('close');
 					danmuWindowExist = false;
-				} 
+				}
 				$("#danmu_dialog").dialog();
 				danmuWindowExist = true;
-				
+
 			}
 		}
 
