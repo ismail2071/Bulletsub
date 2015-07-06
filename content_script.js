@@ -43,6 +43,8 @@ chrome.runtime.onMessage.addListener(
 var rect = {};
 var videoProps = {};
 
+var currentRightClickVideo;
+
 // 1.0.17 1.0.18
 function convertVideos(convertTarget) {
 	var embeds = document.getElementsByTagName(convertTarget);
@@ -94,7 +96,8 @@ function sendDanmuFunc() {
 	var text = document.getElementById('danMuUserText').value;
 	var color = document.getElementById('danMuUserColor').value;
 	var position = document.getElementById('danMuUserPosition').value;
-	var time = $('#danmu').data("nowtime") + 3;
+
+	var time = Math.round(parseFloat($('#danmu').data("nowtime"))) + 2;
 	var size = document.getElementById('danMuUserTextSize').value;
 	var text_obj = '{ "text":"' + text + '","color":"' + color + '","size":"' + size + '","position":"' + position + '","time":' + time + '}';
 	//$.post("stone.php",{danmu:text_obj});
@@ -110,10 +113,10 @@ function sendDanmuFunc() {
 		"isnew" : " ",
 		"from" : "self"
 	};
-
+	console.log("send danmu: " + text + ", at time: " + time);
 	$('#danmu').danmu("add_danmu", a_danmu);
 	document.getElementById('danMuUserText').value = '';
-	sendToFireBase(a_danmu);
+	//sendToFireBase(a_danmu);
 }
 
 //1.0.3
@@ -163,6 +166,7 @@ $("body").mousedown(function (e) {
 	if (e.button == 2) {
 
 		var videoObj = e.target;
+		currentRightClickVideo = videoObj;
 
 		console.dir(videoObj);
 		if ((videoObj.nodeName.toUpperCase() == "video".toUpperCase()) || (videoObj.getAttribute('type') == 'application/x-shockwave-flash')) {
@@ -218,7 +222,40 @@ var g_danmuList = [];
 
 var htmlTagFlag = false;
 
+var tmpVideoUpdateTime = 0;
+
+var updateTimeTimerFlag = false;
+function updateTimeClock() {
+	if (currentRightClickVideo) {
+
+		tmpTime = Math.round(parseFloat(currentRightClickVideo.currentTime) * 10);
+		if (tmpTime != tmpVideoUpdateTime) {
+			tmpVideoUpdateTime = tmpTime;
+			//console.log("danmu time: " + $('#danmu').data("nowtime") + ", " + "影片: " + tmpTime);
+			$('#danmu').danmu("danmu_updateDanmuTimeLine", tmpTime);
+			//$('#danmu').data("nowtime",tmpTime);
+		}
+		//console.log(new Date() + ', In an IFRAME: ' + window.location.href);
+
+
+		/*var tmpOffset = videoProps.target.offset().top;
+		rect = currentRightClickVideo.getBoundingClientRect();
+		var videoPosProp = {
+		"left" : rect.left,
+		"top" : tmpOffset,
+		"width" : currentRightClickVideo.videoWidth,
+		"height" : currentRightClickVideo.videoHeight
+		};
+
+		$('#danmu').danmu("danmu_updateVideoProps", videoPosProp);
+		console.log("left" + rect.left + ", width: " + currentRightClickVideo.videoWidth);*/
+	}
+
+	//console.log(new Date());
+}
+var test = 0;
 $(function () {
+	test++;
 
 	/*jQuery(document).ready(function () {
 	jQuery('video').bind('contextmenu', function () {
@@ -246,11 +283,25 @@ $(function () {
 		if (event.which == 1) {
 			if (event.target.className == "custom-popchrome-menu") {
 				if (!htmlTagFlag) {
-
 					htmlTagFlag = true;
+				}
+				if (!updateTimeTimerFlag) {
+					var int = self.setInterval("updateTimeClock()", 100);
+					updateTimeTimerFlag = true;
 				}
 
 				console.log("Danmu Start");
+				tmpVideoUpdateTime = 0;
+
+				/*currentRightClickVideo.addEventListener('timeupdate', function () {
+				tmpTime = parseInt(currentRightClickVideo.currentTime);
+				if (tmpTime != tmpVideoUpdateTime) {
+				tmpVideoUpdateTime = tmpTime
+				console.log("now time: " + $('#danmu').data("nowtime"));
+				$('#danmu').danmu("danmu_updateDanmuTimeLine", parseInt(tmpTime));
+				}
+
+				}, false);*/
 
 				/* myDataRef.on('child_added', function(snapshot) {
 				var message = snapshot.val();
@@ -278,7 +329,7 @@ $(function () {
 				// #! we don't need to plus it with offset, offset is just sufficient
 				var offset = videoProps.target.offset().top;
 				console.log(offset + "+" + rect.top);
-				
+
 				//1.0.20
 				if (!danmuWindowExist) {
 					$("#danmu").danmu({
@@ -300,9 +351,36 @@ $(function () {
 						"width" : rect.width,
 						"height" : rect.height
 					};
-					$('#danmu').danmu("danmu_updateVideoPos", videoPosProp);
+					$('#danmu').danmu("danmu_updateVideoProps", videoPosProp);
 					//$("#danmu").danmu_updateVideoPos(videoPosProp);
 				}
+
+				$('#danMuUserText').keypress(function (e) {
+					if (e.keyCode == 111) {
+						var videoPosProp = {
+							"left" : rect.left,
+							"top" : offset,
+							"width" : 830,
+							"height" : rect.height
+						};
+						$('#danmu').danmu("danmu_updateVideoProps", videoPosProp);
+					}
+				});
+
+				console.log("初始left" + rect.left + ", width: " + currentRightClickVideo.videoWidth);
+
+				/*window.onresize = function (event) {
+				var tmpOffset = videoProps.target.offset().top;
+				rect = currentRightClickVideo.getBoundingClientRect();
+				var videoPosProp = {
+				"left" : rect.left,
+				"top" : tmpOffset,
+				"width" : currentRightClickVideo.videoWidth,
+				"height" : currentRightClickVideo.videoHeight
+				};
+				$('#danmu').danmu("danmu_updateVideoProps", videoPosProp);
+				console.log("resized!");
+				};*/
 
 				$('#danmu').danmu('danmu_resume');
 

@@ -16,9 +16,7 @@ var child3 = chrome.contextMenus.create({"title": "關閉彈幕", "parentId": id
 
 // The onClicked callback function.
 function openInputBox(info, tab) {
-  /*var sText = info.selectionText;
-  var url = "https://www.google.com/search?q=" + encodeURIComponent(sText);  
-  window.open(url, '_blank');*/
+  
  console.dir(info);
   alert("21 "+tab.id);
   chrome.tabs.sendMessage(tab.id, {open: true}, function(response) {

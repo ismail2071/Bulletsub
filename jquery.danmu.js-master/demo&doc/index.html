@@ -399,9 +399,10 @@ var first=true;
 
 function timedCount()
 {
-   $("#time").text($('#danmu').data("nowtime"));
+	
+   $("#time").text(parseInt($('#danmu').data("nowtime")));
  
-t=setTimeout("timedCount()",50)
+t=setTimeout("timedCount()",1000)
 
 }
 
@@ -493,8 +494,9 @@ function changehide() {
 function settime(){
 	var t=document.getElementById("set_time").value;
 	t=parseInt(t)
-	console.log(t)
+	console.log("設t: " + t);
 	$('#danmu').data("nowtime",t);
+	console.log("danmu time: " + $('#danmu').data("nowtime"));
 }
 	</script>
 	
