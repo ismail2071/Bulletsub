@@ -1,4 +1,12 @@
 /**
+@version	@date		@author     @purpose
+1.0.0		2015/07/08	kusogray	start to modify for video position issue
+
+
+*/
+
+
+/**
  * jQuery Generic Plugin Module
  * Version 0.1
  * Copyright (c) 2011 Cyntax Technologies - http://cyntaxtech.com
@@ -307,6 +315,7 @@ var cyntax = {
 						}
 						var top_local=(row)*options.font_size_big;
 
+						//1.0.0
 						$("#linshi").css({"position":"absolute"
 										,"top":top_local
 										//,"left":options.width

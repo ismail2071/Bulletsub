@@ -22,6 +22,8 @@
 1.0.18		2015/06/12	ismail		right click flash will attempt convert html5 and refine some danmu window
 1.0.19		2015/06/29  kusogray	two dialog issue
 1.0.20		2015/06/29  kusogray	fix multi video danmu pos
+1.0.21		2015/07/08  kusogray	fix danmu timeline issue
+1.0.22		2015/07/08  kusogray	fix change video size update danmu width issue
  */
 
 //1.0.1
@@ -224,21 +226,23 @@ var htmlTagFlag = false;
 
 var tmpVideoUpdateTime = 0;
 
+// 1.0.22
 var tmpVideoLeft = 0;
 var tmpVideoTop = 0;
 var tmpVideoWidth = 0;
 var tmpVideoHeight = 0;
 
-var updateTimeTimerFlag = false;
-function updateTimeClock() {
+
+var updateVideoPosTimerFlag = false;
+function updateVideoPosTimeClock() {
 	if (currentRightClickVideo) {
 
 		var tmpOffset = parseInt(videoProps.target.offset().top);
 		rect = currentRightClickVideo.getBoundingClientRect();
-		
+
 		tmpRectLeft = parseInt(rect.left);
 		tmpOffset = parseInt(tmpOffset);
-		tmpRectWidth =parseInt(rect.width);
+		tmpRectWidth = parseInt(rect.width);
 		//tmpRectWidth = 950;
 		tmpRectHeight = parseInt(rect.height);
 
@@ -249,22 +253,20 @@ function updateTimeClock() {
 				"width" : tmpRectWidth,
 				"height" : tmpRectHeight
 			};
-			tmpVideoLeft   = tmpRectLeft;
-			tmpVideoTop    = tmpOffset;
-			tmpVideoWidth  = tmpRectWidth;
+			tmpVideoLeft = tmpRectLeft;
+			tmpVideoTop = tmpOffset;
+			tmpVideoWidth = tmpRectWidth;
 			tmpVideoHeight = tmpRectHeight;
 			$('#danmu').danmu("danmu_updateVideoProps", videoPosProp);
 			console.log("left: " + tmpRectLeft + ", width: " + tmpRectWidth);
 		}
 
-		
 	}
 
 	//console.log(new Date());
 }
-var test = 0;
+
 $(function () {
-	test++;
 
 	/*jQuery(document).ready(function () {
 	jQuery('video').bind('contextmenu', function () {
@@ -295,12 +297,12 @@ $(function () {
 				if (!htmlTagFlag) {
 					htmlTagFlag = true;
 				}
-				if (!updateTimeTimerFlag) {
-					var int = self.setInterval("updateTimeClock()", 1000);
-					updateTimeTimerFlag = true;
+				
+				//1.0.21
+				if (!updateVideoPosTimerFlag) {
+					var int = self.setInterval("updateVideoPosTimeClock()", 1000);
+					updateVideoPosTimerFlag = true;
 				}
-
-			
 
 				console.log("Danmu Start");
 				tmpVideoUpdateTime = 0;
@@ -368,9 +370,7 @@ $(function () {
 					//console.log(offset + "+" + rect.top);
 				}
 
-				
-
-				console.log("初始left:" + rect.left + ", width: " + currentRightClickVideo.videoWidth);
+				//console.log("初始left:" + rect.left + ", width: " + currentRightClickVideo.videoWidth);
 
 				window.onresize = function (event) {
 					var tmpOffset = videoProps.target.offset().top;
@@ -406,6 +406,7 @@ $(function () {
 
 				}
 
+				//1.0.21
 				currentRightClickVideo.onseeking = function () {
 					tmpTime = Math.round(currentRightClickVideo.currentTime * 10);
 					if (Math.round(tmpTime / 10) != Math.round(tmpVideoUpdateTime / 10)) {
