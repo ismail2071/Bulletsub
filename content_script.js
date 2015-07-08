@@ -97,7 +97,7 @@ function sendDanmuFunc() {
 	var color = document.getElementById('danMuUserColor').value;
 	var position = document.getElementById('danMuUserPosition').value;
 
-	var time = Math.round(parseFloat($('#danmu').data("nowtime"))) + 2;
+	var time = Math.round(($('#danmu').data("nowtime"))) + 3;
 	var size = document.getElementById('danMuUserTextSize').value;
 	var text_obj = '{ "text":"' + text + '","color":"' + color + '","size":"' + size + '","position":"' + position + '","time":' + time + '}';
 	//$.post("stone.php",{danmu:text_obj});
@@ -224,31 +224,40 @@ var htmlTagFlag = false;
 
 var tmpVideoUpdateTime = 0;
 
+var tmpVideoLeft = 0;
+var tmpVideoTop = 0;
+var tmpVideoWidth = 0;
+var tmpVideoHeight = 0;
+
 var updateTimeTimerFlag = false;
 function updateTimeClock() {
 	if (currentRightClickVideo) {
 
-		tmpTime = Math.round(parseFloat(currentRightClickVideo.currentTime) * 10);
-		if (tmpTime != tmpVideoUpdateTime) {
-			tmpVideoUpdateTime = tmpTime;
-			//console.log("danmu time: " + $('#danmu').data("nowtime") + ", " + "影片: " + tmpTime);
-			$('#danmu').danmu("danmu_updateDanmuTimeLine", tmpTime);
-			//$('#danmu').data("nowtime",tmpTime);
-		}
-		//console.log(new Date() + ', In an IFRAME: ' + window.location.href);
-
-
-		/*var tmpOffset = videoProps.target.offset().top;
+		var tmpOffset = parseInt(videoProps.target.offset().top);
 		rect = currentRightClickVideo.getBoundingClientRect();
-		var videoPosProp = {
-		"left" : rect.left,
-		"top" : tmpOffset,
-		"width" : currentRightClickVideo.videoWidth,
-		"height" : currentRightClickVideo.videoHeight
-		};
+		
+		tmpRectLeft = parseInt(rect.left);
+		tmpOffset = parseInt(tmpOffset);
+		tmpRectWidth =parseInt(rect.width);
+		//tmpRectWidth = 950;
+		tmpRectHeight = parseInt(rect.height);
 
-		$('#danmu').danmu("danmu_updateVideoProps", videoPosProp);
-		console.log("left" + rect.left + ", width: " + currentRightClickVideo.videoWidth);*/
+		if (tmpRectLeft != parseInt(tmpVideoLeft) || tmpOffset != parseInt(tmpVideoTop) || parseInt(tmpVideoWidth) != tmpRectWidth || parseInt(tmpVideoHeight) != tmpRectHeight) {
+			var videoPosProp = {
+				"left" : tmpRectLeft,
+				"top" : tmpOffset,
+				"width" : tmpRectWidth,
+				"height" : tmpRectHeight
+			};
+			tmpVideoLeft   = tmpRectLeft;
+			tmpVideoTop    = tmpOffset;
+			tmpVideoWidth  = tmpRectWidth;
+			tmpVideoHeight = tmpRectHeight;
+			$('#danmu').danmu("danmu_updateVideoProps", videoPosProp);
+			console.log("left: " + tmpRectLeft + ", width: " + tmpRectWidth);
+		}
+
+		
 	}
 
 	//console.log(new Date());
@@ -276,6 +285,7 @@ $(function () {
 	//$( "video" ).parent().append("<div id='danmu' style=\"z-index:2147483647;position:absolute;\" </div>");
 	$("body").append("<div id='danmu' style=\"z-index:2147483647;position:absolute;\" </div>");
 	$("body").prepend("<div id='danmu_dialog' style=\"z-index:2147483647;\" title='彈幕視窗''>");
+	$("body").prepend("<div id='winSize' style=\"z-index:2147483647;\" '>");
 
 	renderInputBox();
 
@@ -286,9 +296,11 @@ $(function () {
 					htmlTagFlag = true;
 				}
 				if (!updateTimeTimerFlag) {
-					var int = self.setInterval("updateTimeClock()", 100);
+					var int = self.setInterval("updateTimeClock()", 1000);
 					updateTimeTimerFlag = true;
 				}
+
+			
 
 				console.log("Danmu Start");
 				tmpVideoUpdateTime = 0;
@@ -352,42 +364,34 @@ $(function () {
 						"height" : rect.height
 					};
 					$('#danmu').danmu("danmu_updateVideoProps", videoPosProp);
-					//$("#danmu").danmu_updateVideoPos(videoPosProp);
+					$('#danmu').danmu("danmu_getVideoProps");
+					//console.log(offset + "+" + rect.top);
 				}
 
-				$('#danMuUserText').keypress(function (e) {
-					if (e.keyCode == 111) {
-						var videoPosProp = {
-							"left" : rect.left,
-							"top" : offset,
-							"width" : 830,
-							"height" : rect.height
-						};
-						$('#danmu').danmu("danmu_updateVideoProps", videoPosProp);
-					}
-				});
+				
 
-				console.log("初始left" + rect.left + ", width: " + currentRightClickVideo.videoWidth);
+				console.log("初始left:" + rect.left + ", width: " + currentRightClickVideo.videoWidth);
 
-				/*window.onresize = function (event) {
-				var tmpOffset = videoProps.target.offset().top;
-				rect = currentRightClickVideo.getBoundingClientRect();
-				var videoPosProp = {
-				"left" : rect.left,
-				"top" : tmpOffset,
-				"width" : currentRightClickVideo.videoWidth,
-				"height" : currentRightClickVideo.videoHeight
+				window.onresize = function (event) {
+					var tmpOffset = videoProps.target.offset().top;
+					rect = currentRightClickVideo.getBoundingClientRect();
+					var videoPosProp = {
+						"left" : rect.left,
+						"top" : tmpOffset,
+						"width" : currentRightClickVideo.videoWidth,
+						"height" : currentRightClickVideo.videoHeight
+					};
+					//$('#winSize').danmu("danmu_updateVideoProps", videoPosProp);
+					$('#winSize').text("left:" + rect.left + ", width:" + currentRightClickVideo.videoWidth);
+					console.log("resized!");
 				};
-				$('#danmu').danmu("danmu_updateVideoProps", videoPosProp);
-				console.log("resized!");
-				};*/
 
 				$('#danmu').danmu('danmu_resume');
 
 				// add by list
-				for (var i = 0; i < g_danmuList.length; i++) {
-					$('#danmu').danmu("add_danmu", g_danmuList[i]);
-				}
+				/*for (var i = 0; i < g_danmuList.length; i++) {
+				$('#danmu').danmu("add_danmu", g_danmuList[i]);
+				}*/
 
 				console.log("Danmu Finish");
 
@@ -401,6 +405,16 @@ $(function () {
 					$('#danmu').danmu('danmu_resume');
 
 				}
+
+				currentRightClickVideo.onseeking = function () {
+					tmpTime = Math.round(currentRightClickVideo.currentTime * 10);
+					if (Math.round(tmpTime / 10) != Math.round(tmpVideoUpdateTime / 10)) {
+						tmpVideoUpdateTime = tmpTime;
+						//console.log("danmu time: " + $('#danmu').data("nowtime") + ", " + "影片: " + tmpTime);
+						$('#danmu').danmu("danmu_updateDanmuTimeLine", tmpTime);
+						//$('#danmu').data("nowtime",tmpTime);
+					}
+				};
 
 				//1.0.19
 				if (danmuWindowExist) {

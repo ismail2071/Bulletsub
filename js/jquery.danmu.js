@@ -309,7 +309,8 @@ var cyntax = {
 
 						$("#linshi").css({"position":"absolute"
 										,"top":top_local
-										,"left":options.width
+										//,"left":options.width
+										,"left":currentRightClickVideo.clientWidth
 										 });
 						var fly_tmp_name="fly"+parseInt(heig*Math.random()).toString();	
 						$("#linshi").attr("id",fly_tmp_name);
@@ -321,7 +322,7 @@ var cyntax = {
 						var top_tmp_name="top"+parseInt(10000*Math.random()).toString();
 						$("#linshi").attr("id",top_tmp_name)
 						$('#'+top_tmp_name).css({
-							"width":options.width
+							"width":currentRightClickVideo.clientWidth
 							,"text-align":"center"
 							,"position":"absolute"
 							,"top":(5+$(element).data("topspace"))
@@ -430,6 +431,17 @@ Danmu.prototype.danmu_updateVideoProps = function(arg){
 	if(arg.time){
 		this.$(element).data("nowtime",arg.time);
 	}
+	
+};
+
+
+Danmu.prototype.danmu_getVideoProps = function(){
+	console.log("danmu_getVideoProps:");
+	console.log(this.$element.css("left"));
+	console.log(this.$element.css("top"));
+	console.log(this.$element.css("width"));
+	console.log(this.$element.css("height"));
+	
 	
 };
 
