@@ -26,11 +26,17 @@
 1.0.22		2015/07/08  kusogray	fix change video size update danmu width issue
 1.0.23		2015/07/11  kusogray	clear danmu when needed
 1.0.24 		2015/07/11  ismail		try dynamoDB solution
+1.0.25 		2015/07/11  kusogray	fix youtube full screen issue
  */
 
 //1.0.1
 //var myFirebaseRef = new Firebase("https://popchrome.firebaseio.com/");
 
+//1.0.25
+function ytVidId() {
+	var p = /^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/;
+	return (document.URL.match(p)) ? true : false;
+}
 
 //1.0.19
 var danmuWindowExist = false;
@@ -557,6 +563,16 @@ document.addEventListener("mozfullscreenchange", function(e) {
 document.addEventListener("webkitfullscreenchange", function(e) {
     //fullscreenState.innerHTML = (document.webkitIsFullScreen) ? "" : "not ";
     console.log('Event3: ' + document.webkitIsFullScreen);
+	
+	//1.0.25
+	if (ytVidId()) {
+		if(document.webkitIsFullScreen){
+			jQuery("#danmu").detach().appendTo('.html5-video-container')
+		}else{
+			jQuery("#danmu").detach().appendTo('body')
+		}
+	}
+	
 }, false);
 
 document.addEventListener("msfullscreenchange", function(e) {
