@@ -10,11 +10,6 @@ TO-LIST
    - [ ] append a new danmu div on video's parent
    - [ ] reload danmu
 
-- [ ] video event related to danmu (pause, play, fly, replay)
-
-
-- [ ] danmu need to follow video's timeline
-
 
 - [ ] Amazon DynamoDB (http://aws.amazon.com/tw/dynamodb/pricing/)
   - [ ] rest service to "submit" danmu
@@ -22,7 +17,7 @@ TO-LIST
   - [ ] practice Amazon DynamoDB CRUD 
   - [ ] buy a Amazon DynamoDB service
   
-- [ ] donation survey
+- [ ] donation survey (popup.html)
 
 
 ------------------------------------------------
@@ -52,3 +47,5 @@ TO-LIST
    
 - [X] iFrame issue (2D-gate)
 - [X] replay or multiple video issue (trigger twice)
+- [X] video event related to danmu (pause, play, fly, replay)
+- [X] danmu need to follow video's timeline
