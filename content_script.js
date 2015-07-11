@@ -24,6 +24,7 @@
 1.0.20		2015/06/29  kusogray	fix multi video danmu pos
 1.0.21		2015/07/08  kusogray	fix danmu timeline issue
 1.0.22		2015/07/08  kusogray	fix change video size update danmu width issue
+1.0.23		2015/07/11  kusogray	clear danmu when needed
  */
 
 //1.0.1
@@ -100,25 +101,34 @@ function sendDanmuFunc() {
 	var position = document.getElementById('danMuUserPosition').value;
 
 	var time = Math.round(($('#danmu').data("nowtime"))) + 3;
-	var size = document.getElementById('danMuUserTextSize').value;
-	var text_obj = '{ "text":"' + text + '","color":"' + color + '","size":"' + size + '","position":"' + position + '","time":' + time + '}';
-	//$.post("stone.php",{danmu:text_obj});
-	var text_obj = '{ "text":"' + text + '","color":"' + color + '","size":"' + size + '","position":"' + position + '","time":' + time + ',"isnew":""}';
-	var new_obj = eval('(' + text_obj + ')');
+	if (isNaN(time)) {
+		console.log("time is NaN, retry.");
+		time = Math.round(($('#danmu').data("nowtime"))) + 3;
+		alert("Time is NaN! please resend a danmu. time: " + time + ", nowtime" + $('#danmu').data("nowtime"));
+	}
 
-	var a_danmu = {
-		"text" : text,
-		"color" : color,
-		"size" : size,
-		"position" : position,
-		"time" : time,
-		"isnew" : " ",
-		"from" : "self"
-	};
-	console.log("send danmu: " + text + ", at time: " + time);
-	$('#danmu').danmu("add_danmu", a_danmu);
-	document.getElementById('danMuUserText').value = '';
-	//sendToFireBase(a_danmu);
+	if (!isNaN(time)) {
+		var size = document.getElementById('danMuUserTextSize').value;
+		var text_obj = '{ "text":"' + text + '","color":"' + color + '","size":"' + size + '","position":"' + position + '","time":' + time + '}';
+		//$.post("stone.php",{danmu:text_obj});
+		var text_obj = '{ "text":"' + text + '","color":"' + color + '","size":"' + size + '","position":"' + position + '","time":' + time + ',"isnew":""}';
+		var new_obj = eval('(' + text_obj + ')');
+
+		var a_danmu = {
+			"text" : text,
+			"color" : color,
+			"size" : size,
+			"position" : position,
+			"time" : time,
+			"isnew" : " ",
+			"from" : "self"
+		};
+		console.log("send danmu: " + text + ", at time: " + time);
+		$('#danmu').danmu("add_danmu", a_danmu);
+		document.getElementById('danMuUserText').value = '';
+		//sendToFireBase(a_danmu);
+	}
+
 }
 
 //1.0.3
@@ -168,11 +178,10 @@ $("body").mousedown(function (e) {
 	if (e.button == 2) {
 
 		var videoObj = e.target;
-		currentRightClickVideo = videoObj;
 
 		console.dir(videoObj);
 		if ((videoObj.nodeName.toUpperCase() == "video".toUpperCase()) || (videoObj.getAttribute('type') == 'application/x-shockwave-flash')) {
-
+			currentRightClickVideo = videoObj;
 			rect = videoObj.getBoundingClientRect();
 
 			videoProps.obj = videoObj;
@@ -231,7 +240,6 @@ var tmpVideoLeft = 0;
 var tmpVideoTop = 0;
 var tmpVideoWidth = 0;
 var tmpVideoHeight = 0;
-
 
 var updateVideoPosTimerFlag = false;
 function updateVideoPosTimeClock() {
@@ -294,19 +302,20 @@ $(function () {
 	$(document).mousedown(function (event) {
 		if (event.which == 1) {
 			if (event.target.className == "custom-popchrome-menu") {
+
 				if (!htmlTagFlag) {
 					htmlTagFlag = true;
 				}
-				
+
 				//1.0.21
 				if (!updateVideoPosTimerFlag) {
-					var int = self.setInterval("updateVideoPosTimeClock()", 1000);
+					var int = self.setInterval("updateVideoPosTimeClock()", 700);
 					updateVideoPosTimerFlag = true;
 				}
 
 				console.log("Danmu Start");
 				tmpVideoUpdateTime = 0;
-
+				tmpTime = 0;
 				/*currentRightClickVideo.addEventListener('timeupdate', function () {
 				tmpTime = parseInt(currentRightClickVideo.currentTime);
 				if (tmpTime != tmpVideoUpdateTime) {
@@ -409,12 +418,26 @@ $(function () {
 				//1.0.21
 				currentRightClickVideo.onseeking = function () {
 					tmpTime = Math.round(currentRightClickVideo.currentTime * 10);
+					//1.0.23
+					$('#danmu').danmu('danmu_stop');
+
 					if (Math.round(tmpTime / 10) != Math.round(tmpVideoUpdateTime / 10)) {
 						tmpVideoUpdateTime = tmpTime;
 						//console.log("danmu time: " + $('#danmu').data("nowtime") + ", " + "影片: " + tmpTime);
 						$('#danmu').danmu("danmu_updateDanmuTimeLine", tmpTime);
 						//$('#danmu').data("nowtime",tmpTime);
 					}
+					$('#danmu').danmu('danmu_resume');
+				};
+
+				//1.0.23
+				currentRightClickVideo.onended = function () {
+					$('#danmu').danmu('danmu_stop');
+					
+				};
+
+				currentRightClickVideo.onplay = function () {
+					$('#danmu').danmu('danmu_resume');
 				};
 
 				//1.0.19
