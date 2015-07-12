@@ -6,8 +6,9 @@ TO-LIST
 (1) We really need to close this project soon
 ------------------------------------------------
 
-- [ ] donation survey (popup.html)
+
 - [ ] display multi time issue  (danmu duplicate)
+- [ ] reload danmu when change target video
 - [ ] right click to display / close danmu when fullscreen 
 
 
@@ -19,6 +20,7 @@ TO-LIST
 - [ ] consider using iframe to implement and optimize danmu windows (more fashion danmu window)
 - [ ] survey context menu
 - [ ] special case (instagram) 
+- [ ] donation survey (popup.html)
 
 
 
