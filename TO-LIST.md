@@ -6,18 +6,9 @@ TO-LIST
 (1) We really need to close this project soon
 ------------------------------------------------
 
-- [ ] Full Screen issue
-   - [ ] append a new danmu div on video's parent
-   - [ ] reload danmu
-
-
-- [ ] Amazon DynamoDB (http://aws.amazon.com/tw/dynamodb/pricing/)
-  - [ ] rest service to "submit" danmu
-  - [ ] rest service to "get all" danmu
-  - [ ] practice Amazon DynamoDB CRUD 
-  - [ ] buy a Amazon DynamoDB service
-  
 - [ ] donation survey (popup.html)
+- [ ] display multi time issue  (danmu duplicate)
+- [ ] right click to display / close danmu when fullscreen 
 
 
 ------------------------------------------------
@@ -49,3 +40,10 @@ TO-LIST
 - [X] replay or multiple video issue (trigger twice)
 - [X] video event related to danmu (pause, play, fly, replay)
 - [X] danmu need to follow video's timeline
+- [X] Full Screen issue
+- [X] detach then append a new danmu div on video's parent
+- [X] Amazon DynamoDB (http://aws.amazon.com/tw/dynamodb/pricing/)
+  - [X] rest service to "submit" danmu
+  - [X] rest service to "get all" danmu
+  - [X] practice Amazon DynamoDB CRUD 
+  - [X] buy a Amazon DynamoDB service
