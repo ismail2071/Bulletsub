@@ -603,11 +603,7 @@ $("#display").click(function() {
 console.log("checked");
     if ($("#display").prop("checked")) {
         console.log("checked 2");
-        /*AWS.config.update({
-            "accessKeyId": "AKIAIJKNR244BLHDPUOA",
-            "secretAccessKey": "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",
-            "region": "us-west-2"
-        });*/
+
         dynamodb = new AWS.DynamoDB();
 
 
