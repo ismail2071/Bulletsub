@@ -27,10 +27,14 @@
 1.0.23		2015/07/11  kusogray	clear danmu when needed
 1.0.24 		2015/07/11  ismail		try dynamoDB solution
 1.0.25 		2015/07/11  kusogray	fix youtube full screen issue
+1.0.26 		2015/07/14  kusogray	display danmu option
  */
 
 //1.0.1
 //var myFirebaseRef = new Firebase("https://popchrome.firebaseio.com/");
+
+var isFullScreenFlag = false;
+var displayFlag = true;
 
 //1.0.25
 function ytVidId() {
@@ -38,18 +42,34 @@ function ytVidId() {
 	return (document.URL.match(p)) ? true : false;
 }
 
+function alignTimeLine(clearFlag) {
+	tmpTime = Math.round(currentRightClickVideo.currentTime * 10);
+	//1.0.23
+	if (clearFlag) {
+		$('#danmu').danmu("danmu_hideall");
+	}
+
+	if (Math.round(tmpTime / 10) != Math.round(tmpVideoUpdateTime / 10)) {
+		tmpVideoUpdateTime = tmpTime;
+		//console.log("danmu time: " + $('#danmu').data("nowtime") + ", " + "影片: " + tmpTime);
+		$('#danmu').danmu("danmu_updateDanmuTimeLine", tmpTime);
+		//$('#danmu').data("nowtime",tmpTime);
+	}
+
+}
+
 //1.0.19
 var danmuWindowExist = false;
 
 // 1.0.4
 chrome.runtime.onMessage.addListener(
-    function(request, sender, sendResponse) {
-        if (request.open) {
-            alert("start");
-            renderInputBox();
-        }
-        //sendResponse({farewell : "goodbye"});
-    });
+	function (request, sender, sendResponse) {
+	if (request.open) {
+		alert("start");
+		renderInputBox();
+	}
+	//sendResponse({farewell : "goodbye"});
+});
 
 var rect = {};
 var videoProps = {};
@@ -60,45 +80,43 @@ var currentRightClickVideo;
 
 var dynamodb = {};
 
-
-
 // 1.0.17 1.0.18
 function convertVideos(convertTarget) {
-    var embeds = document.getElementsByTagName(convertTarget);
+	var embeds = document.getElementsByTagName(convertTarget);
 
-    //var embeds = convertTarget;
-    console.log("tagname: " + convertTarget + " converting....");
-    //console.dir(embeds);
-    for (var i = embeds.length - 1; i >= 0; i--) {
+	//var embeds = convertTarget;
+	console.log("tagname: " + convertTarget + " converting....");
+	//console.dir(embeds);
+	for (var i = embeds.length - 1; i >= 0; i--) {
 
-        if (embeds[i].type = "application/x-shockwave-flash") {
-            var flashVideo = embeds[i];
-            var flashVars = flashVideo.attributes['flashvars'].value;
-            console.dir(embeds[i]);
-            console.dir(flashVars);
-            var decodedVars = decodeURIComponent(flashVars);
+		if (embeds[i].type = "application/x-shockwave-flash") {
+			var flashVideo = embeds[i];
+			var flashVars = flashVideo.attributes['flashvars'].value;
+			console.dir(embeds[i]);
+			console.dir(flashVars);
+			var decodedVars = decodeURIComponent(flashVars);
 
-            // Hidden in the vars is the URL for HD mp4 video source.
-            var n = decodedVars.match(/\"hd_src\":\"([^\"]+)\",/i);
-            console.dir(n);
-            var hdSrcUrl = n[1].split("\\").join("");
+			// Hidden in the vars is the URL for HD mp4 video source.
+			var n = decodedVars.match(/\"hd_src\":\"([^\"]+)\",/i);
+			console.dir(n);
+			var hdSrcUrl = n[1].split("\\").join("");
 
-            var video = document.createElement('video');
-            video.src = hdSrcUrl;
-            video.controls = true;
-            video.style.width = "100%";
+			var video = document.createElement('video');
+			video.src = hdSrcUrl;
+			video.controls = true;
+			video.style.width = "100%";
 
-            // Facebook has a super-deep, crazy DOM Structure.
-            // Go up to the same level of play button overlay (hopefully).
-            var container = flashVideo.parentNode.parentNode.parentNode.parentNode;
+			// Facebook has a super-deep, crazy DOM Structure.
+			// Go up to the same level of play button overlay (hopefully).
+			var container = flashVideo.parentNode.parentNode.parentNode.parentNode;
 
-            // Make the HTML5 video the only child node
-            while (container.hasChildNodes()) {
-                container.removeChild(container.lastChild);
-            }
-            container.appendChild(video);
-        }
-    };
+			// Make the HTML5 video the only child node
+			while (container.hasChildNodes()) {
+				container.removeChild(container.lastChild);
+			}
+			container.appendChild(video);
+		}
+	};
 }
 
 //1.0.17 current use only in FB
@@ -110,40 +128,40 @@ setInterval(convertVideos, 3000); // can change a way to trigger it
  */
 
 function sendDanmuFunc() {
-    var text = document.getElementById('danMuUserText').value;
-    var color = document.getElementById('danMuUserColor').value;
-    var position = document.getElementById('danMuUserPosition').value;
-    var videoUri = videoProps.obj.baseURI;
-    var time = Math.round(($('#danmu').data("nowtime"))) + 3;
-    if (isNaN(time)) {
-        console.log("time is NaN, retry.");
-        time = Math.round(($('#danmu').data("nowtime"))) + 3;
-        alert("Time is NaN! please resend a danmu. time: " + time + ", nowtime" + $('#danmu').data("nowtime"));
-    }
+	var text = document.getElementById('danMuUserText').value;
+	var color = document.getElementById('danMuUserColor').value;
+	var position = document.getElementById('danMuUserPosition').value;
+	var videoUri = videoProps.obj.baseURI;
+	var time = Math.round(($('#danmu').data("nowtime"))) + 3;
+	if (isNaN(time)) {
+		console.log("time is NaN, retry.");
+		time = Math.round(($('#danmu').data("nowtime"))) + 3;
+		alert("Time is NaN! please resend a danmu. time: " + time + ", nowtime" + $('#danmu').data("nowtime"));
+	}
 
-    if (!isNaN(time)) {
-        var size = document.getElementById('danMuUserTextSize').value;
-        var text_obj = '{ "text":"' + text + '","color":"' + color + '","size":"' + size + '","position":"' + position + '","time":' + time + '}';
-        //$.post("stone.php",{danmu:text_obj});
-        var text_obj = '{ "text":"' + text + '","color":"' + color + '","size":"' + size + '","position":"' + position + '","time":' + time + ',"isnew":""}';
-        var new_obj = eval('(' + text_obj + ')');
+	if (!isNaN(time)) {
+		var size = document.getElementById('danMuUserTextSize').value;
+		var text_obj = '{ "text":"' + text + '","color":"' + color + '","size":"' + size + '","position":"' + position + '","time":' + time + '}';
+		//$.post("stone.php",{danmu:text_obj});
+		var text_obj = '{ "text":"' + text + '","color":"' + color + '","size":"' + size + '","position":"' + position + '","time":' + time + ',"isnew":""}';
+		var new_obj = eval('(' + text_obj + ')');
 
-        var a_danmu = {
-            "text": text,
-            "color": color,
-            "size": size,
-            "position": position,
-            "time": time.toString(),
-            "isnew": " ",
-            "from": "self"
-        };
-        console.log("send danmu: " + text + ", at time: " + time);
-        $('#danmu').danmu("add_danmu", a_danmu);
-        document.getElementById('danMuUserText').value = '';
-        //sendToFireBase(a_danmu,videoUri);
-        //1.0.24
-        sendToDynamodb(a_danmu, videoUri);
-    }
+		var a_danmu = {
+			"text" : text,
+			"color" : color,
+			"size" : size,
+			"position" : position,
+			"time" : time.toString(),
+			"isnew" : " ",
+			"from" : "self"
+		};
+		console.log("send danmu: " + text + ", at time: " + time);
+		$('#danmu').danmu("add_danmu", a_danmu);
+		document.getElementById('danMuUserText').value = '';
+		//sendToFireBase(a_danmu,videoUri);
+		//1.0.24
+		sendToDynamodb(a_danmu, videoUri);
+	}
 
 }
 
@@ -151,159 +169,164 @@ function sendDanmuFunc() {
 
 function sendToDynamodb(inputDanmuObj, videoUri) {
 
+	/////////////////  create
 
 
-    /////////////////  create
+	var paramsPut = {};
+	paramsPut.TableName = "bulletsub";
+	paramsPut.Item = {
+		"commentId" : {
+			"S" : (allDanmu.Count + 1).toString()
+		},
+		"Url" : {
+			"S" : videoUri
+		},
+		"name" : {
+			"S" : "ismail"
+		},
+		"comment" : {
+			"M" : {
+				"text" : {
+					"S" : inputDanmuObj.text
+				},
+				"color" : {
+					"S" : inputDanmuObj.color
+				},
+				"size" : {
+					"S" : inputDanmuObj.size
+				},
+				"position" : {
+					"S" : inputDanmuObj.position
+				},
+				"time" : {
+					"S" : inputDanmuObj.time
+				},
+				"isnew" : {
+					"S" : inputDanmuObj.isnew
+				},
+				"from" : {
+					"S" : inputDanmuObj.from
+				}
+			}
+		}
+	}
 
+	console.log("insert dynamodb start");
 
-    var paramsPut = {};
-    paramsPut.TableName = "bulletsub";
-    paramsPut.Item = {
-        "commentId": {
-            "S": (allDanmu.Count + 1).toString()
-        },
-        "Url": {
-            "S": videoUri
-        },
-        "name": {
-            "S": "ismail"
-        },
-        "comment": {
-            "M": {
-                "text": {
-                    "S": inputDanmuObj.text
-                },
-                "color": {
-                    "S": inputDanmuObj.color
-                },
-                "size": {
-                    "S": inputDanmuObj.size
-                },
-                "position": {
-                    "S": inputDanmuObj.position
-                },
-                "time": {
-                    "S": inputDanmuObj.time
-                },
-                "isnew": {
-                    "S": inputDanmuObj.isnew
-                },
-                "from": {
-                    "S": inputDanmuObj.from
-                }
-            }
-        }
-    }
-
-    console.log("insert dynamodb start");
-
-    dynamodb.putItem(paramsPut, function(err, result) {
-        if (err) {
-            console.log(err);
-        } else {
-            console.log(result);
-        }
-    });
-
-
+	dynamodb.putItem(paramsPut, function (err, result) {
+		if (err) {
+			console.log(err);
+		} else {
+			console.log(result);
+		}
+	});
 
 }
-
-
 
 //1.0.3
 function sendToFireBase(inputDanmuObj, videoUri) {
 
-    var tmpUrl = document.URL;
-    tmpUrl = tmpUrl.replace(/\./g, "{dot}");
-    tmpUrl = tmpUrl.replace(/\#/g, "{sharp}");
-    tmpUrl = tmpUrl.replace(/\$/g, "{dollar}");
-    tmpUrl = tmpUrl.replace(/\[]/g, "{left}");
-    tmpUrl = tmpUrl.replace(/\]/g, "{right}");
-    tmpUrl = tmpUrl.replace(/\:/g, "{colon}");
-    tmpUrl = tmpUrl.replace(/\//g, "{slash}");
-    console.log(tmpUrl);
+	var tmpUrl = document.URL;
+	tmpUrl = tmpUrl.replace(/\./g, "{dot}");
+	tmpUrl = tmpUrl.replace(/\#/g, "{sharp}");
+	tmpUrl = tmpUrl.replace(/\$/g, "{dollar}");
+	tmpUrl = tmpUrl.replace(/\[]/g, "{left}");
+	tmpUrl = tmpUrl.replace(/\]/g, "{right}");
+	tmpUrl = tmpUrl.replace(/\:/g, "{colon}");
+	tmpUrl = tmpUrl.replace(/\//g, "{slash}");
+	console.log(tmpUrl);
 
-    var randomSubName = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-        var r = Math.random() * 16 | 0,
-            v = c == 'x' ? r : (r & 0x3 | 0x8);
-        return v.toString(16);
-    });
-    var usersRef = myFirebaseRef.child("popChrome");
-    var popChromeRef = usersRef.child(tmpUrl);
-    var contentRef = popChromeRef.child(randomSubName);
+	var randomSubName = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+			var r = Math.random() * 16 | 0,
+			v = c == 'x' ? r : (r & 0x3 | 0x8);
+			return v.toString(16);
+		});
+	var usersRef = myFirebaseRef.child("popChrome");
+	var popChromeRef = usersRef.child(tmpUrl);
+	var contentRef = popChromeRef.child(randomSubName);
 
-    /* "text" : text,
+	/* "text" : text,
 	"color" : color,
 	"size" : size,
 	"position" : position,
 	"time" : time,
 	"isnew" : " " */
 
-    //[Todo] it might be injected so we need a white list here.
-    var content = "text:" + inputDanmuObj.text +
-        ",color:" + inputDanmuObj.color +
-        ",size:" + inputDanmuObj.size +
-        ",position:" + inputDanmuObj.position +
-        ",time:" + inputDanmuObj.time;
+	//[Todo] it might be injected so we need a white list here.
+	var content = "text:" + inputDanmuObj.text +
+		",color:" + inputDanmuObj.color +
+		",size:" + inputDanmuObj.size +
+		",position:" + inputDanmuObj.position +
+		",time:" + inputDanmuObj.time;
 
-    contentRef.set({
-        content
-    });
+	contentRef.set({
+		content
+	});
 }
 
 //1.0.9
-$("body").mousedown(function(e) {
+$("body").mousedown(function (e) {
 
-    if (e.button == 2) {
+	if (e.button == 2) {
 
-        var videoObj = e.target;
+		$(".custom-popchrome-menu").remove();
+		var videoObj = e.target;
 
-        console.dir(videoObj);
-        if ((videoObj.nodeName.toUpperCase() == "video".toUpperCase()) || (videoObj.getAttribute('type') == 'application/x-shockwave-flash')) {
-            currentRightClickVideo = videoObj;
-            rect = videoObj.getBoundingClientRect();
+		console.dir(videoObj);
+		if ((videoObj.nodeName.toUpperCase() == "video".toUpperCase()) || (videoObj.getAttribute('type') == 'application/x-shockwave-flash')) {
+			currentRightClickVideo = videoObj;
+			rect = videoObj.getBoundingClientRect();
 
-            videoProps.obj = videoObj;
-            videoProps.type = (videoObj.nodeName.toUpperCase() == "video".toUpperCase()) ? 'html5' : 'flash';
-            videoProps.target = (videoProps.type == 'html5') ? $(videoObj) : $(videoObj.nodeName + "[type='application/x-shockwave-flash']");
+			videoProps.obj = videoObj;
+			videoProps.type = (videoObj.nodeName.toUpperCase() == "video".toUpperCase()) ? 'html5' : 'flash';
+			videoProps.target = (videoProps.type == 'html5') ? $(videoObj) : $(videoObj.nodeName + "[type='application/x-shockwave-flash']");
 
+			if (videoProps.type == "flash")
+				convertVideos(videoObj.nodeName);
+			// 1.0.11
 
-            if (videoProps.type == "flash")
-                convertVideos(videoObj.nodeName);
-            // 1.0.11
+			videoProps.target.bind('contextmenu', function () {
+				event.preventDefault();
 
-            videoProps.target.bind('contextmenu', function() {
-                event.preventDefault();
+				//$("<menu type='context' id='menu' class='custom-popchrome-menu'><menuitem label='開啟彈幕視窗'></menuitem><menu> ").appendTo("body")
 
-                //$("<menu type='context' id='menu' class='custom-popchrome-menu'><menuitem label='開啟彈幕視窗'></menuitem><menu> ").appendTo("body")
+				$("<div class='custom-popchrome-menu'>開啟彈幕視窗</div>")
+				.appendTo("body")
+				.css({
+					top : event.pageY + "px",
+					left : event.pageX + "px"
+				});
 
-                $("<div class='custom-popchrome-menu'>開啟彈幕視窗</div>")
-                    .appendTo("body")
-                    .css({
-                        top: event.pageY + "px",
-                        left: event.pageX + "px"
-                    });
-                $(".custom-popchrome-menu").css("z-index", "1000");
-                $(".custom-popchrome-menu").css("position", "absolute");
-                $(".custom-popchrome-menu").css("background-color", "#C0C0C0");
-                //$(".custom-popchrome-menu").css("background-color","#C0C0C0");
-                $(".custom-popchrome-menu").css("border", "1px solid black");
-                $(".custom-popchrome-menu").css("padding", "2px");
-                $(".custom-popchrome-menu").css("height", "20");
-                return false;
-            });
+				//1.0.26
+				if (isFullScreenFlag) {
+					if (ytVidId()) {
+						$(".custom-popchrome-menu").detach().appendTo('.html5-video-container');
+					}
 
-        } else
-            return;
-    }
+					if (!displayFlag) {
+						$(".custom-popchrome-menu").text('開啟彈幕');
+					} else {
+						$(".custom-popchrome-menu").text('關閉彈幕');
+					}
+
+				}
+				$(".custom-popchrome-menu").css("z-index", "2147483647");
+				$(".custom-popchrome-menu").css("position", "absolute");
+				$(".custom-popchrome-menu").css("background-color", "#C0C0C0");
+				//$(".custom-popchrome-menu").css("background-color","#C0C0C0");
+				$(".custom-popchrome-menu").css("border", "1px solid black");
+				$(".custom-popchrome-menu").css("padding", "2px");
+				$(".custom-popchrome-menu").css("height", "20");
+				return false;
+			});
+
+		}
+	}
 
 });
 
 //1.0.15
 var g_danmuList = [];
-
-var htmlTagFlag = false;
 
 var tmpVideoUpdateTime = 0;
 
@@ -316,80 +339,157 @@ var tmpVideoHeight = 0;
 var updateVideoPosTimerFlag = false;
 
 function updateVideoPosTimeClock() {
-    if (currentRightClickVideo) {
+	if (currentRightClickVideo) {
 
-        var tmpOffset = parseInt(videoProps.target.offset().top);
-        rect = currentRightClickVideo.getBoundingClientRect();
+		var tmpOffset = parseInt(videoProps.target.offset().top);
+		rect = currentRightClickVideo.getBoundingClientRect();
 
-        tmpRectLeft = parseInt(rect.left);
-        tmpOffset = parseInt(tmpOffset);
-        tmpRectWidth = parseInt(rect.width);
-        //tmpRectWidth = 950;
-        tmpRectHeight = parseInt(rect.height);
+		tmpRectLeft = parseInt(rect.left);
+		tmpOffset = parseInt(tmpOffset);
+		tmpRectWidth = parseInt(rect.width);
+		//tmpRectWidth = 950;
+		tmpRectHeight = parseInt(rect.height);
 
-        if (tmpRectLeft != parseInt(tmpVideoLeft) || tmpOffset != parseInt(tmpVideoTop) || parseInt(tmpVideoWidth) != tmpRectWidth || parseInt(tmpVideoHeight) != tmpRectHeight) {
-            var videoPosProp = {
-                "left": tmpRectLeft,
-                "top": tmpOffset,
-                "width": tmpRectWidth,
-                "height": tmpRectHeight
-            };
-            tmpVideoLeft = tmpRectLeft;
-            tmpVideoTop = tmpOffset;
-            tmpVideoWidth = tmpRectWidth;
-            tmpVideoHeight = tmpRectHeight;
-            $('#danmu').danmu("danmu_updateVideoProps", videoPosProp);
-            console.log("left: " + tmpRectLeft + ", width: " + tmpRectWidth);
-        }
+		if (tmpRectLeft != parseInt(tmpVideoLeft) || tmpOffset != parseInt(tmpVideoTop) || parseInt(tmpVideoWidth) != tmpRectWidth || parseInt(tmpVideoHeight) != tmpRectHeight) {
+			var videoPosProp = {
+				"left" : tmpRectLeft,
+				"top" : tmpOffset,
+				"width" : tmpRectWidth,
+				"height" : tmpRectHeight
+			};
+			tmpVideoLeft = tmpRectLeft;
+			tmpVideoTop = tmpOffset;
+			tmpVideoWidth = tmpRectWidth;
+			tmpVideoHeight = tmpRectHeight;
+			$('#danmu').danmu("danmu_updateVideoProps", videoPosProp);
+			console.log("left: " + tmpRectLeft + ", width: " + tmpRectWidth);
+		}
 
-    }
+	}
+	//console.log("arg: " + $(".timer71452").timer.arguments[0]);
 
-    //console.log(new Date());
+	//console.log(new Date());
 }
 
-$(function() {
+function insertRule(sheet, selectorText, cssText, position) {
+	if (sheet.insertRule) {
+		sheet.insertRule(selectorText + "{" + cssText + "}", position);
+	} else if (sheet.addRule) {
+		sheet.addRule(selectorText, cssText, poistion);
+	}
+}
 
-    /*jQuery(document).ready(function () {
+//1.0.26
+function displayDanmu(flag) {
+	displayFlag = flag;
+	$("#display").prop("checked", flag);
+	for (i in document.styleSheets[0].rules) {
+		if (document.styleSheets[0].rules[i].selectorText == ".flying") {
+			displayText = "block";
+			if (!flag) {
+				displayText = "none";
+			}
+			document.styleSheets[0].rules[i].style.display = displayText;
+		}
+	}
+}
+
+$(function () {
+
+	/*var $stylesheet = $('<style type="text/css" media="screen" />');
+	$stylesheet.html('.flying{display:none !important;}');
+	$('body').append($stylesheet);*/
+
+	/*
+	var $stylesheet = $('<style type="text/css" media="screen" />');
+	$stylesheet.html('.flying{display:block !important;}');
+	$('body').append($stylesheet);*/
+
+	//$.css(".flying", "display: none");
+
+
+	/*function getStyleBySelector(selector) {
+	var sheetList = document.styleSheets;
+	var ruleList;
+	var i,
+	j;
+
+
+	for (i = sheetList.length - 1; i >= 0; i--) {
+	ruleList = sheetList[i].cssRules;
+	for (j = 0; j < ruleList.length; j++) {
+	if (ruleList[j].type == CSSRule.STYLE_RULE &&
+	ruleList[j].selectorText == selector) {
+	return ruleList[j].style;
+	}
+	}
+	}
+	return null;
+	}*/
+
+	//1.0.26
+	insertRule(document.styleSheets[0], ".flying", "display: block", 0);
+	
+
+	//alert(getStyleBySelector(".flying"));
+
+	//$('.flying').css({"display": "none"});
+	//$('.flying').show();
+
+	/*jQuery(document).ready(function () {
 	jQuery('video').bind('contextmenu', function () {
 	return false;
 	});
 	});*/
 
-    /*$("h2").on('click', 'p.test', function() {
+	/*$("h2").on('click', 'p.test', function() {
 	alert('you clicked a p.test element');
 	});*/
 
-    /*$("#container").bind("DOMNodeInserted",function(){
+	/*$("#container").bind("DOMNodeInserted",function(){
 	alert("child is appended");
 	});*/
 
-    //$("body").append("<div id='testOver' style=\"z-index:2147483647 ;position:absolute; top: 10px; right: 10px;  border: 1px solid red; display: block; background: #FFF; \"> xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</div>");
+	//$("body").append("<div id='testOver' style=\"z-index:2147483647 ;position:absolute; top: 10px; right: 10px;  border: 1px solid red; display: block; background: #FFF; \"> xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</div>");
 
-    //$( "video" ).parent().append("<div id='danmu' style=\"z-index:2147483647;position:absolute;\" </div>");
-    $("body").append("<div id='danmu' style='z-index:2147483647;position:absolute;' </div>");
-    $("body").prepend("<div id='danmu_dialog' style='z-index:2147483647;' title='彈幕視窗''>");
-    $("body").prepend("<div id='winSize' style='z-index:2147483647;' >");
+	//$( "video" ).parent().append("<div id='danmu' style=\"z-index:2147483647;position:absolute;\" </div>");
+	$("body").append("<div id='danmu' style='z-index:2147483647;position:absolute;' </div>");
+	$("body").prepend("<div id='danmu_dialog' style='z-index:2147483647;' title='彈幕視窗''>");
 
-    renderInputBox();
+	//$("body").prepend("<div id='winSize' style='z-index:2147483647;' >");
 
-    $(document).mousedown(function(event) {
-        if (event.which == 1) {
-            if (event.target.className == "custom-popchrome-menu") {
+	renderInputBox();
 
-                if (!htmlTagFlag) {
-                    htmlTagFlag = true;
-                }
+	$(document).mousedown(function (event) {
+		if (event.which == 1) {
+			if (event.target.className == "custom-popchrome-menu") {
 
-                //1.0.21
-                if (!updateVideoPosTimerFlag) {
-                    var int = self.setInterval("updateVideoPosTimeClock()", 700);
-                    updateVideoPosTimerFlag = true;
-                }
+				//1.0.26
+				var tmpCustomPopChromeMenuTxt = $(".custom-popchrome-menu").text();
+				if (!(tmpCustomPopChromeMenuTxt.indexOf("視窗") > -1)) {
+					if (displayFlag) {
+						displayDanmu(false);
+						
+					} else {
+						displayDanmu(true);
+					}
+					$(".custom-popchrome-menu").remove();
+					return;
+				}else{
+					$("#display").prop("checked", true);
+					displayDanmu(true);
+				}
 
-                console.log("Danmu Start");
-                tmpVideoUpdateTime = 0;
-                tmpTime = 0;
-                /*currentRightClickVideo.addEventListener('timeupdate', function () {
+				//1.0.21
+				if (!updateVideoPosTimerFlag) {
+					var int = self.setInterval("updateVideoPosTimeClock()", 700);
+					updateVideoPosTimerFlag = true;
+				}
+
+				console.log("Danmu Start");
+				tmpVideoUpdateTime = 0;
+				tmpTime = 0;
+				/*currentRightClickVideo.addEventListener('timeupdate', function () {
 				tmpTime = parseInt(currentRightClickVideo.currentTime);
 				if (tmpTime != tmpVideoUpdateTime) {
 				tmpVideoUpdateTime = tmpTime
@@ -399,135 +499,137 @@ $(function() {
 
 				}, false);*/
 
-                /* myDataRef.on('child_added', function(snapshot) {
+				/* myDataRef.on('child_added', function(snapshot) {
 				var message = snapshot.val();
 				alert(message);
 				}); */
 
-                var a_danmu = {
-                    "text": "豆喔!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!",
-                    "color": "red",
-                    "size": "1",
-                    "position": "0",
-                    "time": 1,
-                    "isnew": " ",
-                    "from": "self"
-                };
-                g_danmuList.push(a_danmu);
+				/*var a_danmu = {
+				"text" : "豆喔!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!",
+				"color" : "red",
+				"size" : "1",
+				"position" : "0",
+				"time" : 1,
+				"isnew" : " ",
+				"from" : "self"
+				};
+				g_danmuList.push(a_danmu);*/
 
-                console.log("Danmu init.");
-                //console.dir(rect);
-                //console.log("top:" + rect.top + " left:" + rect.left);
+				console.log("Danmu init.");
+				//console.dir(rect);
+				//console.log("top:" + rect.top + " left:" + rect.left);
 
-                //
-                //1.0.14
-                // rect.top is a dynamic value means the distance from object to current view top
-                // #! we don't need to plus it with offset, offset is just sufficient
-                var offset = videoProps.target.offset().top;
-                console.log(offset + "+" + rect.top);
+				//
+				//1.0.14
+				// rect.top is a dynamic value means the distance from object to current view top
+				// #! we don't need to plus it with offset, offset is just sufficient
+				var offset = videoProps.target.offset().top;
+				console.log(offset + "+" + rect.top);
 
-                //1.0.20
-                if (!danmuWindowExist) {
-                    $("#danmu").danmu({
-                        left: rect.left,
-                        top: (offset),
-                        height: rect.height,
-                        width: rect.width,
-                        zindex: 2147483647,
-                        speed: 30000,
-                        opacity: 1,
-                        font_size_small: 16,
-                        font_size_big: 24,
-                        top_botton_danmu_time: 6000
-                    });
-                } else {
-                    var videoPosProp = {
-                        "left": rect.left,
-                        "top": offset,
-                        "width": rect.width,
-                        "height": rect.height
-                    };
-                    $('#danmu').danmu("danmu_updateVideoProps", videoPosProp);
-                    $('#danmu').danmu("danmu_getVideoProps");
-                    //console.log(offset + "+" + rect.top);
-                }
+				//1.0.20
+				if (!danmuWindowExist) {
+					$("#danmu").danmu({
+						left : rect.left,
+						top : (offset),
+						height : rect.height,
+						width : rect.width,
+						zindex : 2147483647,
+						speed : 30000,
+						opacity : 1,
+						font_size_small : 16,
+						font_size_big : 24,
+						top_botton_danmu_time : 6000
+					});
+				} else {
+					var videoPosProp = {
+						"left" : rect.left,
+						"top" : offset,
+						"width" : rect.width,
+						"height" : rect.height
+					};
+					$('#danmu').danmu("danmu_updateVideoProps", videoPosProp);
+					$('#danmu').danmu("danmu_getVideoProps");
+					//console.log(offset + "+" + rect.top);
+				}
 
-                //console.log("初始left:" + rect.left + ", width: " + currentRightClickVideo.videoWidth);
+				//console.log("初始left:" + rect.left + ", width: " + currentRightClickVideo.videoWidth);
 
-                window.onresize = function(event) {
-                    var tmpOffset = videoProps.target.offset().top;
-                    rect = currentRightClickVideo.getBoundingClientRect();
-                    var videoPosProp = {
-                        "left": rect.left,
-                        "top": tmpOffset,
-                        "width": currentRightClickVideo.videoWidth,
-                        "height": currentRightClickVideo.videoHeight
-                    };
-                    //$('#winSize').danmu("danmu_updateVideoProps", videoPosProp);
-                    $('#winSize').text("left:" + rect.left + ", width:" + currentRightClickVideo.videoWidth);
-                    console.log("resized!");
-                };
+				/*window.onresize = function (event) {
+				var tmpOffset = videoProps.target.offset().top;
+				rect = currentRightClickVideo.getBoundingClientRect();
+				var videoPosProp = {
+				"left" : rect.left,
+				"top" : tmpOffset,
+				"width" : currentRightClickVideo.videoWidth,
+				"height" : currentRightClickVideo.videoHeight
+				};
+				//$('#winSize').danmu("danmu_updateVideoProps", videoPosProp);
+				$('#winSize').text("left:" + rect.left + ", width:" + currentRightClickVideo.videoWidth);
+				console.log("resized!");
+				};*/
 
-                $('#danmu').danmu('danmu_resume');
+				$('#danmu').danmu('danmu_resume');
 
-                // add by list
-                /*for (var i = 0; i < g_danmuList.length; i++) {
+				// add by list
+				/*for (var i = 0; i < g_danmuList.length; i++) {
 				$('#danmu').danmu("add_danmu", g_danmuList[i]);
 				}*/
 
-                console.log("Danmu Finish");
+				console.log("Danmu Finish");
 
-                videoProps.obj.onpause = function() {
+				videoProps.obj.onpause = function () {
 
-                    $("#danmu").danmu('danmu_pause');
-                };
+					$("#danmu").danmu('danmu_pause');
+				};
 
-                videoProps.obj.onplay = function() {
+				videoProps.obj.onplay = function () {
 
-                    $('#danmu').danmu('danmu_resume');
+					$('#danmu').danmu('danmu_resume');
 
-                }
+				}
 
-                //1.0.21
-                currentRightClickVideo.onseeking = function() {
-                    tmpTime = Math.round(currentRightClickVideo.currentTime * 10);
-                    //1.0.23
-                    $('#danmu').danmu('danmu_stop');
+				//1.0.21
+				currentRightClickVideo.onseeking = function () {
+					alignTimeLine(true);
+					/*tmpTime = Math.round(currentRightClickVideo.currentTime * 10);
+					//1.0.23
 
-                    if (Math.round(tmpTime / 10) != Math.round(tmpVideoUpdateTime / 10)) {
-                        tmpVideoUpdateTime = tmpTime;
-                        //console.log("danmu time: " + $('#danmu').data("nowtime") + ", " + "影片: " + tmpTime);
-                        $('#danmu').danmu("danmu_updateDanmuTimeLine", tmpTime);
-                        //$('#danmu').data("nowtime",tmpTime);
-                    }
-                    $('#danmu').danmu('danmu_resume');
-                };
+					$('#danmu').danmu("danmu_hideall");
 
-                //1.0.23
-                currentRightClickVideo.onended = function() {
-                    $('#danmu').danmu('danmu_stop');
+					if (Math.round(tmpTime / 10) != Math.round(tmpVideoUpdateTime / 10)) {
+					tmpVideoUpdateTime = tmpTime;
+					//console.log("danmu time: " + $('#danmu').data("nowtime") + ", " + "影片: " + tmpTime);
+					$('#danmu').danmu("danmu_updateDanmuTimeLine", tmpTime);
+					//$('#danmu').data("nowtime",tmpTime);
+					}*/
+					//$('#danmu').danmu('danmu_resume');
+				};
 
-                };
+				//1.0.23
+				currentRightClickVideo.onended = function () {
+					$('#danmu').danmu('danmu_stop');
 
-                currentRightClickVideo.onplay = function() {
-                    $('#danmu').danmu('danmu_resume');
-                };
+				};
 
-                //1.0.19
-                if (danmuWindowExist) {
-                    $("#danmu_dialog").dialog('close');
-                    danmuWindowExist = false;
-                }
-                $("#danmu_dialog").dialog();
-                danmuWindowExist = true;
+				currentRightClickVideo.onplay = function () {
+					$('#danmu').danmu('danmu_resume');
+				};
 
-            }
-        }
+				//1.0.19
+				if (danmuWindowExist) {
+					$("#danmu_dialog").dialog('close');
+					danmuWindowExist = false;
+				}
+				$("#danmu_dialog").dialog();
+				danmuWindowExist = true;
 
-        $(".custom-popchrome-menu").remove();
-    });
+			}
+		}
 
-    /*$.contextMenu({
+		$(".custom-popchrome-menu").remove();
+	});
+
+	/*$.contextMenu({
 	selector: 'video',
 	callback: function(key, options) {
 	var m = "clicked: " + key;
@@ -550,34 +652,40 @@ $(function() {
 // listen to html5 player full screen event
 
 
-document.addEventListener("fullscreenchange", function(e) {
-    //fullscreenState.innerHTML = (document.fullscreen) ? "" : "not ";
-    console.log('Event1: ' + document.fullscreen);
+document.addEventListener("fullscreenchange", function (e) {
+	//fullscreenState.innerHTML = (document.fullscreen) ? "" : "not ";
+	console.log('Event1: ' + document.fullscreen);
 }, false);
 
-document.addEventListener("mozfullscreenchange", function(e) {
-    //fullscreenState.innerHTML = (document.mozFullScreen) ? "" : "not ";
-    console.log('Event2: ' + document.mozFullScreen);
+document.addEventListener("mozfullscreenchange", function (e) {
+	//fullscreenState.innerHTML = (document.mozFullScreen) ? "" : "not ";
+	console.log('Event2: ' + document.mozFullScreen);
 }, false);
 
-document.addEventListener("webkitfullscreenchange", function(e) {
-    //fullscreenState.innerHTML = (document.webkitIsFullScreen) ? "" : "not ";
-    console.log('Event3: ' + document.webkitIsFullScreen);
-	
+document.addEventListener("webkitfullscreenchange", function (e) {
+	//fullscreenState.innerHTML = (document.webkitIsFullScreen) ? "" : "not ";
+	console.log('Event3: ' + document.webkitIsFullScreen);
+
 	//1.0.25
-	if (ytVidId()) {
-		if(document.webkitIsFullScreen){
-			jQuery("#danmu").detach().appendTo('.html5-video-container')
-		}else{
-			jQuery("#danmu").detach().appendTo('body')
+
+	if (document.webkitIsFullScreen) {
+		if (ytVidId()) {
+			$("#danmu").detach().appendTo('.html5-video-container');
 		}
+		isFullScreenFlag = true;
+	} else {
+
+		if (ytVidId()) {
+			$("#danmu").detach().appendTo('body');
+		}
+		isFullScreenFlag = false;
 	}
-	
+
 }, false);
 
-document.addEventListener("msfullscreenchange", function(e) {
-    //fullscreenState.innerHTML = (document.msFullscreenElement) ? "" : "not ";
-    console.log('Event4: ' + document.msFullscreenElement);
+document.addEventListener("msfullscreenchange", function (e) {
+	//fullscreenState.innerHTML = (document.msFullscreenElement) ? "" : "not ";
+	console.log('Event4: ' + document.msFullscreenElement);
 }, false);
 
 //1.0.16
@@ -585,95 +693,85 @@ document.addEventListener("msfullscreenchange", function(e) {
 //1.0.18
 function renderInputBox() {
 
-    $("#danmu_dialog").load(chrome.extension.getURL("danMu.html"), function() {
-        $('#danMuUserText').keypress(function(e) {
-            if (e.keyCode == 13) {
-                sendDanmuFunc();
-            }
-        });
+	$("#danmu_dialog").load(chrome.extension.getURL("danMu.html"), function () {
+		$('#danMuUserText').keypress(function (e) {
+			if (e.keyCode == 13) {
+				sendDanmuFunc();
+			}
+		});
 
-        $("#danMuUserBtn").click(function() {
-            sendDanmuFunc(); // v1.0.2.1
-        });
+		$("#danMuUserBtn").click(function () {
+			sendDanmuFunc(); // v1.0.2.1
+		});
 
+		//1.0.24 check to query db danmu
 
-//1.0.24 check to query db danmu
+		$("#display").click(function () {
+			console.log("checked");
+			if ($("#display").prop("checked")) {
+				displayFlag = true;
+				console.log("checked 2");
+				displayDanmu(true);
+				
+				dynamodb = new AWS.DynamoDB();
 
-$("#display").click(function() {
-console.log("checked");
-    if ($("#display").prop("checked")) {
-        console.log("checked 2");
+				var paramsQuery = {
+					"TableName" : "bulletsub",
+					"Select" : "SPECIFIC_ATTRIBUTES",
+					"AttributesToGet" : ["comment"],
+					"KeyConditions" : { // indexed attributes to query
+						// must include the hash key value of the table or index
+						// with 'EQ' operator
+						"Url" : {
+							ComparisonOperator : 'EQ', // (EQ | NE | IN | LE | LT | GE | GT | BETWEEN |
+							//  NOT_NULL | NULL | CONTAINS | NOT_CONTAINS | BEGINS_WITH)
+							AttributeValueList : [{
+									S : videoProps.obj.baseURI
+								}, ],
+						},
+						// more key conditions ...
+					},
+					"ReturnConsumedCapacity" : "TOTAL"
+				};
 
-        dynamodb = new AWS.DynamoDB();
+				dynamodb.query(paramsQuery, function (err, result) {
 
+					if (err) {
+						console.log(err);
+					} else {
 
-        var paramsQuery = {
-            "TableName": "bulletsub",
-            "Select": "SPECIFIC_ATTRIBUTES",
-            "AttributesToGet": ["comment"],
-            "KeyConditions": { // indexed attributes to query
-                // must include the hash key value of the table or index 
-                // with 'EQ' operator
-                "Url": {
-                    ComparisonOperator: 'EQ', // (EQ | NE | IN | LE | LT | GE | GT | BETWEEN | 
-                    //  NOT_NULL | NULL | CONTAINS | NOT_CONTAINS | BEGINS_WITH)
-                    AttributeValueList: [{
-                        S:  videoProps.obj.baseURI
-                    }, ],
-                },
-                // more key conditions ...
-            },
-            "ReturnConsumedCapacity": "TOTAL"
-        };
+						allDanmu = result;
+						console.log("query done...");
+						console.log(result);
 
+						result.Items.map(function (item) {
 
+							var a_danmu = {
+								"text" : item.comment.M.text.S,
+								"color" : item.comment.M.color.S,
+								"size" : item.comment.M.size.S,
+								"position" : item.comment.M.position.S,
+								"time" : item.comment.M.time.S,
+								"isnew" : item.comment.M.isnew.S,
+								"from" : item.comment.M.from.S
+							};
 
-        dynamodb.query(paramsQuery, function(err, result) {
+							$('#danmu').danmu("add_danmu", a_danmu);
+						});
 
-            if (err) {
-                console.log(err);
-            } else {
+					}
 
-                allDanmu = result;
-                console.log("query done...");
-                console.log(result);
+				});
 
-                result.Items.map(function(item) {
+			} else {
+				displayFlag = false;
+				displayDanmu(false);
+			}
 
+		});
 
-                    var a_danmu = {
-                        "text": item.comment.M.text.S,
-                        "color": item.comment.M.color.S,
-                        "size": item.comment.M.size.S,
-                        "position": item.comment.M.position.S,
-                        "time": item.comment.M.time.S,
-                        "isnew": item.comment.M.isnew.S,
-                        "from": item.comment.M.from.S
-                    };
+	});
 
-                    $('#danmu').danmu("add_danmu", a_danmu);
-                });
-
-
-            }
-
-
-        });
-
-    }
-
-
-});
-
-
-
-    });
-
-    $("#danmu_dialog").hide();
+	$("#danmu_dialog").hide();
 
 }
-
-
-
-
-
