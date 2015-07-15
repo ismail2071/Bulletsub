@@ -44,11 +44,11 @@ var danmuWindowExist = false;
 // 1.0.4
 chrome.runtime.onMessage.addListener(
     function(request, sender, sendResponse) {
-        if (request.open) {
-            alert("start");
-            renderInputBox();
-        }
-        //sendResponse({farewell : "goodbye"});
+    console.log(sender.tab ?
+                "from a content script:" + sender.tab.url :
+                "from the extension");
+        console.dir(request.token);
+      sendResponse({farewell: "goodbye"});
     });
 
 var rect = {};
@@ -585,6 +585,9 @@ document.addEventListener("msfullscreenchange", function(e) {
 //1.0.18
 function renderInputBox() {
 
+
+
+
     $("#danmu_dialog").load(chrome.extension.getURL("danMu.html"), function() {
         $('#danMuUserText').keypress(function(e) {
             if (e.keyCode == 13) {
@@ -604,8 +607,26 @@ console.log("checked");
     if ($("#display").prop("checked")) {
         console.log("checked 2");
 
-        dynamodb = new AWS.DynamoDB();
 
+
+    //sendMessage is a fucking asynchronous function 
+
+    chrome.runtime.sendMessage({doyourjob: "needFuckingToken"}, function(response) {
+        console.dir(response);
+        
+        var tokenDesu = response.answer.split("=")[1];
+
+        console.log("token:"+tokenDesu);
+
+         AWS.config.credentials = new AWS.WebIdentityCredentials({
+            RoleArn: 'arn:aws:iam::811580466261:role/facebookIdf',
+            ProviderId: 'graph.facebook.com', // this is null for Google
+            WebIdentityToken: tokenDesu
+        });
+
+    AWS.config.region = 'us-west-2';
+
+    dynamodb = new AWS.DynamoDB();        
 
         var paramsQuery = {
             "TableName": "bulletsub",
@@ -656,9 +677,17 @@ console.log("checked");
 
 
             }
-
-
         });
+
+
+    });
+
+    
+
+
+
+
+   
 
     }
 

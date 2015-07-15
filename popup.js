@@ -1,17 +1,17 @@
-// popup.js
+        if (localStorage.accessToken) {
+            var graphUrl = "https://graph.facebook.com/me?" + localStorage.accessToken + "&callback=displayUser";
+            console.log(graphUrl);
+        
+            var script = document.createElement("script");
+            script.src = graphUrl;
+            document.body.appendChild(script);
+ 
+            function displayUser(user) {
+                console.log(user);
+                console.dir(document);
+                document.getElementById("greeting").innerHTML = "<h2>Hi, "+user.first_name+"<BR> welcome to use BulletSub! </h2>";
 
-//alert("test2!");
+            }
 
-//alert(src);
-/*document.getElementById("button").onclick = function() {
-//alert("test!");
-$(".lsb").html("ttt");
-}*/
-
-$(function () {
-	$("p").remove();
-	document.getElementById("maincontent");
-	var src = document.getElementsByTagName("maincontent");
-	y = $(".article_content").html('President Speech TEST!');;
-	x = 1;
-});
+        }
+    
