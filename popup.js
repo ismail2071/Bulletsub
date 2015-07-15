@@ -8,7 +8,7 @@
  
             function displayUser(user) {
                 console.log(user);
-                console.dir(document);
+                
                 document.getElementById("greeting").innerHTML = "<h2>Hi, "+user.first_name+"<BR> welcome to use BulletSub! </h2>";
 
             }

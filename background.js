@@ -1,6 +1,8 @@
 
 /**
-* open tab for auth facebook
+* 1.0.27
+* open tab for auth facebook 
+* reference https://developers.facebook.com/docs/facebook-login/manually-build-a-login-flow/v2.4#token
 */
 
 if(!localStorage.accessToken){
@@ -17,7 +19,7 @@ authTabId = tab.id;
 
 // monitoring tab
 chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab){
-// if status == complete
+// if status == complete, get the return url token
 
 if (tabId == authTabId && changeInfo.status == 'complete' && tab.url.indexOf(url)) {
 
