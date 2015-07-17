@@ -4,23 +4,23 @@
 * open tab for auth facebook 
 * reference https://developers.facebook.com/docs/facebook-login/manually-build-a-login-flow/v2.4#token
 */
-
-if(!localStorage.accessToken){
+//console.dir(localStorage.accessToken);
+//if(!localStorage.accessToken){
 
 // new tab id
-var authTabId; 
+//var authTabId; 
  // facebook app url
-var url = 'https://www.facebook.com/dialog/oauth?client_id=496825830382069&response_type=token&scope=email&redirect_uri=http://www.facebook.com/connect/login_success.html';
+//var url = 'https://www.facebook.com/dialog/oauth?client_id=496825830382069&response_type=token&scope=email&redirect_uri=http://www.facebook.com/connect/login_success.html';
 
 // create new tab for fb auth
-chrome.tabs.create({url: url, selected: true}, function(tab){
-authTabId = tab.id;
-});
+//chrome.tabs.create({url: url, selected: true}, function(tab){
+//authTabId = tab.id;
+//});
 
 // monitoring tab
-chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab){
+//chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab){
 // if status == complete, get the return url token
-
+/*
 if (tabId == authTabId && changeInfo.status == 'complete' && tab.url.indexOf(url)) {
 
   var params = tab.url.split('#')[1];
@@ -37,7 +37,7 @@ if (tabId == authTabId && changeInfo.status == 'complete' && tab.url.indexOf(url
 
 
 }
-
+*/
 // Set up context menu at install time.
 chrome.runtime.onInstalled.addListener(function() {
     var context = "all";
@@ -92,19 +92,41 @@ function onClickHandler(info, tab) {
 };
 
 
-
+/*1.0.28*/
 chrome.runtime.onMessage.addListener(
   function(request, sender, sendResponse) {
     if (request.doyourjob == "needFuckingToken"){
-      console.log("needFuckingToken:"+localStorage.accessToken);
-      sendResponse({answer: localStorage.accessToken});
+
+        $.getJSON( "http://52.26.184.134:3000/getDanmu", {"Url":request.comment} )
+        .done(
+        function( data ) {
+            console.log("data:");
+            console.dir(data);
+            sendResponse({answer:data});
+        })
+        .fail(function( jqxhr, textStatus, error ) {
+          var err = textStatus + ", " + error;
+          console.log( "Request Failed: " + err );
+        });
     }
+    else if (request.doyourjob == "needFuckingSend"){
+
+      var postdata = {'Url':request.Url,comment:request.comment,'service':'BulletSub'};
+
+      $.post( "http://52.26.184.134:3000/putDanmu",postdata, "json");
+
+    }
+
+      /**
+      Google Chrome extension onMessage Document
+
+      Function to call (at most once) when you have a response. The argument should be any JSON-ifiable object. 
+      !! If you have more than one onMessage listener in the same document, then only one may send a response. 
+      This function becomes invalid when the event listener returns, 
+      unless you ***return true*** from the event listener to indicate you wish to send a response asynchronously 
+      (this will keep the message channel open to the other end until sendResponse is called).
+    
+      **/
+     return true; //Important
   });
 
-/*chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
-   if(changeInfo && changeInfo.status == "complete"){
-    chrome.tabs.executeScript(tabId, {file: "content_script.js"});
-    
-   }
-   
-}); */

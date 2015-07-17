@@ -29,6 +29,7 @@
 1.0.25      2015/07/11  kusogray    fix youtube full screen issue
 1.0.26      2015/07/14  kusogray    display danmu option
 1.0.27      2015/07/15  ismail      Using facebook Identity Federation APIs for AWS
+1.0.28      2015/07/18  ismail      change to nodejs and MongoDB on AWS solution
  */
 
 //1.0.1
@@ -163,110 +164,25 @@ function sendDanmuFunc() {
         console.log("send danmu: " + text + ", at time: " + time);
         $('#danmu').danmu("add_danmu", a_danmu);
         document.getElementById('danMuUserText').value = '';
-        //sendToFireBase(a_danmu,videoUri);
         //1.0.24
-        sendToDynamodb(a_danmu, videoUri);
+        //1.0.28
+        sendToMongo(a_danmu, videoUri);
     }
 
 }
 
-//1.0.24 stupid Dynamodb
+//1.0.28 (insert danmu to Mongo)
 
-function sendToDynamodb(inputDanmuObj, videoUri) {
+function sendToMongo(inputDanmuObj, videoUri) {
 
     /////////////////  create
+    chrome.runtime.sendMessage({
+        doyourjob: "needFuckingSend",comment:inputDanmuObj,Url:videoUri
+    }, function(response) {
+        console.log("answer:");
+        console.dir(response);
+});
 
-
-    var paramsPut = {};
-    paramsPut.TableName = "bulletsub";
-    paramsPut.Item = {
-        "commentId": {
-            "S": (allDanmu.Count + 1).toString()
-        },
-        "Url": {
-            "S": videoUri
-        },
-        "name": {
-            "S": "ismail"
-        },
-        "comment": {
-            "M": {
-                "text": {
-                    "S": inputDanmuObj.text
-                },
-                "color": {
-                    "S": inputDanmuObj.color
-                },
-                "size": {
-                    "S": inputDanmuObj.size
-                },
-                "position": {
-                    "S": inputDanmuObj.position
-                },
-                "time": {
-                    "S": inputDanmuObj.time
-                },
-                "isnew": {
-                    "S": inputDanmuObj.isnew
-                },
-                "from": {
-                    "S": inputDanmuObj.from
-                }
-            }
-        }
-    }
-
-    console.log("insert dynamodb start");
-
-    dynamodb.putItem(paramsPut, function(err, result) {
-        if (err) {
-            console.log(err);
-        } else {
-            console.log(result);
-        }
-    });
-
-}
-
-//1.0.3
-function sendToFireBase(inputDanmuObj, videoUri) {
-
-    var tmpUrl = document.URL;
-    tmpUrl = tmpUrl.replace(/\./g, "{dot}");
-    tmpUrl = tmpUrl.replace(/\#/g, "{sharp}");
-    tmpUrl = tmpUrl.replace(/\$/g, "{dollar}");
-    tmpUrl = tmpUrl.replace(/\[]/g, "{left}");
-    tmpUrl = tmpUrl.replace(/\]/g, "{right}");
-    tmpUrl = tmpUrl.replace(/\:/g, "{colon}");
-    tmpUrl = tmpUrl.replace(/\//g, "{slash}");
-    console.log(tmpUrl);
-
-    var randomSubName = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-        var r = Math.random() * 16 | 0,
-            v = c == 'x' ? r : (r & 0x3 | 0x8);
-        return v.toString(16);
-    });
-    var usersRef = myFirebaseRef.child("popChrome");
-    var popChromeRef = usersRef.child(tmpUrl);
-    var contentRef = popChromeRef.child(randomSubName);
-
-    /* "text" : text,
-    "color" : color,
-    "size" : size,
-    "position" : position,
-    "time" : time,
-    "isnew" : " " */
-
-    //[Todo] it might be injected so we need a white list here.
-    var content = "text:" + inputDanmuObj.text +
-        ",color:" + inputDanmuObj.color +
-        ",size:" + inputDanmuObj.size +
-        ",position:" + inputDanmuObj.position +
-        ",time:" + inputDanmuObj.time;
-
-    contentRef.set({
-        content
-    });
 }
 
 //1.0.9
@@ -521,7 +437,17 @@ $(function() {
                 g_danmuList.push(a_danmu);*/
 
                 //1.0.27
-                loadDynamiDB();
+                //1.0.28 (load danmu from Mongo)
+                function callback (response){
+                    console.log("answer:");
+                    console.dir(response.answer);
+                    response.answer.map(function(item) {
+                    $('#danmu').danmu("add_danmu", item);                   
+                });
+                }
+
+                chrome.runtime.sendMessage({doyourjob: "needFuckingToken",comment:videoProps.obj.baseURI},callback);
+
                 console.log("Danmu init.");
                 //console.dir(rect);
                 //console.log("top:" + rect.top + " left:" + rect.left);
@@ -658,7 +584,6 @@ $(function() {
 // 1.0.14
 // listen to html5 player full screen event
 
-
 document.addEventListener("fullscreenchange", function(e) {
     //fullscreenState.innerHTML = (document.fullscreen) ? "" : "not ";
     console.log('Event1: ' + document.fullscreen);
@@ -729,86 +654,3 @@ function renderInputBox() {
 
 }
 
-
-
-function loadDynamiDB() {
-
-    //1.0.27
-    //sendMessage is a fucking asynchronous function 
-
-    chrome.runtime.sendMessage({
-        doyourjob: "needFuckingToken"
-    }, function(response) {
-        console.dir(response);
-
-        var tokenDesu = response.answer.split("=")[1];
-
-        console.log("token:" + tokenDesu);
-
-        AWS.config.credentials = new AWS.WebIdentityCredentials({
-            RoleArn: 'arn:aws:iam::811580466261:role/facebookIdf',
-            ProviderId: 'graph.facebook.com', // this is null for Google
-            WebIdentityToken: tokenDesu
-        });
-
-        AWS.config.region = 'us-west-2';
-
-        dynamodb = new AWS.DynamoDB();
-
-        var paramsQuery = {
-            "TableName": "bulletsub",
-            "Select": "SPECIFIC_ATTRIBUTES",
-            "AttributesToGet": ["comment"],
-            "KeyConditions": { // indexed attributes to query
-                // must include the hash key value of the table or index 
-                // with 'EQ' operator
-                "Url": {
-                    ComparisonOperator: 'EQ', // (EQ | NE | IN | LE | LT | GE | GT | BETWEEN | 
-                    //  NOT_NULL | NULL | CONTAINS | NOT_CONTAINS | BEGINS_WITH)
-                    AttributeValueList: [{
-                        S: videoProps.obj.baseURI
-                    }, ],
-                },
-                // more key conditions ...
-            },
-            "ReturnConsumedCapacity": "TOTAL"
-        };
-
-
-
-        dynamodb.query(paramsQuery, function(err, result) {
-
-            if (err) {
-                console.log(err);
-            } else {
-
-                allDanmu = result;
-                console.log("query done...");
-                console.log(result);
-
-                result.Items.map(function(item) {
-
-
-                    var a_danmu = {
-                        "text": item.comment.M.text.S,
-                        "color": item.comment.M.color.S,
-                        "size": item.comment.M.size.S,
-                        "position": item.comment.M.position.S,
-                        "time": item.comment.M.time.S,
-                        "isnew": item.comment.M.isnew.S,
-                        "from": item.comment.M.from.S
-                    };
-
-                    $('#danmu').danmu("add_danmu", a_danmu);
-                });
-
-
-            }
-        });
-
-
-    });
-
-
-
-}
