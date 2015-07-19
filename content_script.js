@@ -446,7 +446,13 @@ $(function() {
                 });
                 }
 
-                chrome.runtime.sendMessage({doyourjob: "needFuckingToken",comment:videoProps.obj.baseURI},callback);
+                //chrome.runtime.sendMessage({doyourjob: "needFuckingToken",comment:videoProps.obj.baseURI},callback);
+
+                var port = chrome.runtime.connect({name: "needFuckingToken"});
+                port.postMessage({comment:videoProps.obj.baseURI});
+
+               
+                port.onMessage.addListener(callback);
 
                 console.log("Danmu init.");
                 //console.dir(rect);

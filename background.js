@@ -93,23 +93,40 @@ function onClickHandler(info, tab) {
 
 
 /*1.0.28*/
-chrome.runtime.onMessage.addListener(
-  function(request, sender, sendResponse) {
-    if (request.doyourjob == "needFuckingToken"){
+
+
+chrome.runtime.onConnect.addListener(function(port) {
+console.log(port.name);
+
+  if (port.name == "needFuckingToken"){
+    port.onMessage.addListener(function(request) {
+          console.log("get db danmu start");
+          console.log(request.comment);
 
         $.getJSON( "http://52.26.184.134:3000/getDanmu", {"Url":request.comment} )
         .done(
         function( data ) {
             console.log("data:");
             console.dir(data);
-            sendResponse({answer:data});
+            port.postMessage({answer:data});
         })
         .fail(function( jqxhr, textStatus, error ) {
           var err = textStatus + ", " + error;
           console.log( "Request Failed: " + err );
         });
-    }
-    else if (request.doyourjob == "needFuckingSend"){
+    
+
+
+    });
+  }
+
+
+});
+
+
+chrome.runtime.onMessage.addListener(
+  function(request, sender, sendResponse) {
+    if (request.doyourjob == "needFuckingSend"){
 
       var postdata = {'Url':request.Url,comment:request.comment,'service':'BulletSub'};
 
