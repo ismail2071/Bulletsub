@@ -10,7 +10,8 @@ TO-LIST
 - [ ] display multi time issue  (danmu duplicate)
 - [ ] reload danmu when change target video
 - [ ] right click to display / close danmu when fullscreen 
-
+- [ ] open danmu window need not to always resume timeline
+- [ ] flag to record loaded urls
 
 ------------------------------------------------
 (2) Nice to have functions
