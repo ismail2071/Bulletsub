@@ -36,7 +36,7 @@
 //var myFirebaseRef = new Firebase("https://popchrome.firebaseio.com/");
 
 var isFullScreenFlag = false;
-var displayFlag = true;
+var displayFlag = false;
 
 //1.0.25
 function ytVidId() {
