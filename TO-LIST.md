@@ -7,11 +7,12 @@ TO-LIST
 ------------------------------------------------
 
 
-- [ ] display multi time issue  (danmu duplicate)
+
 - [ ] reload danmu when change target video
-- [ ] right click to display / close danmu when fullscreen 
+- [ ] fullscreen load danmu when user click load  
+- [ ] not to load danmu to cuurent video twice
 - [ ] open danmu window need not to always resume timeline
-- [ ] flag to record loaded urls
+
 
 ------------------------------------------------
 (2) Nice to have functions
@@ -50,3 +51,6 @@ TO-LIST
   - [X] rest service to "get all" danmu
   - [X] practice Amazon DynamoDB CRUD 
   - [X] buy a Amazon DynamoDB service
+  
+- [X] display multi time issue  (danmu duplicate)
+- [X] right click to display / close danmu when fullscreen 

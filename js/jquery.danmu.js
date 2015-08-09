@@ -278,6 +278,8 @@ var cyntax = {
 		callback: function( index ) {
 			heig=$(element).height();
 			//row_conut=parseInt(heig/options.font_size_big);
+			//console.log("nowtime: " + $(element).data("nowtime"));
+			$('#timeLineText').text($(element).data("nowtime"));
 			if($(element).data("danmu_array")[$(element).data("nowtime")]){
 				var danmus=$(element).data("danmu_array")[$(element).data("nowtime")];
 				for(var i=0;i<danmus.length;i++){
@@ -460,6 +462,7 @@ Danmu.prototype.danmu_updateDanmuTimeLine = function(time){
 	this.$element.data("nowtime",time);
 	
 };
+
 
 
 

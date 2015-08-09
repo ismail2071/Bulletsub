@@ -53,6 +53,12 @@
   </tbody></table>
 </div>
 
+<div id='danmu_upper'>
+<label>TimeLine:</label>
+  <table id="timeLineText" style="border-collapse:separate;border-spacing:4px;"><tbody>
+  </tbody></table>
+</div>
+
 
 <BR>
  <div id="danmu_lower">
@@ -98,20 +104,37 @@ $("#Palette").append("</tr>");
 
 
 type.map(
-  function(typeObj){
+function(typeObj){
     $("#"+typeObj[0]+" tbody td").click(function() {     // function_td
-    $("#"+typeObj[0]+" tbody td").css("border-color","black");
-    $("#"+typeObj[0]+" tbody td").css("border-width","1px");
-    $(this).css("border-color","red");
-    $(this).css("border-width","2px");
-    $("#"+typeObj[1]).val($(this).attr('class'));
-    console.log($("#"+typeObj[1]).val());
+		$("#"+typeObj[0]+" tbody td").css("border-color","black");
+		$("#"+typeObj[0]+" tbody td").css("border-width","1px");
+		if($(this)[0].id =="Red"){
+			$(this).css("border-color","black");
+		}else{
+			$(this).css("border-color","red");
+		}
+		
+		$(this).css("border-width","2px");
+		$("#"+typeObj[1]).val($(this).attr('class'));
+		console.log($("#"+typeObj[1]).val());
+	});
+
 });
 
-  });
+// default Red
+$('#Red').css("border-color","black");
+$('#Red').css("border-width","2px");
+$('#danMuUserColor').val("Red");
 
+// default Size Big
+$('#BIG').css("border-color","red");
+$('#BIG').css("border-width","2px");
+$('#danMuUserTextSize').val("BIG");
 
-
+// default pos random
+$('#Random').css("border-color","red");
+$('#Random').css("border-width","2px");
+$('#danMuUserPosition').val("0");
 
 </script>
 
