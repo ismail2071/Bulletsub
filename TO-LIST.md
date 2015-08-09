@@ -7,7 +7,7 @@ TO-LIST
 ------------------------------------------------
 
 - [ ] show the loading danmu status on the danmu window
-
+- [ ] try change "get danmu from mongo" function from backgrond.js to content.js (using ajax to get json)
 
 
 ------------------------------------------------
