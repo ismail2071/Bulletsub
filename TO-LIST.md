@@ -6,7 +6,7 @@ TO-LIST
 (1) We really need to close this project soon
 ------------------------------------------------
 
-  
+- [ ] show the loading danmu status on the danmu window
 
 
 
