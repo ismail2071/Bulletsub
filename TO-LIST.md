@@ -6,18 +6,15 @@ TO-LIST
 (1) We really need to close this project soon
 ------------------------------------------------
 
+  
 
-
-- [ ] reload danmu when change target video
-- [ ] fullscreen load danmu when user click load  
-- [ ] not to load danmu to cuurent video twice
-- [ ] open danmu window need not to always resume timeline
 
 
 ------------------------------------------------
 (2) Nice to have functions
 ------------------------------------------------
 
+- [ ] not to load danmu to cuurent video twice
 - [ ] load danmu array, not single one
 - [ ] consider using iframe to implement and optimize danmu windows (more fashion danmu window)
 - [ ] survey context menu
@@ -54,3 +51,6 @@ TO-LIST
   
 - [X] display multi time issue  (danmu duplicate)
 - [X] right click to display / close danmu when fullscreen 
+- [X] reload danmu when change target video
+- [X] open danmu window need not to always resume timeline
+- [X] fullscreen load danmu when user click load
