@@ -433,10 +433,13 @@ $(function () {
 				//1.0.21
 				if (!updateVideoPosTimerFlag) {
 					var int = self.setInterval("updateVideoPosTimeClock()", 700);
+					var int = self.setInterval("alignTimeLine(false)", 5000);
 					updateVideoPosTimerFlag = true;
 				}
 
+				$('#loadingStatusLabel').text("Status: Loading...");
 				alignTimeLine(true);
+				
 
 				console.log("Danmu Start");
 				tmpVideoUpdateTime = 0;
@@ -472,6 +475,7 @@ $(function () {
 				console.log("Danmu is loading from server now...");
 				function callback(response) {
 					console.log("Danmu is loading done:");
+					$('#loadingStatusLabel').text("Status: Loaded " + response.answer.length + " danmus.");
 					console.dir(response.answer);
 					response.answer.map(function (item) {
 						$('#danmu').danmu("add_danmu", item);
