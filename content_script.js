@@ -623,6 +623,8 @@ $(function () {
 	"quit": {name: "Quit", icon: "quit"}
 	}
 	});*/
+	
+	
 
 });
 
@@ -691,6 +693,9 @@ function renderInputBox() {
 			} else
 				$("#danmu").show();
 		});
+		
+		
+		
 
 	});
 

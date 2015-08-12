@@ -6,10 +6,12 @@ TO-LIST
 (1) We really need to close this project soon
 ------------------------------------------------
 
-- [ ] show the loading danmu status on the danmu window
+
 - [ ] add language prop in danmu
-- [ ] add language selection combo box
 - [ ] hide danmu w.r.t current language selection
+- [ ] do not return fail when 0 danmu
+- [ ] fb url check
+
 
 
 
@@ -57,3 +59,5 @@ TO-LIST
 - [X] reload danmu when change target video
 - [X] open danmu window need not to always resume timeline
 - [X] fullscreen load danmu when user click load
+- [X] show the loading danmu status on the danmu window
+- [X] add language selection combo box

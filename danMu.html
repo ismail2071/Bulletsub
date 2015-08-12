@@ -28,25 +28,31 @@
 
 </style>
 
+<div id="mainDanMuDivId">
 <text id="danMuUserColor" style="display:none"></text>
 <text id="danMuUserTextSize" style="display:none"></text>
 <text id="danMuUserPosition" style="display:none"></text>
 
 <div id='danmu_upper'>
-<label>COLOR:</label>
+<label>COLOR</label>
   <table id="Palette" style="border-collapse:separate;border-spacing:4px;"><tbody>
   </tbody></table>
 </div>
 <div id='danmu_upper'>
-<label>SIZE:</label>
+<label>SIZE</label>
   <table id="danmusize" style="border-collapse:separate;border-spacing:4px;"><tbody>
   </tbody></table>
 </div>
 <div id='danmu_upper'>
-<label>POSITION:</label>
+<label>POSITION</label>
   <table id="pos" style="border-collapse:separate;border-spacing:4px;"><tbody>
   </tbody></table>
 </div>
+
+<div id='danmu_upper' style="float: right;">
+	<img id = "settingImgId"  alt="Setting" height="16" width="16">
+</div>
+
 <div id='danmu_upper'>
 <label>DISPLAY:</label>
   <table id="switch" style="border-collapse:separate;border-spacing:4px;"><tbody><input type="checkbox" id="display" value="display">
@@ -64,9 +70,38 @@
   <input type="text" class="form-control" id="danMuUserText" placeholder="DANMU!!">
   <button type="button" id="danMuUserBtn"  class="btn-custom">SUBMIT</button>
   </div>
-
-<script type="text/javascript">
   
+</div>
+
+
+  
+  <div id="danmuSettingDivId">
+
+  Language: 
+	<div></div>
+       <select   multiple="multiple" placeholder="Selected"  class="testsel">
+		   <option value="zh-tw">繁體中文</option>
+		   <option value="zh-cn">简体中文</option>
+		   <option value="en">English</option>
+		   <option value="jp">日本語</option>
+		  
+		</select>
+	
+  <img id = "prevImgId" style="float: right;"  alt="Main Page" height="16" width="16">
+  
+ <!--  <div id="tabs-2">
+    <p>Morbi tincidunt, dui sit amet facilisis feugiat, odio metus gravida ante, ut pharetra massa metus id nunc. Duis scelerisque molestie turpis. Sed fringilla, massa eget luctus malesuada, metus eros molestie lectus, ut tempus eros massa ut dolor. Aenean aliquet fringilla sem. Suspendisse sed ligula in ligula suscipit aliquam. Praesent in eros vestibulum mi adipiscing adipiscing. Morbi facilisis. Curabitur ornare consequat nunc. Aenean vel metus. Ut posuere viverra nulla. Aliquam erat volutpat. Pellentesque convallis. Maecenas feugiat, tellus pellentesque pretium posuere, felis lorem euismod felis, eu ornare leo nisi vel felis. Mauris consectetur tortor et purus.</p>
+  </div> -->
+</div>
+
+
+  
+<script type="text/javascript">
+  $('#danmuSettingDivId').hide();
+  
+   var settingImgUrl =chrome.extension.getURL("setting.png");
+	$("#settingImgId").attr("src",settingImgUrl);
+	  
   function cssstyle (color,size) {
         return "background-color:"+color+";padding:5px;border-color:black;font-size:"+ size+";border-style:solid;border-width:1px;";
   }
@@ -134,7 +169,27 @@ $('#danMuUserTextSize').val("BIG");
 $('#Random').css("border-color","red");
 $('#Random').css("border-width","2px");
 $('#danMuUserPosition').val("0");
-
+$(function () {
+	$("#settingImgId").click(function () {
+				//$("#danmu_dialog").dialog('close');
+				//alert("test");
+				//$("#danmu_dialog").load(chrome.extension.getURL("DanMuSetting.html"));
+				$('#danmuSettingDivId').show();
+				$('#mainDanMuDivId').hide();
+				$("#danmu_dialog").dialog({height: '234.5', width: '308.5'});
+			});
+			
+			
+	 var prevImgUrl =chrome.extension.getURL("home.png");
+	$('.testsel').SumoSelect({okCancelInMulti:false });
+	  $("#prevImgId").attr("src",prevImgUrl);
+	 $("#prevImgId").click(function () {
+			$('#danmuSettingDivId').hide();
+				$('#mainDanMuDivId').show();
+			//$("#danmu_dialog").load(chrome.extension.getURL("danMu.html"));
+			//$("#danmu_dialog").dialog({height: '234.5', width: '308.5'});
+	});		
+});
 </script>
 
 
