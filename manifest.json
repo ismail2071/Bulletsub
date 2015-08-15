@@ -2,7 +2,7 @@
  "manifest_version": 3,
 
   "name": "Danmu",
-  "description": "Make you video player as chatroom!",
+  "description": "Live Comment on the Videos!!",
   "version": "1.0",
  "background":  {"page":"background.html"
   },
@@ -14,14 +14,14 @@
   "permissions": ["tabs", "http://*/", "https://*/",  "contextMenus"],
   "content_scripts":[{
   "matches": [ "<all_urls>"],
-  "css": ["css/jquery-ui.css","js/sumoSelect/sumoselect.css"],
-  "js":["lib/jquery-2.1.3.min.js","js/jquery-ui.js", "js/jquery.danmu.js","content_script.js","js/sumoSelect/jquery.sumoselect.min.js"]//,
+  "css": ["css/jquery-ui.css","js/sumoSelect/sumoselect.css","css/ProtoIoOnOff.css","js/jqplot/jquery.jqplot.min.css"],
+  "js":["lib/jquery-2.1.3.min.js","lib/bootstrap.min.js","js/jquery-ui.js", "js/jquery.danmu.js","content_script.js","js/sumoSelect/jquery.sumoselect.min.js","js/jqplot/jquery.jqplot.min.js","js/jqplot/plugins/jqplot.barRenderer.min.js","js/jqplot/plugins/jqplot.categoryAxisRenderer.min.js"]//,
   //"all_frames": true
   }],
   
 
   //using chrome API chrome.extension.getURL to separate dialog html view
-   "web_accessible_resources": ["danMu.html","lib/jquery-2.1.3.min.js","home.png","setting.png"],
+   "web_accessible_resources": ["danMu.html","lib/jquery-2.1.3.min.js","home.png","setting.png","bar-chart-hi.png"],
    "icons": {  "16":"icon.png", 
                 "48":"icon.png", 
                 "128":"icon.png"  },

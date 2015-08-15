@@ -41,6 +41,29 @@
 var isFullScreenFlag = false;
 var displayFlag = false;
 
+var histogramPlot;
+var histogramDrew = false;
+var histogramPastColor = "#FF9900"; // orange
+var histogramMouseColor = "#FF0000" // red
+function toHHMMSS(input) {
+	var sec_num = parseInt(input, 10); // don't forget the second param
+	var hours = Math.floor(sec_num / 3600);
+	var minutes = Math.floor((sec_num - (hours * 3600)) / 60);
+	var seconds = sec_num - (hours * 3600) - (minutes * 60);
+
+	if (hours < 10) {
+		hours = "0" + hours;
+	}
+	if (minutes < 10) {
+		minutes = "0" + minutes;
+	}
+	if (seconds < 10) {
+		seconds = "0" + seconds;
+	}
+	var time = hours + ':' + minutes + ':' + seconds;
+	return time;
+}
+
 //1.0.25
 function ytVidId() {
 	var p = /^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/;
@@ -48,18 +71,18 @@ function ytVidId() {
 }
 
 //1.0.29
-function getInsertUrl(inputUrl){
-	if(inputUrl=="" && videoProps.obj.baseURI.indexOf('xx.fbcdn.net')> -1){
-		return videoProps.obj.baseURI.substr(videoProps.obj.baseURI,videoProps.obj.baseURI.indexOf("?"));
+function getInsertUrl(inputUrl) {
+	if (inputUrl == "" && videoProps.obj.baseURI.indexOf('xx.fbcdn.net') > -1) {
+		return videoProps.obj.baseURI.substr(videoProps.obj.baseURI, videoProps.obj.baseURI.indexOf("?"));
 	}
-	if(inputUrl.indexOf('xx.fbcdn.net')> -1){
+	if (inputUrl.indexOf('xx.fbcdn.net') > -1) {
 
-		return inputUrl.substr(inputUrl,inputUrl.indexOf("?"));
+		return inputUrl.substr(inputUrl, inputUrl.indexOf("?"));
 
-	}else{
+	} else {
 		return videoProps.obj.baseURI;
 	}
-	
+
 }
 
 //1.0.31
@@ -165,7 +188,7 @@ function sendDanmuFunc() {
 	var text = document.getElementById('danMuUserText').value;
 	var color = document.getElementById('danMuUserColor').value;
 	var position = document.getElementById('danMuUserPosition').value;
-	var videoUri = getInsertUrl(videoProps.obj.src);//ytVidId(videoProps.obj.baseURI) ? videoProps.obj.baseURI : ;
+	var videoUri = getInsertUrl(videoProps.obj.src); //ytVidId(videoProps.obj.baseURI) ? videoProps.obj.baseURI : ;
 	var time = Math.round(($('#danmu').data("nowtime")));
 	if (isNaN(time)) {
 		console.log("time is NaN, retry.");
@@ -414,6 +437,7 @@ $(function () {
 		if (event.which == 1) {
 			if (event.target.className == "custom-popchrome-menu") {
 
+				histogramDrew = false;
 				//1.0.26
 				var tmpCustomPopChromeMenuTxt = $(".custom-popchrome-menu").text();
 				if (!(tmpCustomPopChromeMenuTxt.indexOf("視窗") > -1)) {
@@ -437,9 +461,8 @@ $(function () {
 					updateVideoPosTimerFlag = true;
 				}
 
-				$('#loadingStatusLabel').text("Status: Loading...");
+				//$('#loadingStatusLabel').text("Status: Loading...");
 				alignTimeLine(true);
-				
 
 				console.log("Danmu Start");
 				tmpVideoUpdateTime = 0;
@@ -475,11 +498,125 @@ $(function () {
 				console.log("Danmu is loading from server now...");
 				function callback(response) {
 					console.log("Danmu is loading done:");
-					$('#loadingStatusLabel').text("Status: Loaded " + response.answer.length + " danmus.");
-					console.dir(response.answer);
-					response.answer.map(function (item) {
-						$('#danmu').danmu("add_danmu", item);
+					var tmpNumDanmu = 0;
+					if (response.answer.length > 0) {
+						tmpNumDanmu = response.answer.length;
+						console.dir(response.answer);
+						response.answer.map(function (item) {
+							$('#danmu').danmu("add_danmu", item);
+						});
+					}
+					//$('#loadingStatusLabel').text("Status: Loaded " + tmpNumDanmu + " danmus.");
+					$('#danmu_dialog').dialog('option', 'title', '彈幕視窗 - ' + tmpNumDanmu + " danmus.");
+
+					$("#histogramImgId").click(function () {
+
+						$('#danmuSettingDivId').hide();
+						$('#danmuStatisticsDivId').show();
+						$('#mainDanMuDivId').hide();
+
+						//  Statistics Page:
+						if (!histogramDrew) {
+							$.jqplot.config.enablePlugins = true;
+
+							s1 = [];
+							s3 = [];
+
+							var videoLen = currentRightClickVideo.duration;
+							for (i = 1; i <= videoLen; i++) {
+								s2 = [];
+								s2.push(i);
+								s2.push(Math.floor((Math.random() * 2573) + 1));
+								s1.push(s2);
+								s3.push('#17BDB8');
+							}
+
+							plot1 = $.jqplot('chart1', [s1], {
+									// Only animate if we're not using excanvas (not in IE 7 or IE 8)..
+									//animate: !$.jqplot.use_excanvas,
+									seriesColors : s3,
+									seriesDefaults : {
+										renderer : $.jqplot.BarRenderer,
+										rendererOptions : {
+											varyBarColor : true,
+											barPadding : 0,
+											barMargin : 0
+										},
+										pointLabels : {
+											show : false
+										}
+									},
+									axes : {
+										xaxis : {
+											renderer : $.jqplot.CategoryAxisRenderer,
+											//ticks: ticks
+											showTicks : false,
+											tickOptions : {
+												showGridline : false,
+												show : false
+											},
+											rendererOptions : {
+												drawBaseline : false
+											}
+										},
+										yaxis : {
+											//renderer: $.jqplot.CategoryAxisRenderer,
+											//ticks: ticks
+											tickOptions : {
+												showGridline : false,
+												show : false
+											}
+										}
+									},
+									grid : {
+										drawGridLines : false, // wether to draw lines across the grid or not.
+										background : 'transparent',
+										borderWidth : 0.0,
+									},
+
+									highlighter : {
+										show : false
+									}
+								});
+
+							$('#chart1').bind('jqplotDataClick',
+								function (ev, seriesIndex, pointIndex, data) {
+								//$('#info1').html('series: ' + seriesIndex + ', point: ' + pointIndex + ', data: ' + data);
+								currentRightClickVideo.currentTime = pointIndex;
+								//plot1.series[seriesIndex].seriesColors[pointIndex] = "#000"; // FFF is white, you could add any color here to change it
+								//plot1.redraw();
+							});
+
+							/*$('#chart1').bind('jqplotDataHighlight',
+								function (ev, seriesIndex, pointIndex, data) {
+								var tmpCurrentTime = Math.round(currentRightClickVideo.currentTime);
+								for (i = 0; i < tmpCurrentTime; i++) {
+									plot1.series[0].seriesColors[i] = "#FF9900";
+								}
+								plot1.redraw();
+							});
+
+							$('#chart1').bind('jqplotDataUnhighlight',
+								function (ev) {
+								$('#info2').html('Nothing');
+							});*/
+
+							setInterval(function () {
+								var tmpCurrentTime = Math.round(currentRightClickVideo.currentTime);
+								for (i = 0; i < tmpCurrentTime; i++) {
+									plot1.series[0].seriesColors[i] = "#FF9900";
+								}
+								plot1.redraw();
+
+							}, 1000);
+
+							$(".jqplot-xaxis-tick").hide();
+
+							histogramDrew = true;
+						}
+
 					});
+
 				}
 
 				//chrome.runtime.sendMessage({doyourjob: "needFuckingToken",comment:videoProps.obj.baseURI},callback);
@@ -489,7 +626,7 @@ $(function () {
 				var port = chrome.runtime.connect({
 						name : "needFuckingToken"
 					});
-				
+
 				var tmpUrl = getInsertUrl(videoProps.obj.src);
 				//ytVidId(videoProps.obj.baseURI) ? videoProps.obj.baseURI : videoProps.obj.src;
 
@@ -553,12 +690,11 @@ $(function () {
 				};*/
 
 				//1.0.30
-				if(videoProps.obj.ended || videoProps.obj.paused){
+				if (videoProps.obj.ended || videoProps.obj.paused) {
 					$('#danmu').danmu('danmu_pause');
-				}else{
+				} else {
 					$('#danmu').danmu('danmu_resume');
 				}
-				
 
 				// add by list
 				/*for (var i = 0; i < g_danmuList.length; i++) {
@@ -623,8 +759,6 @@ $(function () {
 	"quit": {name: "Quit", icon: "quit"}
 	}
 	});*/
-	
-	
 
 });
 
@@ -693,9 +827,6 @@ function renderInputBox() {
 			} else
 				$("#danmu").show();
 		});
-		
-		
-		
 
 	});
 
