@@ -1,8 +1,6 @@
 <style type="text/css">
   
-  
-  
-  
+
   #danmu_upper  {
   display: inline-block;
 }
@@ -58,12 +56,6 @@
 </div>
 
 
-<div id='danmu_upper'>
-<label>DISPLAY:</label>
-  <table id="switch" style="border-collapse:separate;border-spacing:4px;"><tbody><input type="checkbox" id="display" value="display">
-  </tbody></table>
-</div>
-
 <!-- <div id='danmu_upper'>
 <label id = "loadingStatusLabel">Status:</label>
   </tbody></table>
@@ -73,29 +65,18 @@
 <BR>
  <div id="danmu_lower">
   <input type="text" class="form-control" id="danMuUserText" placeholder="DANMU!!">
-  <button type="button" id="danMuUserBtn"  class="btn-custom">SUBMIT</button>
+  <button type="button" id="danMuUserBtn" title="Send Comment!!"><img src id="danMuUserBtnIMG"/></button>
+  <input type="checkbox" id="danMuDisplay" value="display" class="displayCheckbox" >
+  <text name="danMuUserLgBtn" id="danMuUserLgBtn" value=""></text>
+
   </div>
-  
+	
 </div>
 
 
   
 <div id="danmuSettingDivId">
 
-	<div></div>
-       <select   multiple="multiple" placeholder="Select Languages:"  class="testsel">
-		   <option value="zh-tw">繁體中文</option>
-		   <option value="zh-cn">简体中文</option>
-		   <option value="en">English</option>
-		   <option value="jp">日本語</option>
-		  
-		</select>
-	
-  <img id = "prevImgId" style="float: right;"  alt="Main Page" height="16" width="16">
-  
- <!--  <div id="tabs-2">
-    <p>Morbi tincidunt, dui sit amet facilisis feugiat, odio metus gravida ante, ut pharetra massa metus id nunc. Duis scelerisque molestie turpis. Sed fringilla, massa eget luctus malesuada, metus eros molestie lectus, ut tempus eros massa ut dolor. Aenean aliquet fringilla sem. Suspendisse sed ligula in ligula suscipit aliquam. Praesent in eros vestibulum mi adipiscing adipiscing. Morbi facilisis. Curabitur ornare consequat nunc. Aenean vel metus. Ut posuere viverra nulla. Aliquam erat volutpat. Pellentesque convallis. Maecenas feugiat, tellus pellentesque pretium posuere, felis lorem euismod felis, eu ornare leo nisi vel felis. Mauris consectetur tortor et purus.</p>
-  </div> -->
 </div>
 
 <div id="danmuStatisticsDivId">
@@ -128,9 +109,15 @@
   $('#danmuSettingDivId').hide();
   $('#danmuStatisticsDivId').hide();
   
-   var settingImgUrl =chrome.extension.getURL("setting.png");
+
+
+
+    var settingImgUrl =chrome.extension.getURL("setting.png");
+    var uploadImgUrl =chrome.extension.getURL("upload.png");
+	
 	$("#settingImgId").attr("src",settingImgUrl);
-	  
+	$("#danMuUserBtnIMG").attr("src",uploadImgUrl);
+	$("#danMuUserBtn").tooltipster();
   function cssstyle (color,size) {
         return "background-color:"+color+";padding:5px;border-color:black;font-size:"+ size+";border-style:solid;border-width:1px;";
   }
@@ -139,7 +126,7 @@
   var size =[{"text":'BIG','size':'25px','value':'1'},{"text":'small','size':'8px','value':'0'}];
   var pos =[["Random","0"],["Upper","1"],["Lower","2"]];
   var type = [["Palette","danMuUserColor"],["danmusize","danMuUserTextSize"],["pos","danMuUserPosition"]];
-          
+  var language = [{code:"zh-CN",text:"简体中文"},{code:"zh-TW",text:"繁體中文"},{code:"en",text:"English"},{code:"jp",text:"日本語"}];  	      
 
 
 for (var i = 0; i <3; i++) {
@@ -165,6 +152,18 @@ $("#Palette").append("</tr>");
     $("#pos tbody").append("<tr><td id="+postext[0]+" style="+styleStr+" class="+postext[1]+" >"+postext[0]+"</td></tr>"); 
   });
 
+var languageSetting =language.map(function(langObj){
+		var selected = ''
+		console.log(window.navigator.language,langObj.code);
+	 		if(window.navigator.language==langObj.code){
+	 			$( "#danMuUserLgBtn" ).text(langObj.text);
+	 		}
+	 		return ('<text id='+langObj.code+' class = "langSet" >'+langObj.text+'</text><BR>');
+	 			//selected = 'selected="selected"';
+	 			
+	 }).join("");
+
+
 
 type.map(
 function(typeObj){
@@ -184,6 +183,37 @@ function(typeObj){
 
 });
 
+
+$('.displayCheckbox').each(function(){
+    $(this).hide().after('<span class="class_checkbox checked" title="hidden comment!"><img src id="danMudisplayIMG"/></span>');
+    var checkBoxImgUrl=chrome.extension.getURL("comment_off.png");
+  	$("#danMudisplayIMG").attr("src",checkBoxImgUrl);
+  	$('.class_checkbox').tooltipster();
+});
+
+$('.class_checkbox').on('click',function(){
+    $(this).toggleClass('checked').prev().prop('checked',$(this).is('.checked'))
+});
+
+	
+
+	$('#danMuUserLgBtn').prop('title',languageSetting );
+	$('#danMuUserLgBtn').tooltipster({contentAsHTML: true,
+  									
+  									 'interactive': true,
+  									 'autoClose': true,
+  								    functionReady: function(){
+        $('.tooltipster-default .langSet').on('click', function(e){
+            e.preventDefault();
+            console.dir(e.target.id);
+            console.dir(e.target.innerText);
+            $( "#danMuUserLgBtn" ).text(e.target.innerText);
+            $( "#danMuUserLgBtn" ).val(e.target.id);
+             $('body').click();
+        });
+    }});
+
+
 // default Red
 $('#Red').css("border-color","black");
 $('#Red').css("border-width","2px");
@@ -202,11 +232,12 @@ $(function () {
 	$("#settingImgId").click(function () {
 				//$("#danmu_dialog").dialog('close');
 				//alert("test");
-				//$("#danmu_dialog").load(chrome.extension.getURL("DanMuSetting.html"));
+				$("#danmuSettingDivId").load(chrome.extension.getURL("DanMuSetting.html"));
+				
 				$('#danmuSettingDivId').show();
 				$('#mainDanMuDivId').hide();
 				$('#danmuStatisticsDivId').hide();
-				$("#danmu_dialog").dialog({height: '234.5', width: '308.5'});
+				$("#danmu_dialog").dialog({height: '234.5', width: '350'});
 			});
 			
 			
@@ -221,20 +252,24 @@ $(function () {
 			$('#danmuSettingDivId').hide();
 			$('#danmuStatisticsDivId').hide();
 			$('#mainDanMuDivId').show();
-			$("#danmu_dialog").dialog({height: '235.5', width: '308.5'});
+			$("#danmu_dialog").dialog({height: '235.5', width: '350'});
 
 	});	  
 	$("#prevImgId2").click(function () {
 			$('#danmuSettingDivId').hide();
 			$('#danmuStatisticsDivId').hide();
 			$('#mainDanMuDivId').show();
-			$("#danmu_dialog").dialog({height: '235.5', width: '308.5'});
+			$("#danmu_dialog").dialog({height: '235.5', width: '350'});
 
 	});	 
 	
-	
-	
-	
+
+function danMuLanguageSet(code){
+
+	console.log(code);
+	$( "#danMuUserLgBtn" ).text(code);
+}
+
 	
 	
 	

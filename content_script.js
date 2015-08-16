@@ -33,6 +33,7 @@
 1.0.29      2015/08/09  kusogray    fb and youtube input url function
 1.0.30      2015/08/09  kusogray    pause danmu time line if video is paused or ended when open danmu
 1.0.31      2015/08/09  kusogray    remove danmu array under current #dunmu function
+1.0.32		2015/08/17  ismail    	add danMu UI language option
  */
 
 //1.0.1
@@ -356,7 +357,7 @@ function insertRule(sheet, selectorText, cssText, position) {
 //1.0.26
 function displayDanmu(flag) {
 	displayFlag = flag;
-	$("#display").prop("checked", flag);
+	$("#danMuDisplay").prop("checked", flag);
 	for (i in document.styleSheets[0].rules) {
 		if (document.styleSheets[0].rules[i].selectorText == ".flying") {
 			displayText = "block";
@@ -507,6 +508,7 @@ $(function () {
 						});
 					}
 					//$('#loadingStatusLabel').text("Status: Loaded " + tmpNumDanmu + " danmus.");
+					$("#danmu_dialog").dialog({height: '234.5', width: '350'});
 					$('#danmu_dialog').dialog('option', 'title', '彈幕視窗 - ' + tmpNumDanmu + " danmus.");
 
 					$("#histogramImgId").click(function () {
@@ -819,10 +821,9 @@ function renderInputBox() {
 
 		//1.0.24 check to query db danmu
 
-		$("#display").click(function () {
-			console.log("checked");
-			if (!$("#display").prop("checked")) {
-				console.log("checked 2");
+		$(".class_checkbox").click(function () {
+			if (!$("#danMuDisplay").prop("checked")) {
+				console.log("checked (close danMu)");
 				$('#danmu').hide();
 			} else
 				$("#danmu").show();
