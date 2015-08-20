@@ -508,7 +508,10 @@ $(function () {
 						});
 					}
 					//$('#loadingStatusLabel').text("Status: Loaded " + tmpNumDanmu + " danmus.");
-					$("#danmu_dialog").dialog({height: '234.5', width: '350'});
+					$("#danmu_dialog").dialog({
+						height : '234.5',
+						width : '350'
+					});
 					$('#danmu_dialog').dialog('option', 'title', '彈幕視窗 - ' + tmpNumDanmu + " danmus.");
 
 					$("#histogramImgId").click(function () {
@@ -524,11 +527,26 @@ $(function () {
 							s1 = [];
 							s3 = [];
 
+							sTmp = [];
+							$.each($('#danmu').data("danmu_array"), function (key, value) {
+								//alert(key + ": " + value);
+								var tmpSec = parseInt(Math.floor(key/10));
+								sTmp[tmpSec] = value.length;
+								
+							});
+
 							var videoLen = currentRightClickVideo.duration;
 							for (i = 1; i <= videoLen; i++) {
 								s2 = [];
 								s2.push(i);
-								s2.push(Math.floor((Math.random() * 2573) + 1));
+								var tmpValue = sTmp[i];
+								if(tmpValue){
+									s2.push(tmpValue);
+					
+								}else{
+									s2.push(0)
+								}
+								
 								s1.push(s2);
 								s3.push('#17BDB8');
 							}
@@ -590,17 +608,17 @@ $(function () {
 							});
 
 							/*$('#chart1').bind('jqplotDataHighlight',
-								function (ev, seriesIndex, pointIndex, data) {
-								var tmpCurrentTime = Math.round(currentRightClickVideo.currentTime);
-								for (i = 0; i < tmpCurrentTime; i++) {
-									plot1.series[0].seriesColors[i] = "#FF9900";
-								}
-								plot1.redraw();
+							function (ev, seriesIndex, pointIndex, data) {
+							var tmpCurrentTime = Math.round(currentRightClickVideo.currentTime);
+							for (i = 0; i < tmpCurrentTime; i++) {
+							plot1.series[0].seriesColors[i] = "#FF9900";
+							}
+							plot1.redraw();
 							});
 
 							$('#chart1').bind('jqplotDataUnhighlight',
-								function (ev) {
-								$('#info2').html('Nothing');
+							function (ev) {
+							$('#info2').html('Nothing');
 							});*/
 
 							setInterval(function () {
