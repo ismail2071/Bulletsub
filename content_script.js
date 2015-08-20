@@ -73,10 +73,10 @@ function ytVidId() {
 
 //1.0.29
 function getInsertUrl(inputUrl) {
-	if (inputUrl == "" && videoProps.obj.baseURI.indexOf('xx.fbcdn.net') > -1) {
+	if (inputUrl == "" && videoProps.obj.baseURI.indexOf('fbcdn') > -1) {
 		return videoProps.obj.baseURI.substr(videoProps.obj.baseURI, videoProps.obj.baseURI.indexOf("?"));
 	}
-	if (inputUrl.indexOf('xx.fbcdn.net') > -1) {
+	if (inputUrl.indexOf('fbcdn') > -1) {
 
 		return inputUrl.substr(inputUrl, inputUrl.indexOf("?"));
 
