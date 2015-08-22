@@ -46,6 +46,8 @@ var histogramPlot;
 var histogramDrew = false;
 var histogramPastColor = "#FF9900"; // orange
 var histogramMouseColor = "#FF0000" // red
+
+
 function toHHMMSS(input) {
 	var sec_num = parseInt(input, 10); // don't forget the second param
 	var hours = Math.floor(sec_num / 3600);
@@ -187,6 +189,9 @@ setInterval(convertVideos, 3000); // can change a way to trigger it
 
 function sendDanmuFunc() {
 	var text = document.getElementById('danMuUserText').value;
+	if(!text || text.length ==0){
+		return;
+	}
 	var color = document.getElementById('danMuUserColor').value;
 	var position = document.getElementById('danMuUserPosition').value;
 	var videoUri = getInsertUrl(videoProps.obj.src); //ytVidId(videoProps.obj.baseURI) ? videoProps.obj.baseURI : ;
@@ -451,7 +456,8 @@ $(function () {
 					$(".custom-popchrome-menu").remove();
 					return;
 				} else {
-					$("#display").prop("checked", true);
+					$("#danMuDisplay").prop("checked", true);
+					
 					displayDanmu(true);
 				}
 
@@ -504,18 +510,20 @@ $(function () {
 						tmpNumDanmu = response.answer.length;
 						console.dir(response.answer);
 						response.answer.map(function (item) {
+							delete item.isnew;
 							$('#danmu').danmu("add_danmu", item);
 						});
 					}
 					//$('#loadingStatusLabel').text("Status: Loaded " + tmpNumDanmu + " danmus.");
+					
 					$("#danmu_dialog").dialog({
-						height : '234.5',
-						width : '350'
+						height : mainWindowHeight,
+						width : mainWindowWidth
 					});
 					$('#danmu_dialog').dialog('option', 'title', '彈幕視窗 - ' + tmpNumDanmu + " danmus.");
 
 					$("#histogramImgId").click(function () {
-
+					$('#danmu_dialog').dialog({height : histogramWindowHeight,width : histogramWindowWidth});
 						$('#danmuSettingDivId').hide();
 						$('#danmuStatisticsDivId').show();
 						$('#mainDanMuDivId').hide();
@@ -530,25 +538,29 @@ $(function () {
 							sTmp = [];
 							$.each($('#danmu').data("danmu_array"), function (key, value) {
 								//alert(key + ": " + value);
-								var tmpSec = parseInt(Math.floor(key/10));
+								var tmpSec = parseInt(Math.floor(key / 10));
 								sTmp[tmpSec] = value.length;
-								
+
 							});
 
 							var videoLen = currentRightClickVideo.duration;
+							var histoInterval = 50;
 							for (i = 1; i <= videoLen; i++) {
 								s2 = [];
 								s2.push(i);
 								var tmpValue = sTmp[i];
-								if(tmpValue){
+								if (tmpValue) {
 									s2.push(tmpValue);
-					
-								}else{
+									histoInterval++;
+								} else {
 									s2.push(0)
 								}
-								
+
 								s1.push(s2);
 								s3.push('#17BDB8');
+							}
+							if(histoInterval > videoLen){
+								histoInterval = videoLen;
 							}
 
 							plot1 = $.jqplot('chart1', [s1], {
@@ -571,6 +583,8 @@ $(function () {
 											renderer : $.jqplot.CategoryAxisRenderer,
 											//ticks: ticks
 											showTicks : false,
+											autoscale:true,
+											numberTicks : histoInterval,
 											tickOptions : {
 												showGridline : false,
 												show : false
@@ -582,6 +596,7 @@ $(function () {
 										yaxis : {
 											//renderer: $.jqplot.CategoryAxisRenderer,
 											//ticks: ticks
+											autoscale:true,
 											tickOptions : {
 												showGridline : false,
 												show : false
@@ -843,8 +858,15 @@ function renderInputBox() {
 			if (!$("#danMuDisplay").prop("checked")) {
 				console.log("checked (close danMu)");
 				$('#danmu').hide();
-			} else
+				checkBoxImgUrl = chrome.extension.getURL("comment_off.png");
+				
+
+			} else{
 				$("#danmu").show();
+				checkBoxImgUrl = chrome.extension.getURL("comment_on.png");
+			}
+			$("#danMudisplayIMG").attr("src", checkBoxImgUrl);
+				
 		});
 
 	});

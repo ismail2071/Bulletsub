@@ -34,6 +34,7 @@
 <text id="danMuUserTextSize" style="display:none"></text>
 <text id="danMuUserPosition" style="display:none"></text>
 
+
 <div id='danmu_upper'>
 <label>COLOR</label>
   <table id="Palette" style="border-collapse:separate;border-spacing:4px;"><tbody>
@@ -53,6 +54,7 @@
 <div id='danmu_upper' style="float: right;">
 	<img id = "settingImgId"  alt="Setting" height="16" width="16">
 	<div><img id = "histogramImgId"  alt="Setting" height="16" width="16"></div>
+	<input type="checkbox" id="danMuDisplay" value="display" class="displayCheckbox"  >
 </div>
 
 
@@ -64,11 +66,13 @@
 
 <BR>
  <div id="danmu_lower">
-  <input type="text" class="form-control" id="danMuUserText" placeholder="DANMU!!">
-  <button type="button" id="danMuUserBtn" title="Send Comment!!"><img src id="danMuUserBtnIMG"/></button>
-  <input type="checkbox" id="danMuDisplay" value="display" class="displayCheckbox" >
-  <text name="danMuUserLgBtn" id="danMuUserLgBtn" value=""></text>
-
+  
+  
+<!--   <text name="danMuUserLgBtn" id="danMuUserLgBtn" value=""></text> -->
+	<div>
+		<input type="text"  style="border:3px #FF0000 solid" class="form-control" id="danMuUserText" placeholder="Comment here!!">
+	  <button type="button" id="danMuUserBtn" title="Send Comment!!"><img src id="danMuUserBtnIMG"/></button>
+	</div>
   </div>
 	
 </div>
@@ -84,7 +88,7 @@
 	 <div> 
 		<div id="leftThing" style="margin-top: 0px; float: left; width:42%; margin-top: 12px;">Click to Jump: </div>
 		
-		<div style="margin-top: 0px; float: left; width:50%; ">
+		<div style="margin-top: 10px; float: left; width:50%; ">
 			<div class="onoffswitch"> 
 				<input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch" checked>
 				<label class="onoffswitch-label" for="myonoffswitch">
@@ -112,7 +116,7 @@
 
 
 
-    var settingImgUrl =chrome.extension.getURL("setting.png");
+    var settingImgUrl =chrome.extension.getURL("language.png");
     var uploadImgUrl =chrome.extension.getURL("upload.png");
 	
 	$("#settingImgId").attr("src",settingImgUrl);
@@ -152,7 +156,7 @@ $("#Palette").append("</tr>");
     $("#pos tbody").append("<tr><td id="+postext[0]+" style="+styleStr+" class="+postext[1]+" >"+postext[0]+"</td></tr>"); 
   });
 
-var languageSetting =language.map(function(langObj){
+/*var languageSetting =language.map(function(langObj){
 		var selected = ''
 		console.log(window.navigator.language,langObj.code);
 	 		if(window.navigator.language==langObj.code){
@@ -161,7 +165,7 @@ var languageSetting =language.map(function(langObj){
 	 		return ('<text id='+langObj.code+' class = "langSet" >'+langObj.text+'</text><BR>');
 	 			//selected = 'selected="selected"';
 	 			
-	 }).join("");
+	 }).join("");*/
 
 
 
@@ -185,19 +189,21 @@ function(typeObj){
 
 
 $('.displayCheckbox').each(function(){
-    $(this).hide().after('<span class="class_checkbox checked" title="hidden comment!"><img src id="danMudisplayIMG"/></span>');
-    var checkBoxImgUrl=chrome.extension.getURL("comment_off.png");
+    $(this).hide().after('<span class="class_checkbox checked" title="hidden comment!"><img height="20" width="20" src id="danMudisplayIMG"/></span>');
+    var checkBoxImgUrl=chrome.extension.getURL("comment_on.png");
   	$("#danMudisplayIMG").attr("src",checkBoxImgUrl);
   	$('.class_checkbox').tooltipster();
+	
 });
 
 $('.class_checkbox').on('click',function(){
-    $(this).toggleClass('checked').prev().prop('checked',$(this).is('.checked'))
+    $(this).toggleClass('checked').prev().prop('checked',$(this).is('.checked'));
+	
 });
 
 	
 
-	$('#danMuUserLgBtn').prop('title',languageSetting );
+	/*$('#danMuUserLgBtn').prop('title',languageSetting );
 	$('#danMuUserLgBtn').tooltipster({contentAsHTML: true,
   									
   									 'interactive': true,
@@ -212,7 +218,7 @@ $('.class_checkbox').on('click',function(){
              $('body').click();
         });
     }});
-
+*/
 
 // default Red
 $('#Red').css("border-color","black");
@@ -237,29 +243,32 @@ $(function () {
 				$('#danmuSettingDivId').show();
 				$('#mainDanMuDivId').hide();
 				$('#danmuStatisticsDivId').hide();
-				$("#danmu_dialog").dialog({height: '234.5', width: '350'});
+				$("#danmu_dialog").dialog({height: languageWindowHeight, width: languageWindowWidth});
 			});
 			
 			
 	 var prevImgUrl =chrome.extension.getURL("home.png");
 	 var histogramImgUrl =chrome.extension.getURL("bar-chart-hi.png");
+	  
+	 //console.log ('danMuMainWinHeight: ' + danMuMainWinHeight + 'danMuMainWinWidth: ' + danMuMainWinWidth);
 	$('.testsel').SumoSelect({okCancelInMulti:false });
 	  $("#prevImgId").attr("src",prevImgUrl);
 	  $("#prevImgId2").attr("src",prevImgUrl);
 	  $("#histogramImgId").attr("src",histogramImgUrl);
 	  
 	 $("#prevImgId").click(function () {
+
 			$('#danmuSettingDivId').hide();
 			$('#danmuStatisticsDivId').hide();
 			$('#mainDanMuDivId').show();
-			$("#danmu_dialog").dialog({height: '235.5', width: '350'});
+			$("#danmu_dialog").dialog({height: mainWindowHeight, width: mainWindowWidth});
 
 	});	  
 	$("#prevImgId2").click(function () {
 			$('#danmuSettingDivId').hide();
 			$('#danmuStatisticsDivId').hide();
 			$('#mainDanMuDivId').show();
-			$("#danmu_dialog").dialog({height: '235.5', width: '350'});
+			$("#danmu_dialog").dialog({height: mainWindowHeight, width: mainWindowWidth});
 
 	});	 
 	
