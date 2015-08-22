@@ -45,6 +45,7 @@ var displayFlag = false;
 var histogramPlot;
 var histogramDrew = false;
 var histogramPastColor = "#FF9900"; // orange
+var histogramNotPastColor = "#17BDB8"; // light blue
 var histogramMouseColor = "#FF0000" // red
 
 
@@ -189,7 +190,7 @@ setInterval(convertVideos, 3000); // can change a way to trigger it
 
 function sendDanmuFunc() {
 	var text = document.getElementById('danMuUserText').value;
-	if(!text || text.length ==0){
+	if (!text || text.length == 0) {
 		return;
 	}
 	var color = document.getElementById('danMuUserColor').value;
@@ -457,7 +458,7 @@ $(function () {
 					return;
 				} else {
 					$("#danMuDisplay").prop("checked", true);
-					
+
 					displayDanmu(true);
 				}
 
@@ -515,7 +516,7 @@ $(function () {
 						});
 					}
 					//$('#loadingStatusLabel').text("Status: Loaded " + tmpNumDanmu + " danmus.");
-					
+
 					$("#danmu_dialog").dialog({
 						height : mainWindowHeight,
 						width : mainWindowWidth
@@ -523,7 +524,10 @@ $(function () {
 					$('#danmu_dialog').dialog('option', 'title', '彈幕視窗 - ' + tmpNumDanmu + " danmus.");
 
 					$("#histogramImgId").click(function () {
-					$('#danmu_dialog').dialog({height : histogramWindowHeight,width : histogramWindowWidth});
+						$('#danmu_dialog').dialog({
+							height : histogramWindowHeight,
+							width : histogramWindowWidth
+						});
 						$('#danmuSettingDivId').hide();
 						$('#danmuStatisticsDivId').show();
 						$('#mainDanMuDivId').hide();
@@ -544,6 +548,7 @@ $(function () {
 							});
 
 							var videoLen = currentRightClickVideo.duration;
+							$('#videoDurationTextId').html(toHHMMSS(videoLen)) ;
 							var histoInterval = 50;
 							for (i = 1; i <= videoLen; i++) {
 								s2 = [];
@@ -557,9 +562,9 @@ $(function () {
 								}
 
 								s1.push(s2);
-								s3.push('#17BDB8');
+								s3.push(histogramNotPastColor);
 							}
-							if(histoInterval > videoLen){
+							if (histoInterval > videoLen) {
 								histoInterval = videoLen;
 							}
 
@@ -583,12 +588,15 @@ $(function () {
 											renderer : $.jqplot.CategoryAxisRenderer,
 											//ticks: ticks
 											showTicks : false,
-											autoscale:true,
+											autoscale : true,
 											numberTicks : histoInterval,
 											tickOptions : {
 												showGridline : false,
-												show : false
+												show : true,
+												angle : 30,
+												formatString : '%s'
 											},
+											
 											rendererOptions : {
 												drawBaseline : false
 											}
@@ -596,7 +604,7 @@ $(function () {
 										yaxis : {
 											//renderer: $.jqplot.CategoryAxisRenderer,
 											//ticks: ticks
-											autoscale:true,
+											autoscale : true,
 											tickOptions : {
 												showGridline : false,
 												show : false
@@ -610,14 +618,18 @@ $(function () {
 									},
 
 									highlighter : {
-										show : false
+										show : false,
+
 									}
 								});
 
 							$('#chart1').bind('jqplotDataClick',
 								function (ev, seriesIndex, pointIndex, data) {
 								//$('#info1').html('series: ' + seriesIndex + ', point: ' + pointIndex + ', data: ' + data);
-								currentRightClickVideo.currentTime = pointIndex;
+								if($('.danmuOnoffswitch-checkbox').is(':checked')){
+									currentRightClickVideo.currentTime = pointIndex;	
+								}
+								
 								//plot1.series[seriesIndex].seriesColors[pointIndex] = "#000"; // FFF is white, you could add any color here to change it
 								//plot1.redraw();
 							});
@@ -638,8 +650,13 @@ $(function () {
 
 							setInterval(function () {
 								var tmpCurrentTime = Math.round(currentRightClickVideo.currentTime);
-								for (i = 0; i < tmpCurrentTime; i++) {
-									plot1.series[0].seriesColors[i] = "#FF9900";
+								var tmpColor = histogramPastColor;
+								for (i = 0; i < videoLen; i++) {
+									
+									if(i> tmpCurrentTime){
+										  tmpColor = histogramNotPastColor;
+									}
+									plot1.series[0].seriesColors[i] = tmpColor;
 								}
 								plot1.redraw();
 
@@ -859,14 +876,13 @@ function renderInputBox() {
 				console.log("checked (close danMu)");
 				$('#danmu').hide();
 				checkBoxImgUrl = chrome.extension.getURL("comment_off.png");
-				
 
-			} else{
+			} else {
 				$("#danmu").show();
 				checkBoxImgUrl = chrome.extension.getURL("comment_on.png");
 			}
 			$("#danMudisplayIMG").attr("src", checkBoxImgUrl);
-				
+
 		});
 
 	});
