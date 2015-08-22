@@ -101,18 +101,18 @@ function removeDanmuArray() {
 }
 
 function alignTimeLine(clearFlag) {
-	tmpTime = Math.round(currentRightClickVideo.currentTime * 10);
+	tmpTime = Math.floor(currentRightClickVideo.currentTime * 10);
 	//1.0.23
 	if (clearFlag) {
 		$('#danmu').danmu("danmu_hideall");
 	}
 
-	if (Math.round(tmpTime / 10) != Math.round(tmpVideoUpdateTime / 10)) {
-		tmpVideoUpdateTime = tmpTime;
+	//if (Math.floor(tmpTime / 10) != Math.floor(tmpVideoUpdateTime / 10)) {
+		//tmpVideoUpdateTime = Math.floor(tmpTime / 10) * 10;
 		//console.log("danmu time: " + $('#danmu').data("nowtime") + ", " + "影片: " + tmpTime);
 		$('#danmu').danmu("danmu_updateDanmuTimeLine", tmpTime);
 		//$('#danmu').data("nowtime",tmpTime);
-	}
+	//}
 
 }
 
@@ -444,6 +444,7 @@ $(function () {
 		if (event.which == 1) {
 			if (event.target.className == "custom-popchrome-menu") {
 
+				removeDanmuArray(); // remove danmu before load //1.0.31
 				histogramDrew = false;
 				//1.0.26
 				var tmpCustomPopChromeMenuTxt = $(".custom-popchrome-menu").text();
@@ -465,7 +466,7 @@ $(function () {
 				//1.0.21
 				if (!updateVideoPosTimerFlag) {
 					var int = self.setInterval("updateVideoPosTimeClock()", 700);
-					var int = self.setInterval("alignTimeLine(false)", 5000);
+					//var int = self.setInterval("alignTimeLine(false)", 2000);
 					updateVideoPosTimerFlag = true;
 				}
 
@@ -674,7 +675,7 @@ $(function () {
 				//chrome.runtime.sendMessage({doyourjob: "needFuckingToken",comment:videoProps.obj.baseURI},callback);
 
 				//
-				removeDanmuArray(); // remove danmu before load //1.0.31
+				
 				var port = chrome.runtime.connect({
 						name : "needFuckingToken"
 					});
