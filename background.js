@@ -103,7 +103,7 @@ console.log(port.name);
           console.log("get db danmu start");
           console.log(request.comment);
 
-        $.getJSON( "http://52.26.184.134:3000/getDanmu", {"Url":request.comment} )
+        $.getJSON( "http://ec2-52-26-184-134.us-west-2.compute.amazonaws.com:3000/getDanmu", {"Url":request.comment} )
         .done(
         function( data ) {
             console.log("data:");
@@ -129,8 +129,8 @@ chrome.runtime.onMessage.addListener(
     if (request.doyourjob == "needFuckingSend"){
 
       var postdata = {'Url':request.Url,comment:request.comment,'service':'BulletSub'};
-
-      $.post( "http://52.26.184.134:3000/putDanmu",postdata, "json");
+      console.dir(postdata);
+      $.post( "http://ec2-52-26-184-134.us-west-2.compute.amazonaws.com:3000/putDanmu",postdata, "json");
 
     }
 

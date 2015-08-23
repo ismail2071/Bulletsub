@@ -284,8 +284,9 @@ var cyntax = {
 			if($(element).data("danmu_array")[$(element).data("nowtime")]){
 				var danmus=$(element).data("danmu_array")[$(element).data("nowtime")];
 				for(var i=0;i<danmus.length;i++){
-					var a_danmu="<div class='flying flying2' id='linshi'></div>";
+					var a_danmu="<div class='flying flying2 damnulan_"+danmus[i].language+"' id='linshi'></div>";
 					$(element).append(a_danmu);
+					danmuDisplay = (danmus[i].language == window.navigator.language)?"visible":"hidden";
 					$("#linshi").text(danmus[i].text);
 					$("#linshi").css({
 						"color":danmus[i].color
@@ -295,7 +296,10 @@ var cyntax = {
 						,"white-space":"nowrap"
 						,"font-weight":"bold"
 						,"z-index":"2147483647"
+						,"visibility":danmuDisplay
 					});
+
+
 					if (danmus[i].color<"#777777")
 						$("#linshi").css({
 							"text-shadow":" 0px 0px 2px #FFFFFF"

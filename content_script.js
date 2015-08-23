@@ -209,7 +209,8 @@ function sendDanmuFunc() {
 		//$.post("stone.php",{danmu:text_obj});
 		var text_obj = '{ "text":"' + text + '","color":"' + color + '","size":"' + size + '","position":"' + position + '","time":' + time + ',"isnew":""}';
 		var new_obj = eval('(' + text_obj + ')');
-
+		var language = $("#languageSelect option:selected" ).val()==null?window.navigator.language:$("#languageSelect option:selected" ).val();
+	
 		var a_danmu = {
 			"text" : text,
 			"color" : color,
@@ -217,7 +218,8 @@ function sendDanmuFunc() {
 			"position" : position,
 			"time" : time.toString(),
 			"isnew" : " ",
-			"from" : "self"
+			"from" : "self",
+			"language":language
 		};
 		console.log("send danmu: " + text + ", at time: " + time);
 		$('#danmu').danmu("add_danmu", a_danmu);
@@ -351,7 +353,7 @@ function updateVideoPosTimeClock() {
 
 	//console.log(new Date());
 }
-
+//insertRule(document.styleSheets[0], ".flying", "display: block", 0);
 function insertRule(sheet, selectorText, cssText, position) {
 	if (sheet.insertRule) {
 		sheet.insertRule(selectorText + "{" + cssText + "}", position);
@@ -366,6 +368,7 @@ function displayDanmu(flag) {
 	$("#danMuDisplay").prop("checked", flag);
 	for (i in document.styleSheets[0].rules) {
 		if (document.styleSheets[0].rules[i].selectorText == ".flying") {
+			
 			displayText = "block";
 			if (!flag) {
 				displayText = "none";
@@ -377,36 +380,6 @@ function displayDanmu(flag) {
 
 $(function () {
 
-	/*var $stylesheet = $('<style type="text/css" media="screen" />');
-	$stylesheet.html('.flying{display:none !important;}');
-	$('body').append($stylesheet);*/
-
-	/*
-	var $stylesheet = $('<style type="text/css" media="screen" />');
-	$stylesheet.html('.flying{display:block !important;}');
-	$('body').append($stylesheet);*/
-
-	//$.css(".flying", "display: none");
-
-
-	/*function getStyleBySelector(selector) {
-	var sheetList = document.styleSheets;
-	var ruleList;
-	var i,
-	j;
-
-
-	for (i = sheetList.length - 1; i >= 0; i--) {
-	ruleList = sheetList[i].cssRules;
-	for (j = 0; j < ruleList.length; j++) {
-	if (ruleList[j].type == CSSRule.STYLE_RULE &&
-	ruleList[j].selectorText == selector) {
-	return ruleList[j].style;
-	}
-	}
-	}
-	return null;
-	}*/
 
 	//1.0.26
 	insertRule(document.styleSheets[0], ".flying", "display: block", 0);
@@ -476,31 +449,6 @@ $(function () {
 				console.log("Danmu Start");
 				tmpVideoUpdateTime = 0;
 				tmpTime = 0;
-				/*currentRightClickVideo.addEventListener('timeupdate', function () {
-				tmpTime = parseInt(currentRightClickVideo.currentTime);
-				if (tmpTime != tmpVideoUpdateTime) {
-				tmpVideoUpdateTime = tmpTime
-				console.log("now time: " + $('#danmu').data("nowtime"));
-				$('#danmu').danmu("danmu_updateDanmuTimeLine", parseInt(tmpTime));
-				}
-
-				}, false);*/
-
-				/* myDataRef.on('child_added', function(snapshot) {
-				var message = snapshot.val();
-				alert(message);
-				}); */
-
-				/*var a_danmu = {
-				"text" : "豆喔!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!",
-				"color" : "red",
-				"size" : "1",
-				"position" : "0",
-				"time" : 1,
-				"isnew" : " ",
-				"from" : "self"
-				};
-				g_danmuList.push(a_danmu);*/
 
 				//1.0.27
 				//1.0.28 (load danmu from Mongo)
@@ -512,10 +460,28 @@ $(function () {
 						tmpNumDanmu = response.answer.length;
 						console.dir(response.answer);
 						response.answer.map(function (item) {
+							console.dir(item);
 							delete item.isnew;
+							if (item.language==null)
+								item.language=window.navigator.language;
 							$('#danmu').danmu("add_danmu", item);
+
 						});
+
+					var languageList = ["zh-CN","zh-TW","en","jp"];
+
+					languageList.map(function(lan){
+						console.log($(".damnulan_"+lan));
+						$(".damnulan_"+lan).hide();
+						if (lan == window.navigator.language)
+							$(".damnulan_"+lan).show();
+						
+					});
+
 					}
+
+
+					
 					//$('#loadingStatusLabel').text("Status: Loaded " + tmpNumDanmu + " danmus.");
 
 					$("#danmu_dialog").dialog({
