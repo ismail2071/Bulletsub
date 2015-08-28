@@ -356,7 +356,8 @@ Danmu.DEFAULTS = {
 		danmuss:{},
 		default_font_color:"#FFFFFF",
 		font_size_small:16,
-		font_size_big:24,
+		font_size_median:24,
+		font_size_big:28,
 		opacity:"0.9",
 		top_botton_danmu_time:6000
 	}
