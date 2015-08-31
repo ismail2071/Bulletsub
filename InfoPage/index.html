@@ -41,15 +41,15 @@
     <div class="container">
       <div class="navbar-header">
         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse"> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button>
-        <a class="navbar-brand" href="#home"><i class="fa fa-location-arrow"></i> Ascend</a> </div>
+        <a class="navbar-brand" href="#home"><i class="fa fa-location-arrow"></i> Twidéo</a> </div>
       <div class="navbar-collapse collapse">
         <ul class="nav navbar-nav navbar-right">
           <li id="homeText"><a href="#home" class="smoothScroll">ReplaceText</a></li>
-          <li> <a href="#about" class="smoothScroll"> About</a></li>
-          <li> <a href="#services" class="smoothScroll"> Services</a></li>
-          <li> <a href="#portfolio" class="smoothScroll"> Portfolio</a></li>
-          <li> <a href="#team" class="smoothScroll"> Team</a></li>
-          <li> <a href="#contact" class="smoothScroll"> Contact</a></li>
+          <li id="howToUseText"> <a href="#howToUse" class="smoothScroll"> ReplaceText</a></li>
+          <li id="faqText"> <a href="#faq" class="smoothScroll"> ReplaceText</a></li>
+          <!-- <li > <a href="#portfolio" class="smoothScroll"> Portfolio</a></li> -->
+          <li id="teamText"> <a href="#team" class="smoothScroll"> ReplaceText</a></li>
+          <li id="donationText"> <a href="#donation" class="smoothScroll"> ReplaceText</a></li>
         </ul>
       </div>
       <!--/.nav-collapse --> 
@@ -60,20 +60,37 @@
 <!-- ==== HEADERWRAP ==== -->
 <div id="headerwrap" name="home">
   <header class="clearfix">
-    <h2><font color='white'>Comments on Video!</f></h2>
-    <p>Leave your comment right on the video</p>
-    <a href="#portfolio" class="smoothScroll btn btn-lg">How to use?</a> </header>
+    <h2><font color='white' id ="shortSentenceText">ReplaceText</font></h2>
+    <p id ="longSentenceText">ReplaceText</p>
+    <a href="#howToUse" id ="howToUseBtn" class="smoothScroll btn btn-lg"  > ReplaceText</a>
+	
+	</header>
+	
 </div>
 <!-- /headerwrap --> 
 
-
+<!-- ==== How To Use ==== -->
+<div id="howToUse" name="howToUse">
+  <div class="container">
+    <div class="row white">
+      <div class="col-md-6"> <img class="img-responsive" src="assets/img/about/about1.jpg" align=""> </div>
+      <div class="col-md-6">
+        <h3 id ="howToUseBtn">ReplaceText</h3>
+        <p>Lorem ipsum dolor sit amet, quo meis audire placerat eu, te eos porro veniam. An everti maiorum detracto mea. Eu eos dicam voluptaria, erant bonorum albucius et per, ei sapientem accommodare est. Saepe dolorum constituam ei vel. Te sit malorum ceteros repudiandae, ne tritani adipisci vis.</p>
+        <h3>Why choose us?</h3>
+        <p>Lorem ipsum dolor sit amet, quo meis audire placerat eu, te eos porro veniam. An everti maiorum detracto mea. Eu eos dicam voluptaria, erant bonorum albucius et per, ei sapientem accommodare est. Saepe dolorum constituam ei vel.</p>
+      </div>
+    </div>
+    <!-- row --> 
+  </div>
+</div>
 <!-- container --> 
 
-<!-- ==== SERVICES ==== -->
-<div id="services" name="services">
+<!-- ==== FAQ ==== -->
+<div id="faq" name="faq">
   <div class="container">
     <div class="row">
-      <h2 class="centered">Our Services</h2>
+      <h2 class="centered" id="faqTextKeep">ReplaceText</h2>
       <hr>
       <div class="col-lg-8 col-lg-offset-2">
         <p class="large">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aut eaque, laboriosam veritatis, quos non quis ad perspiciatis, totam corporis ea, alias ut unde.</p>
@@ -101,184 +118,6 @@
 </div>
 <!-- container --> 
 
-<!-- ==== PORTFOLIO ==== -->
-<div id="portfolio" name="portfolio">
-  <div class="container">
-    <div class="row">
-      <h2 class="centered">Our Portfolio</h2>
-      <hr>
-      <div class="col-lg-8 col-lg-offset-2 centered">
-        <p class="large">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aut eaque, laboriosam veritatis, quos non quis ad perspiciatis, totam corporis ea, alias ut unde.</p>
-      </div>
-    </div>
-    <!-- /row -->
-    <div class="container">
-      <div class="row"> 
-        
-        <!-- PORTFOLIO IMAGE 1 -->
-        <div class="col-md-4 ">
-          <div class="grid mask">
-            <figure> <img class="img-responsive" src="assets/img/portfolio/folio01.jpg" alt="">
-              <figcaption>
-                <h5>UX / UI</h5>
-                <a data-toggle="modal" href="#myModal" class="btn btn-default">More Details</a> </figcaption>
-              <!-- /figcaption --> 
-            </figure>
-            <!-- /figure --> 
-          </div>
-          <!-- /grid-mask --> 
-        </div>
-        
-        <!-- MODAL SHOW THE PORTFOLIO IMAGE. In this demo, all links point to this modal. You should create
-						      a modal for each of your projects. -->
-        
-        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-          <div class="modal-dialog">
-            <div class="modal-content">
-              <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title">Project Title</h4>
-              </div>
-              <div class="modal-body">
-                <p><img class="img-responsive" src="assets/img/portfolio/folio01-preview.jpg" alt=""></p>
-                <p>Lorem ipsum dolor sit amet, quo meis audire placerat eu, te eos porro veniam. An everti maiorum detracto mea. Eu eos dicam voluptaria, erant bonorum albucius et per, ei sapientem accommodare est. Saepe dolorum constituam ei vel</p>
-                <p><b><a href="#">Visit Site</a></b></p>
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-              </div>
-            </div>
-            <!-- /.modal-content --> 
-          </div>
-          <!-- /.modal-dialog --> 
-        </div>
-        <!-- /.modal --> 
-        
-        <!-- PORTFOLIO IMAGE 2 -->
-        <div class="col-md-4">
-          <div class="grid mask">
-            <figure> <img class="img-responsive" src="assets/img/portfolio/folio02.jpg" alt="">
-              <figcaption>
-                <h5>CONCEPT</h5>
-                <a data-toggle="modal" href="#myModal" class="btn btn-default">More Details</a> </figcaption>
-              <!-- /figcaption --> 
-            </figure>
-            <!-- /figure --> 
-          </div>
-          <!-- /grid-mask --> 
-        </div>
-        
-        <!-- PORTFOLIO IMAGE 3 -->
-        <div class="col-md-4">
-          <div class="grid mask">
-            <figure> <img class="img-responsive" src="assets/img/portfolio/folio03.jpg" alt="">
-              <figcaption>
-                <h5>MOBILE UI KIT</h5>
-                <a data-toggle="modal" href="#myModal" class="btn btn-default">More Details</a> </figcaption>
-              <!-- /figcaption --> 
-            </figure>
-            <!-- /figure --> 
-          </div>
-          <!-- /grid-mask --> 
-        </div>
-      </div>
-      <!-- /row --> 
-      
-      <!-- PORTFOLIO IMAGE 4 -->
-      <div class="row">
-        <div class="col-md-4 ">
-          <div class="grid mask">
-            <figure> <img class="img-responsive" src="assets/img/portfolio/folio04.jpg" alt="">
-              <figcaption>
-                <h5>CONCEPT</h5>
-                <a data-toggle="modal" href="#myModal" class="btn btn-default">More Details</a> </figcaption>
-              <!-- /figcaption --> 
-            </figure>
-            <!-- /figure --> 
-          </div>
-          <!-- /grid-mask --> 
-        </div>
-        
-        <!-- PORTFOLIO IMAGE 5 -->
-        <div class="col-md-4">
-          <div class="grid mask">
-            <figure> <img class="img-responsive" src="assets/img/portfolio/folio05.jpg" alt="">
-              <figcaption>
-                <h5>UX / UI</h5>
-                <a data-toggle="modal" href="#myModal" class="btn btn-default">More Details</a> </figcaption>
-              <!-- /figcaption --> 
-            </figure>
-            <!-- /figure --> 
-          </div>
-          <!-- /grid-mask --> 
-        </div>
-        
-        <!-- PORTFOLIO IMAGE 6 -->
-        <div class="col-md-4">
-          <div class="grid mask">
-            <figure> <img class="img-responsive" src="assets/img/portfolio/folio06.jpg" alt="">
-              <figcaption>
-                <h5>CMS INTEGRATION</h5>
-                <a data-toggle="modal" href="#myModal" class="btn btn-default">More Details</a> </figcaption>
-              <!-- /figcaption --> 
-            </figure>
-            <!-- /figure --> 
-          </div>
-          <!-- /grid-mask --> 
-        </div>
-        <!-- /col --> 
-      </div>
-      <!-- /row --> 
-            <!-- PORTFOLIO IMAGE 7 -->
-      <div class="row">
-        <div class="col-md-4 ">
-          <div class="grid mask">
-            <figure> <img class="img-responsive" src="assets/img/portfolio/folio07.jpg" alt="">
-              <figcaption>
-                <h5>MOCKUP</h5>
-                <a data-toggle="modal" href="#myModal" class="btn btn-default">More Details</a> </figcaption>
-              <!-- /figcaption --> 
-            </figure>
-            <!-- /figure --> 
-          </div>
-          <!-- /grid-mask --> 
-        </div>
-        
-        <!-- PORTFOLIO IMAGE 8 -->
-        <div class="col-md-4">
-          <div class="grid mask">
-            <figure> <img class="img-responsive" src="assets/img/portfolio/folio08.jpg" alt="">
-              <figcaption>
-                <h5>WEB ICONS</h5>
-                <a data-toggle="modal" href="#myModal" class="btn btn-default">More Details</a> </figcaption>
-              <!-- /figcaption --> 
-            </figure>
-            <!-- /figure --> 
-          </div>
-          <!-- /grid-mask --> 
-        </div>
-        
-        <!-- PORTFOLIO IMAGE 9 -->
-        <div class="col-md-4">
-          <div class="grid mask">
-            <figure> <img class="img-responsive" src="assets/img/portfolio/folio09.jpg" alt="">
-              <figcaption>
-                <h5>UX / UI</h5>
-                <a data-toggle="modal" href="#myModal" class="btn btn-default">More Details</a> </figcaption>
-              <!-- /figcaption --> 
-            </figure>
-            <!-- /figure --> 
-          </div>
-          <!-- /grid-mask --> 
-        </div>
-        <!-- /col --> 
-      </div>
-      <!-- /row --> 
-    </div>
-    <!-- /row --> 
-  </div>
-</div>
-<!-- /container --> 
 
 <!-- ==== TEAM MEMBERS ==== -->
 <div id="team" name="team">
@@ -302,46 +141,29 @@
         <h4>Larry Evans</h4>
         <p>Albucius consectetuer eu nam. Saepe legendos vulputate eu quo, id mea comprehensam signifer.</p>
         <a href="#"><i class="fa fa-twitter"></i></a> <a href="#"><i class="fa fa-facebook"></i></a> <a href="#"><i class="fa fa-linkedin"></i></a> </div>
-      <div class="col-lg-8 col-lg-offset-2 centered">
-        <p class="large">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aut eaque, laboriosam veritatis, quos non quis ad perspiciatis, totam corporis ea, alias ut unde.</p>
-      </div>
     </div>
   </div>
   <!-- row --> 
 </div>
 <!-- container --> 
 
-<!-- ==== ABOUT ==== -->
-<div id="about" name="about">
-  <div class="container">
-    <div class="row white">
-      <div class="col-md-6"> <img class="img-responsive" src="assets/img/about/about1.jpg" align=""> </div>
-      <div class="col-md-6">
-        <h3>About us</h3>
-        <p>Lorem ipsum dolor sit amet, quo meis audire placerat eu, te eos porro veniam. An everti maiorum detracto mea. Eu eos dicam voluptaria, erant bonorum albucius et per, ei sapientem accommodare est. Saepe dolorum constituam ei vel. Te sit malorum ceteros repudiandae, ne tritani adipisci vis.</p>
-        <h3>Why choose us?</h3>
-        <p>Lorem ipsum dolor sit amet, quo meis audire placerat eu, te eos porro veniam. An everti maiorum detracto mea. Eu eos dicam voluptaria, erant bonorum albucius et per, ei sapientem accommodare est. Saepe dolorum constituam ei vel.</p>
-      </div>
-    </div>
-    <!-- row --> 
-  </div>
-</div>
 
-<!-- ==== CONTACT ==== -->
-<div id="contact" name="contact">
+
+<!-- ==== DONATION ==== -->
+<div id="donation" name="donation">
   <div class="container">
     <div class="row">
       <h2 class="centered">Contact Us</h2>
       <hr>
       <div class="col-md-4 centered"> <i class="fa fa-map-marker fa-2x"></i>
-        <p>321 Awesome Street<br>
-          New York, NY 17022</p>
+        <p><font color = "black">321 Awesome Street<br>
+          New York, NY 17022 </font></p>
       </div>
       <div class="col-md-4"> <i class="fa fa-envelope-o fa-2x"></i>
-        <p>info@companyname.com</p>
+        <p><font color = "black">info@companyname.com</font></p>
       </div>
       <div class="col-md-4"> <i class="fa fa-phone fa-2x"></i>
-        <p> +1 800 123 1234</p>
+        <p><font color = "black"> +1 800 123 1234</font></p>
       </div>
     </div>
     <div class="row">

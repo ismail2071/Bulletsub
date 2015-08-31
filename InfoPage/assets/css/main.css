@@ -269,26 +269,26 @@ a:before, a:after {
 	outline: 0px;
 	border: 1px solid #fff;
 }
-#about {
+#howToUse {
 	background: #fff;
 	padding-top: 80px;
 	padding-right: 0;
 	padding-left: 0;
 	padding-bottom: 60px;
 }
-#about img {
+#howToUse img {
 	margin-top: 0;
 }
-#services {
+#faq {
 	background: url(../img/bg.jpg) no-repeat center center fixed;
 	padding: 60px 0;
 	text-align: center;
 	background-size: cover;
 }
-#services .fa {
+#faq .fa {
 	color: #c0ed5d;
 }
-#services hr {
+#faq hr {
 	display: block;
 	height: 3px;
 	border: 0;
@@ -303,14 +303,14 @@ a:before, a:after {
 	position: relative;
 	border: none;
 }
-#services p {
+#faq p {
 	text-align: center;
 	color: #fff;
 }
-#services H2 {
+#faq H2 {
 	color: #fff;
 }
-#services H3 {
+#faq H3 {
 	color: #fff;
 }
 #team {
@@ -373,19 +373,19 @@ a:before, a:after {
 #portfolio .btn-default {
 	border: 0;
 }
-#contact {
+#donation {
 	background: #fff;
 	padding: 60px 0;
 	text-align: center;
 }
-#contact .form {
+#donation .form {
 	padding: 30px 0;
 }
-#contact .fa {
+#donation .fa {
 	color: #3ab7cb;
 	margin-bottom: 10px;
 }
-#contact .btn {
+#donation .btn {
 	font-weight: 500;
 	font-size: 18px;
 	margin-top: 50px;
@@ -393,7 +393,7 @@ a:before, a:after {
 	color: #fff;
 	border: 0;
 }
-#contact .btn:hover, #contact .btn:focus {
+#donation .btn:hover, #donation .btn:focus {
 	background-color: #329cad;
 	outline: 0px;
 }
