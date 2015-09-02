@@ -1,8 +1,8 @@
-var mainWindowHeight = "240.5";
-var mainWindowWidth = "309";
+var mainWindowHeight = "220.5";
+var mainWindowWidth = "288";
 
-var languageWindowHeight = "270.5";
-var languageWindowWidth = "340";
+var languageWindowHeight = "330.5";
+var languageWindowWidth = "290";
 
 var histogramWindowHeight = "245.5";
 var histogramWindowWidth = "310";
