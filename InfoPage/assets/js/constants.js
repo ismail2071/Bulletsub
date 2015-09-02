@@ -6,7 +6,7 @@ var znTwFaqText = "FAQ";
 var znTwTeamText = "關於我們";
 var znTwDonationText = "贊助";
 var znTwShortSentenceText = "在影片中推文吧!";
-var znTwLongSentenceText = "支援所有html5影片 (不含iFrame)";
+var znTwLongSentenceText = "支援所有html5影片 (iFrame除外)";
 
 //簡體中文
 var znChHome = "主页";
@@ -15,7 +15,7 @@ var znChFaqText = "FAQ";
 var znChTeamText = "关于我们";
 var znChDonationText = "贊助";
 var znChShortSentenceText = "在影片中发弹幕吧!";
-var znChLongSentenceText = "支援所有html5影片 (不含iFrame)";
+var znChLongSentenceText = "支援所有html5影片 (iFrame除外)";
 
 // 日本語
 var jpHome = "ホーム";
@@ -35,7 +35,7 @@ var enDonationText = "Donation";
 var enShortSentenceText = "Comments on Video!";
 var enLongSentenceText = "Comments on Video!";
 
-var language = "jp";
+var language = "znTw";
 var languagePackage = {};
 
 if (language == "en") {

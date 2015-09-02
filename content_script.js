@@ -34,7 +34,18 @@
 1.0.30      2015/08/09  kusogray    pause danmu time line if video is paused or ended when open danmu
 1.0.31      2015/08/09  kusogray    remove danmu array under current #dunmu function
 1.0.32		2015/08/17  ismail    	add danMu UI language option
+1.0.33		2015/09/02  kusogray    fix close png on the dialog
  */
+
+ 
+ 
+/*
+    background: url(http://manual.mahara.org/en/15.04/_images/close.png);
+    background-size: 20px 20px;
+    background-repeat: no-repeat;
+    margin-right: 5px;
+    margin-top: -10px;
+*/
 
 //1.0.1
 //var myFirebaseRef = new Firebase("https://popchrome.firebaseio.com/");
@@ -407,7 +418,7 @@ $(function () {
 
 	//$( "video" ).parent().append("<div id='danmu' style=\"z-index:2147483647;position:absolute;\" </div>");
 	$("body").append("<div id='danmu' style='z-index:2147483647;position:absolute;' </div>");
-	$("body").prepend("<div id='danmu_dialog' style='z-index:2147483647;' title='彈幕視窗''>");
+	$("body").prepend("<div id='danmu_dialog' style='z-index:2147483647;' title='Twidéo''>");
 
 	//$("body").prepend("<div id='winSize' style='z-index:2147483647;' >");
 
@@ -480,7 +491,7 @@ $(function () {
 
 					}
 
-
+					
 					
 					//$('#loadingStatusLabel').text("Status: Loaded " + tmpNumDanmu + " danmus.");
 
@@ -488,7 +499,13 @@ $(function () {
 						height : mainWindowHeight,
 						width : mainWindowWidth
 					});
-					$('#danmu_dialog').dialog('option', 'title', '彈幕視窗 - ' + tmpNumDanmu + " danmus.");
+					$('#danmu_dialog').dialog('option', 'title', 'Twidéo - ' + tmpNumDanmu + " comments.");
+					$('#danmu_dialog').dialog('option', 'dialogClass', 'twideoDialogClass');
+					
+					// 1.0.33
+					var closePngUrl = 'url(' + chrome.extension.getURL("close.png") + ')';
+					var tmpCss ='  background: url(http://manual.mahara.org/en/15.04/_images/close.png);background-size: 20px 20px;background-repeat: no-repeat;margin-right: 5px;margin-top: -10px;';
+					$('.twideoDialogClass  .ui-dialog-titlebar-close').css({'background': closePngUrl, 'background-size': '20px 20px'});
 
 					$("#histogramImgId").click(function () {
 						$('#danmu_dialog').dialog({

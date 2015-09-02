@@ -21,7 +21,7 @@
   
 
   //using chrome API chrome.extension.getURL to separate dialog html view
-   "web_accessible_resources": ["danMu.html","lib/jquery-2.1.3.min.js","home.png","setting.png","bar-chart-hi.png","DanMuSetting.html","PrevPage.png","upload.png","comment_on.png","comment_off.png","language.png"],
+   "web_accessible_resources": ["danMu.html","lib/jquery-2.1.3.min.js","home.png","setting.png","bar-chart-hi.png","DanMuSetting.html","PrevPage.png","upload.png","comment_on.png","comment_off.png","language.png","close.png"],
    "icons": {  "16":"icon.png", 
                 "48":"icon.png", 
                 "128":"icon.png"  },

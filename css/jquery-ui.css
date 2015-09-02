@@ -415,6 +415,12 @@ button.ui-button::-moz-focus-inner {
 	margin: -10px 0 0 0;
 	padding: 1px;
 	height: 20px;
+	
+	background: url(http://manual.mahara.org/en/15.04/_images/close.png);
+    background-size: 20px 20px;
+    background-repeat: no-repeat;
+    margin-right: 5px;
+    margin-top: -10px;
 }
 .ui-dialog .ui-dialog-content {
 	position: relative;

@@ -7,12 +7,6 @@ TO-LIST
 ------------------------------------------------
 
 
-- [ ] add language prop in danmu
-- [ ] hide danmu w.r.t current language selection
-- [ ] do not return fail when 0 danmu
-- [ ] fb url check
-
-
 
 
 ------------------------------------------------
@@ -61,3 +55,7 @@ TO-LIST
 - [X] fullscreen load danmu when user click load
 - [X] show the loading danmu status on the danmu window
 - [X] add language selection combo box
+- [X] add language prop in danmu
+- [X] hide danmu w.r.t current language selection
+- [X] fb url check
+- [X] do not return fail when 0 danmu
