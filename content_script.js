@@ -35,6 +35,7 @@
 1.0.31      2015/08/09  kusogray    remove danmu array under current #dunmu function
 1.0.32		2015/08/17  ismail    	add danMu UI language option
 1.0.33		2015/09/02  kusogray    fix close png on the dialog
+1.0.34		2015/09/02  kusogray    add danmu cnt local when user send a valid danmu
  */
 
  
@@ -204,6 +205,14 @@ function sendDanmuFunc() {
 	if (!text || text.length == 0) {
 		return;
 	}
+	
+	// title bar danmu add 1
+	// 1.0.34
+	var tmpTitle = $('#danmu_dialog').dialog('option', 'title');
+	var danmuCnt = parseInt(tmpTitle.split("-")[1].split(" ")[1], 10) + 1;
+	$('#danmu_dialog').dialog('option', 'title', 'Twidéo - ' + danmuCnt + " comments.");
+	
+	
 	var color = document.getElementById('danMuUserColor').value;
 	var position = document.getElementById('danMuUserPosition').value;
 	var videoUri = getInsertUrl(videoProps.obj.src); //ytVidId(videoProps.obj.baseURI) ? videoProps.obj.baseURI : ;
