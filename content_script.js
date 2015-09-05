@@ -293,7 +293,7 @@ $("body").mousedown(function (e) {
 
 				//$("<menu type='context' id='menu' class='custom-popchrome-menu'><menuitem label='開啟彈幕視窗'></menuitem><menu> ").appendTo("body")
 
-				$("<div class='custom-popchrome-menu'>開啟彈幕視窗</div>")
+				$("<div class='custom-popchrome-menu'>Open Twidéo Window</div>")
 				.appendTo("body")
 				.css({
 					top : event.pageY + "px",
@@ -307,9 +307,9 @@ $("body").mousedown(function (e) {
 					}
 
 					if (!displayFlag) {
-						$(".custom-popchrome-menu").text('開啟彈幕');
+						$(".custom-popchrome-menu").text('Display Comments');
 					} else {
-						$(".custom-popchrome-menu").text('關閉彈幕');
+						$(".custom-popchrome-menu").text('Close Comments');
 					}
 
 				}
@@ -441,7 +441,7 @@ $(function () {
 				histogramDrew = false;
 				//1.0.26
 				var tmpCustomPopChromeMenuTxt = $(".custom-popchrome-menu").text();
-				if (!(tmpCustomPopChromeMenuTxt.indexOf("視窗") > -1)) {
+				if (!(tmpCustomPopChromeMenuTxt.indexOf("Twidéo") > -1)) {
 					if (displayFlag) {
 						displayDanmu(false);
 
