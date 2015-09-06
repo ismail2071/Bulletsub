@@ -132,26 +132,25 @@ function alignTimeLine(clearFlag) {
 var danmuWindowExist = false;
 
 // 1.0.4
-chrome.runtime.onMessage.addListener(
 
-	function (request, sender, sendResponse) {
-	console.log(sender.tab ?
-		"from a content script:" + sender.tab.url :
-		"from the extension");
-	console.dir(request.token);
-	sendResponse({
-		farewell : "goodbye"
-	});
-});
 
 var rect = {};
 var videoProps = {};
 var allDanmu = {};
 var currentRightClickVideo;
 
-//////init aws dynamodb
+chrome.extension.onMessage.addListener(function(msg, sender, sendResponse) {
 
-var dynamodb = {};
+  if (msg.action == 'open_dialog_box') {
+
+  			$(document).mousedown(function (event) {
+    			//alert("Message recieved!"+event.target.className);
+    			  console.dir(event.target.className);
+    		});
+
+  }
+
+});
 
 // 1.0.17 1.0.18
 function convertVideos(convertTarget) {
@@ -291,7 +290,7 @@ $("body").mousedown(function (e) {
 
 			if ($(".ytp-menu")!=undefined)
 				{
-					console.log("test");
+					console.log("test youtube");
 					
 				$("<div class='ytp-menuitem custom-twideo-menu' aria-haspopup='false' tabindex='38' role='menuitem'><div class='ytp-menuitem-label custom-twideo-menu'><span><img src="+chrome.extension.getURL("icon.png")+" height='28' width='28'/></span>Open Twidéo Window !!!!</div><div class='ytp-menuitem-content'></div></div>")
 				.appendTo(".ytp-menu");
@@ -302,14 +301,14 @@ $("body").mousedown(function (e) {
 				}*/
 			}
 
-
 			else
+			{
+				console.log("test2");
 			videoProps.target.bind('contextmenu', function () {
 				//event.preventDefault();
 
 				//$("<menu type='context' id='menu' class='custom-popchrome-menu'><menuitem label='開啟彈幕視窗'></menuitem><menu> ").appendTo("body")
 
-				
 				$("<div class='custom-popchrome-menu'>Open Twidéo Window</div>")
 				.appendTo("body")
 				.css({
@@ -343,7 +342,7 @@ $("body").mousedown(function (e) {
 				$(".custom-popchrome-menu").css("height", "20");
 				return false;
 			});
-
+			}
 		}
 	}
 
@@ -456,6 +455,9 @@ $(function () {
 
 	$(document).mousedown(function (event) {
 		if (event.which == 1) {
+
+
+
 			console.dir(event.target.className);
 			if (event.target.className == "ytp-menuitem-label custom-twideo-menu") {
 

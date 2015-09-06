@@ -41,7 +41,7 @@ if (tabId == authTabId && changeInfo.status == 'complete' && tab.url.indexOf(url
 // Set up context menu at install time.
 chrome.runtime.onInstalled.addListener(function() {
     var context = "all";
-    var title = "DanMu GO!";
+    var title = "Twideo";
     var id = chrome.contextMenus.create({
         "title": title,
         "contexts": [context],
@@ -49,23 +49,12 @@ chrome.runtime.onInstalled.addListener(function() {
     });
 
     var child1 = chrome.contextMenus.create({
-        "title": "Open DanMu Window",
+        "title": "Open Twideo Window",
         "parentId": id,
         "onclick": openInputBox,
         "contexts": [context]
     });
-    var child2 = chrome.contextMenus.create({
-        "title": "Open DanMu",
-        "parentId": id,
-        "onclick": onClickHandler,
-        "contexts": [context]
-    });
-    var child3 = chrome.contextMenus.create({
-        "title": "Close DanMu",
-        "parentId": id,
-        "onclick": onClickHandler,
-        "contexts": [context]
-    });
+
 
 });
 
@@ -74,9 +63,14 @@ chrome.runtime.onInstalled.addListener(function() {
 
 // The onClicked callback function.
 function openInputBox(info, tab) {
-    chrome.tabs.sendMessage(tab.id, "fuck", {}, function(response) {
-        console.log(response)
-    });
+
+  console.log("item " + info.menuItemId + " was clicked");
+  console.log("info: " + JSON.stringify(info));
+  console.log("tab: " + JSON.stringify(tab));
+
+chrome.tabs.query({active: true, currentWindow: true}, function(tabs){
+    chrome.tabs.sendMessage(tabs[0].id, {action: "open_dialog_box"}, function(response) {});  
+});
 };
 
 
