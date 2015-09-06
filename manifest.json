@@ -1,7 +1,7 @@
  {
  "manifest_version": 3,
 
-  "name": "Danmu",
+  "name": "Twidéo",
   "description": "Live Comment on the Videos!!",
   "version": "1.0",
  "background":  {"page":"background.html"
