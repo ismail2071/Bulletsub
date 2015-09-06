@@ -272,7 +272,7 @@ $("body").mousedown(function (e) {
 
 	if (e.button == 2) {
 
-		$(".custom-popchrome-menu").remove();
+		$(".ytp-menuitem.custom-twideo-menu").remove();
 		var videoObj = e.target;
 
 		console.dir(videoObj);
@@ -288,18 +288,35 @@ $("body").mousedown(function (e) {
 				convertVideos(videoObj.nodeName);
 			// 1.0.11
 
+
+			if ($(".ytp-menu")!=undefined)
+				{
+					console.log("test");
+					
+				$("<div class='ytp-menuitem custom-twideo-menu' aria-haspopup='false' tabindex='38' role='menuitem'><div class='ytp-menuitem-label custom-twideo-menu'><span><img src="+chrome.extension.getURL("icon.png")+" height='28' width='28'/></span>Open Twidéo Window !!!!</div><div class='ytp-menuitem-content'></div></div>")
+				.appendTo(".ytp-menu");
+
+				/*if ($(".ytp-menu")!=undefined){
+					$(".ytp-menu").append
+
+				}*/
+			}
+
+
+			else
 			videoProps.target.bind('contextmenu', function () {
-				event.preventDefault();
+				//event.preventDefault();
 
 				//$("<menu type='context' id='menu' class='custom-popchrome-menu'><menuitem label='開啟彈幕視窗'></menuitem><menu> ").appendTo("body")
 
+				
 				$("<div class='custom-popchrome-menu'>Open Twidéo Window</div>")
 				.appendTo("body")
 				.css({
 					top : event.pageY + "px",
 					left : event.pageX + "px"
 				});
-
+				
 				//1.0.26
 				if (isFullScreenFlag) {
 					if (ytVidId()) {
@@ -313,11 +330,15 @@ $("body").mousedown(function (e) {
 					}
 
 				}
+
+
 				$(".custom-popchrome-menu").css("z-index", "2147483647");
 				$(".custom-popchrome-menu").css("position", "absolute");
 				$(".custom-popchrome-menu").css("background-color", "#C0C0C0");
 				//$(".custom-popchrome-menu").css("background-color","#C0C0C0");
 				$(".custom-popchrome-menu").css("border", "1px solid black");
+				
+
 				$(".custom-popchrome-menu").css("padding", "2px");
 				$(".custom-popchrome-menu").css("height", "20");
 				return false;
@@ -435,12 +456,13 @@ $(function () {
 
 	$(document).mousedown(function (event) {
 		if (event.which == 1) {
-			if (event.target.className == "custom-popchrome-menu") {
+			console.dir(event.target.className);
+			if (event.target.className == "ytp-menuitem-label custom-twideo-menu") {
 
 				removeDanmuArray(); // remove danmu before load //1.0.31
 				histogramDrew = false;
 				//1.0.26
-				var tmpCustomPopChromeMenuTxt = $(".custom-popchrome-menu").text();
+				var tmpCustomPopChromeMenuTxt = $(".ytp-menuitem.custom-twideo-menu").text();
 				if (!(tmpCustomPopChromeMenuTxt.indexOf("Twidéo") > -1)) {
 					if (displayFlag) {
 						displayDanmu(false);
@@ -448,7 +470,7 @@ $(function () {
 					} else {
 						displayDanmu(true);
 					}
-					$(".custom-popchrome-menu").remove();
+					$(".ytp-menuitem.custom-twideo-menu").remove();
 					return;
 				} else {
 					$("#danMuDisplay").prop("checked", true);
@@ -785,7 +807,7 @@ $(function () {
 			}
 		}
 
-		$(".custom-popchrome-menu").remove();
+		$(".ytp-popup.ytp-contextmenu").css("display","none");
 	});
 
 	/*$.contextMenu({
