@@ -1,5 +1,5 @@
 var mainWindowHeight = "220.5";
-var mainWindowWidth = "288";
+var mainWindowWidth = "300";
 
 var languageWindowHeight = "330.5";
 var languageWindowWidth = "290";
