@@ -155,6 +155,11 @@ var textSetter = function (id, text) {
 }
 
 $(document).ready(function () {
+	
+	// change paypal donate icon
+	var paypalDonateIconPath = chrome.extension.getURL("btn_donateCC_LG.gif")
+	$("#paypalDonateIcon").attr("src",paypalDonateIconPath);
+	
 	// Handler for .ready() called.
 	htmlSetter("homeText", languagePackage.homeText);
 	htmlSetter("howToUseText", languagePackage.howToUseText);
