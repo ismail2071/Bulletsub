@@ -39,14 +39,18 @@ if (tabId == authTabId && changeInfo.status == 'complete' && tab.url.indexOf(url
 }
 */
 // Set up context menu at install time.
+/*
 chrome.runtime.onInstalled.addListener(function() {
     var context = "all";
     var title = "Twideo";
     var id = chrome.contextMenus.create({
+        "type": normal,
         "title": title,
         "contexts": [context],
         "id": "context" + context
-    });
+    },function () {
+    console.log('contextMenus are create.');
+  });
 
     var child1 = chrome.contextMenus.create({
         "title": "Open Twideo Window",
@@ -56,10 +60,8 @@ chrome.runtime.onInstalled.addListener(function() {
     });
 
 
-});
+});*/
 
-// add click event
-//chrome.contextMenus.onClicked.addListener(onClickHandler);
 
 // The onClicked callback function.
 function openInputBox(info, tab) {
@@ -74,16 +76,21 @@ chrome.tabs.query({active: true, currentWindow: true}, function(tabs){
 };
 
 
-function onClickHandler(info, tab) {
-    /*var sText = info.selectionText;
-    var url = "https://www.google.com/search?q=" + encodeURIComponent(sText);  
-    window.open(url, '_blank');*/
-    console.dir(info);
-    alert("22 " + tab.id);
-    chrome.tabs.sendMessage(tab.id, {
-        open: "danmu"
-    }, function(response) {});
-};
+// Create one test item for each context type.
+
+var contexts = ["page"];
+
+  var context = contexts[0];
+  var title = "Test '" + context + "' menu item";
+  var id = chrome.contextMenus.create({"title": title, "contexts":[context],
+                                       "onclick": openInputBox});
+  console.log("'" + context + "' item:" + id);
+
+// add click event
+//chrome.contextMenus.onClicked.addListener(onClickHandler);
+
+
+
 
 
 /*1.0.28*/

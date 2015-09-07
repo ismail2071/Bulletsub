@@ -25,6 +25,16 @@
       body { height: 580px; }
     </style>
 
+	
+<style type=text/css> 
+	<!--
+	/*全部設定字體*/
+	 
+	//-->
+	body { font-family: verdana, Times New Roman,  微軟正黑體; !important }
+</style>
+ 
+ 
 <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
 <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
 <!--[if lt IE 9]>
@@ -41,7 +51,7 @@
     <div class="container">
       <div class="navbar-header">
         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse"> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button>
-        <a class="navbar-brand" href="#home"><i class="fa fa-location-arrow"></i> Twidéo</a> </div>
+        <a class="navbar-brand" href="#home"><img  src="assets/img/icon.png" style="margin-top: -10px;" height="42px" width="42px" align="center"> Twidéo</a> </div>
       <div class="navbar-collapse collapse">
         <ul class="nav navbar-nav navbar-right">
           <li id="homeText"><a href="#home" class="smoothScroll">ReplaceText</a></li>
@@ -130,20 +140,27 @@
       <h2 id="donationText" class="centered">ReplaceText</h2>
 
 	  <h3 id="whyNeedDonate" class="large">ReplaceText</h3>
+
 	  <hr>
-	  <img  src="assets/img/WhyNeedDonation.jpg" height="240px" width="240px" align="center">
+	  <img style="margin-top: -42px;" src="assets/img/WhyNeedDonation.jpg" height="240px" width="240px" align="center">
       
        <h3 id="whyNeedDonateContent" class="large">ReplaceText</h3>
-
-      <div class="col-md-4"> <i class="fa fa-envelope-o fa-2x"></i>
-        <p><font color = "black">info@companyname.com</font></p>
-      </div>
-
     </div>
+	
+	
+	</br></br>
+
+
     <div class="row">
-      <div class="col-lg-8 col-lg-offset-2 centered">
-        
-      </div>
+      <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
+<input type="hidden" name="cmd" value="_s-xclick">
+<input type="hidden" name="hosted_button_id" value="7ELEEHJ4BNR5Q">
+<!-- <table>
+<tr><td><input type="hidden" name="on0" value="Donation: (US dollar)">Donation: (US dollar)</td></tr><tr><td><input type="text" name="os0" maxlength="200"></td></tr>
+</table> -->
+<input type="image" src="https://www.paypal.com/en_US/i/btn/btn_donateCC_LG.gif" border="0" name="submit" alt="PayPal － 更安全、更簡單的線上付款方式！">
+<img alt="" border="0" src="https://www.paypalobjects.com/zh_TW/i/scr/pixel.gif" width="1" height="1">
+</form>
     </div>
     <!-- row --> 
     
@@ -160,8 +177,8 @@
       <div class="col-lg-3 centered"> <img class="img img-circle" src="assets/img/team/team01.jpg" height="120px" width="120px" alt="">
         <h4>Wei-Hao Mou</h4>
         <p>Programmer from Taiwan  <br> Enjoy doing excited and fun projects.</p>
-		<hr>
         <a href="#"><i class="fa fa-twitter"></i></a> <a href="#"><i class="fa fa-facebook"></i></a> <a href="#"><i class="fa fa-linkedin"></i></a> </div>
+		<hr>
       <div class="col-lg-3 centered"> <img class="img img-circle" src="assets/img/team/team02.jpg" height="120px" width="120px" alt="">
         <h4>Hung-Rei Chen</h4>
         <p>Albucius consectetuer eu nam. Saepe legendos vulputate eu quo, id mea comprehensam signifer.</p>
