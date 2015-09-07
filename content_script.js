@@ -139,18 +139,7 @@ var videoProps = {};
 var allDanmu = {};
 var currentRightClickVideo;
 
-chrome.extension.onMessage.addListener(function(msg, sender, sendResponse) {
 
-  if (msg.action == 'open_dialog_box') {
-
-  			$(document).mousedown(function (event) {
-    			//alert("Message recieved!"+event.target.className);
-    			  console.dir(event.target.className);
-    		});
-
-  }
-
-});
 
 // 1.0.17 1.0.18
 function convertVideos(convertTarget) {
@@ -272,10 +261,15 @@ $("body").mousedown(function (e) {
 	if (e.button == 2) {
 
 		$(".ytp-menuitem.custom-twideo-menu").remove();
+		$(".custom-twideo-menu").remove();
 		var videoObj = e.target;
 
 		console.dir(videoObj);
-		if ((videoObj.nodeName.toUpperCase() == "video".toUpperCase()) || (videoObj.getAttribute('type') == 'application/x-shockwave-flash')) {
+    	//console.log(window.location.href );
+    	var currentUrl = window.location.href;
+    	currentUrl.search("youtube");
+
+//		if ((videoObj.nodeName.toUpperCase() == "video".toUpperCase()) || (videoObj.getAttribute('type') == 'application/x-shockwave-flash')) {
 			currentRightClickVideo = videoObj;
 			rect = videoObj.getBoundingClientRect();
 
@@ -283,33 +277,30 @@ $("body").mousedown(function (e) {
 			videoProps.type = (videoObj.nodeName.toUpperCase() == "video".toUpperCase()) ? 'html5' : 'flash';
 			videoProps.target = (videoProps.type == 'html5') ? $(videoObj) : $(videoObj.nodeName + "[type='application/x-shockwave-flash']");
 
-			if (videoProps.type == "flash")
-				convertVideos(videoObj.nodeName);
+//			if (videoProps.type == "flash")
+//				convertVideos(videoObj.nodeName);
 			// 1.0.11
 
+			
 
-			if ($(".ytp-menu")!=undefined)
-				{
+			if ($(".ytp-menu")!=undefined && currentUrl.search("youtube")>0)
+			{
 					console.log("test youtube");
 					
 				$("<div class='ytp-menuitem custom-twideo-menu' aria-haspopup='false' tabindex='38' role='menuitem'><div class='ytp-menuitem-label custom-twideo-menu'><span><img src="+chrome.extension.getURL("icon.png")+" height='28' width='28'/></span>Open Twidéo Window !!!!</div><div class='ytp-menuitem-content'></div></div>")
 				.appendTo(".ytp-menu");
 
-				/*if ($(".ytp-menu")!=undefined){
-					$(".ytp-menu").append
-
-				}*/
 			}
 
 			else
 			{
-				console.log("test2");
+			console.log("test2");
 			videoProps.target.bind('contextmenu', function () {
 				//event.preventDefault();
 
 				//$("<menu type='context' id='menu' class='custom-popchrome-menu'><menuitem label='開啟彈幕視窗'></menuitem><menu> ").appendTo("body")
 
-				$("<div class='custom-popchrome-menu'>Open Twidéo Window</div>")
+				$("<div class='custom-twideo-menu'>Open Twidéo Window</div>")
 				.appendTo("body")
 				.css({
 					top : event.pageY + "px",
@@ -319,32 +310,32 @@ $("body").mousedown(function (e) {
 				//1.0.26
 				if (isFullScreenFlag) {
 					if (ytVidId()) {
-						$(".custom-popchrome-menu").detach().appendTo('.html5-video-container');
+						$(".ccustom-twideo-menu").detach().appendTo('.html5-video-container');
 					}
 
 					if (!displayFlag) {
-						$(".custom-popchrome-menu").text('Display Comments');
+						$(".custom-twideo-menu").text('Display Comments');
 					} else {
-						$(".custom-popchrome-menu").text('Close Comments');
+						$(".custom-twideo-menu").text('Close Comments');
 					}
 
 				}
 
 
-				$(".custom-popchrome-menu").css("z-index", "2147483647");
-				$(".custom-popchrome-menu").css("position", "absolute");
-				$(".custom-popchrome-menu").css("background-color", "#C0C0C0");
+				$(".custom-twideo-menu").css("z-index", "2147483647");
+				$(".custom-twideo-menu").css("position", "absolute");
+				$(".custom-twideo-menu").css("background-color", "#C0C0C0");
 				//$(".custom-popchrome-menu").css("background-color","#C0C0C0");
-				$(".custom-popchrome-menu").css("border", "1px solid black");
+				$(".custom-twideo-menu").css("border", "1px solid black");
 				
 
-				$(".custom-popchrome-menu").css("padding", "2px");
-				$(".custom-popchrome-menu").css("height", "20");
+				$(".custom-twideo-menu").css("padding", "2px");
+				$(".custom-twideo-menu").css("height", "20");
 				return false;
 			});
 			}
 		}
-	}
+//	}
 
 });
 
@@ -457,14 +448,18 @@ $(function () {
 		if (event.which == 1) {
 
 
+			var clickClassName = event.target.className;
+			var clickClassPosition = clickClassName.search(/custom-twideo-menu/i);
+			console.log(clickClassName);
+			console.log(clickClassName.search(/custom-twideo-menu/i));
 
-			console.dir(event.target.className);
-			if (event.target.className == "ytp-menuitem-label custom-twideo-menu") {
+			var classType = (clickClassPosition==0)?".custom-twideo-menu":".ytp-menuitem.custom-twideo-menu";
+			if (event.target.className.search(/custom-twideo-menu/i)>-1) {
 
 				removeDanmuArray(); // remove danmu before load //1.0.31
 				histogramDrew = false;
 				//1.0.26
-				var tmpCustomPopChromeMenuTxt = $(".ytp-menuitem.custom-twideo-menu").text();
+				var tmpCustomPopChromeMenuTxt = $(classType).text();
 				if (!(tmpCustomPopChromeMenuTxt.indexOf("Twidéo") > -1)) {
 					if (displayFlag) {
 						displayDanmu(false);
@@ -472,7 +467,7 @@ $(function () {
 					} else {
 						displayDanmu(true);
 					}
-					$(".ytp-menuitem.custom-twideo-menu").remove();
+					$(classType).remove();
 					return;
 				} else {
 					$("#danMuDisplay").prop("checked", true);
@@ -810,6 +805,7 @@ $(function () {
 		}
 
 		$(".ytp-popup.ytp-contextmenu").css("display","none");
+		$(classType).remove();
 	});
 
 	/*$.contextMenu({
