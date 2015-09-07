@@ -36,6 +36,7 @@
 1.0.32		2015/08/17  ismail    	add danMu UI language option
 1.0.33		2015/09/02  kusogray    fix close png on the dialog
 1.0.34		2015/09/02  kusogray    add danmu cnt local when user send a valid danmu
+1.0.35		2015/09/08  ismail	    comment side bar
  */
 
  
@@ -140,54 +141,6 @@ var allDanmu = {};
 var currentRightClickVideo;
 
 
-
-// 1.0.17 1.0.18
-function convertVideos(convertTarget) {
-	var embeds = document.getElementsByTagName(convertTarget);
-
-	//var embeds = convertTarget;
-	console.log("tagname: " + convertTarget + " converting....");
-	//console.dir(embeds);
-	for (var i = embeds.length - 1; i >= 0; i--) {
-
-		if (embeds[i].type = "application/x-shockwave-flash") {
-			var flashVideo = embeds[i];
-			var flashVars = flashVideo.attributes['flashvars'].value;
-			console.dir(embeds[i]);
-			console.dir(flashVars);
-			var decodedVars = decodeURIComponent(flashVars);
-
-			// Hidden in the vars is the URL for HD mp4 video source.
-			var n = decodedVars.match(/\"hd_src\":\"([^\"]+)\",/i);
-			console.dir(n);
-			var hdSrcUrl = n[1].split("\\").join("");
-
-			var video = document.createElement('video');
-			video.src = hdSrcUrl;
-			video.controls = true;
-			video.style.width = "100%";
-
-			// Facebook has a super-deep, crazy DOM Structure.
-			// Go up to the same level of play button overlay (hopefully).
-			var container = flashVideo.parentNode.parentNode.parentNode.parentNode;
-
-			// Make the HTML5 video the only child node
-			while (container.hasChildNodes()) {
-				container.removeChild(container.lastChild);
-			}
-			container.appendChild(video);
-		}
-	};
-}
-
-//1.0.17 current use only in FB
-/*
-var tmpUrl = document.URL;
-if( tmpUrl.indexOf('www.facebook.com')> -1){
-setInterval(convertVideos, 3000); // can change a way to trigger it
-}
- */
-
 function sendDanmuFunc() {
 	var text = document.getElementById('danMuUserText').value;
 	if (!text || text.length == 0) {
@@ -266,8 +219,6 @@ $("body").mousedown(function (e) {
 
 		console.dir(videoObj);
     	//console.log(window.location.href );
-    	var currentUrl = window.location.href;
-    	currentUrl.search("youtube");
 
 //		if ((videoObj.nodeName.toUpperCase() == "video".toUpperCase()) || (videoObj.getAttribute('type') == 'application/x-shockwave-flash')) {
 			currentRightClickVideo = videoObj;
@@ -283,7 +234,7 @@ $("body").mousedown(function (e) {
 
 			
 
-			if ($(".ytp-menu")!=undefined && currentUrl.search("youtube")>0)
+			if ($(".ytp-menu")!=undefined && ytVidId())
 			{
 					console.log("test youtube");
 					
@@ -415,32 +366,10 @@ $(function () {
 	//1.0.26
 	insertRule(document.styleSheets[0], ".flying", "display: block", 0);
 
-	//alert(getStyleBySelector(".flying"));
-
-	//$('.flying').css({"display": "none"});
-	//$('.flying').show();
-
-	/*jQuery(document).ready(function () {
-	jQuery('video').bind('contextmenu', function () {
-	return false;
-	});
-	});*/
-
-	/*$("h2").on('click', 'p.test', function() {
-	alert('you clicked a p.test element');
-	});*/
-
-	/*$("#container").bind("DOMNodeInserted",function(){
-	alert("child is appended");
-	});*/
-
-	//$("body").append("<div id='testOver' style=\"z-index:2147483647 ;position:absolute; top: 10px; right: 10px;  border: 1px solid red; display: block; background: #FFF; \"> xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</div>");
-
-	//$( "video" ).parent().append("<div id='danmu' style=\"z-index:2147483647;position:absolute;\" </div>");
 	$("body").append("<div id='danmu' style='z-index:2147483647;position:absolute;' </div>");
 	$("body").prepend("<div id='danmu_dialog' style='z-index:2147483647;' title='Twidéo''>");
-
-	//$("body").prepend("<div id='winSize' style='z-index:2147483647;' >");
+	$("body").append("<div id='twideo_Table' style='z-index:2147483647;' title='Twidéo comments'' ></div>");
+	
 
 	renderInputBox();
 
@@ -450,8 +379,7 @@ $(function () {
 
 			var clickClassName = event.target.className;
 			var clickClassPosition = clickClassName.search(/custom-twideo-menu/i);
-			console.log(clickClassName);
-			console.log(clickClassName.search(/custom-twideo-menu/i));
+			
 
 			var classType = (clickClassPosition==0)?".custom-twideo-menu":".ytp-menuitem.custom-twideo-menu";
 			if (event.target.className.search(/custom-twideo-menu/i)>-1) {
@@ -494,18 +422,27 @@ $(function () {
 				console.log("Danmu is loading from server now...");
 				function callback(response) {
 					console.log("Danmu is loading done:");
+					
 					var tmpNumDanmu = 0;
 					if (response.answer.length > 0) {
 						tmpNumDanmu = response.answer.length;
 						console.dir(response.answer);
-						response.answer.map(function (item) {
-							console.dir(item);
+
+						var data = response.answer.map(function (item) {
+
 							delete item.isnew;
 							if (item.language==null)
 								item.language=window.navigator.language;
 							$('#danmu').danmu("add_danmu", item);
-
+							return [toHHMMSS(item.time),item.text];
+							
 						});
+						if(typeof dataTable === 'undefined')
+						 dataTable = $('#table_id').DataTable({
+						 searching: false,
+						 data:data,
+						paging: false,
+    					});
 
 					var languageList = ["zh-CN","zh-TW","en","jp"];
 
@@ -527,6 +464,8 @@ $(function () {
 						height : mainWindowHeight,
 						width : mainWindowWidth
 					});
+
+
 					$('#danmu_dialog').dialog('option', 'title', 'Twidéo - ' + tmpNumDanmu + " comments.");
 					$('#danmu_dialog').dialog('option', 'dialogClass', 'twideoDialogClass');
 					
@@ -646,19 +585,6 @@ $(function () {
 								//plot1.redraw();
 							});
 
-							/*$('#chart1').bind('jqplotDataHighlight',
-							function (ev, seriesIndex, pointIndex, data) {
-							var tmpCurrentTime = Math.round(currentRightClickVideo.currentTime);
-							for (i = 0; i < tmpCurrentTime; i++) {
-							plot1.series[0].seriesColors[i] = "#FF9900";
-							}
-							plot1.redraw();
-							});
-
-							$('#chart1').bind('jqplotDataUnhighlight',
-							function (ev) {
-							$('#info2').html('Nothing');
-							});*/
 
 							setInterval(function () {
 								var tmpCurrentTime = Math.round(currentRightClickVideo.currentTime);
@@ -679,6 +605,21 @@ $(function () {
 							histogramDrew = true;
 						}
 
+					});
+
+		
+					//1.0.35
+						$("#twideo_Table").dialog({
+							height : mainWindowHeight*1.6,
+							width : mainWindowWidth*1.3,
+							position: { my: "center+100%", at: "center", of: window  },
+							 close: function() { $('#twideo_Table').toggle() }
+						});
+						$("#twideo_Table").dialog('close');
+						
+
+					$("#commentSideImgId").click(function () {
+						($( "#twideo_Table" ).dialog( "isOpen" ))?$("#twideo_Table").dialog('close'):$("#twideo_Table").dialog('open');
 					});
 
 				}
@@ -737,22 +678,6 @@ $(function () {
 					//console.log(offset + "+" + rect.top);
 				}
 
-				//console.log("初始left:" + rect.left + ", width: " + currentRightClickVideo.videoWidth);
-
-				/*window.onresize = function (event) {
-				var tmpOffset = videoProps.target.offset().top;
-				rect = currentRightClickVideo.getBoundingClientRect();
-				var videoPosProp = {
-				"left" : rect.left,
-				"top" : tmpOffset,
-				"width" : currentRightClickVideo.videoWidth,
-				"height" : currentRightClickVideo.videoHeight
-				};
-				//$('#winSize').danmu("danmu_updateVideoProps", videoPosProp);
-				$('#winSize').text("left:" + rect.left + ", width:" + currentRightClickVideo.videoWidth);
-				console.log("resized!");
-				};*/
-
 				//1.0.30
 				if (videoProps.obj.ended || videoProps.obj.paused) {
 					$('#danmu').danmu('danmu_pause');
@@ -808,22 +733,6 @@ $(function () {
 		$(classType).remove();
 	});
 
-	/*$.contextMenu({
-	selector: 'video',
-	callback: function(key, options) {
-	var m = "clicked: " + key;
-	window.console && console.log(m) || alert(m);
-	},
-	items: {
-	"edit": {name: "Edit", icon: "edit"},
-	"cut": {name: "Cut", icon: "cut"},
-	"copy": {name: "Copy", icon: "copy"},
-	"paste": {name: "Paste", icon: "paste"},
-	"delete": {name: "Delete", icon: "delete"},
-	"sep1": "---------",
-	"quit": {name: "Quit", icon: "quit"}
-	}
-	});*/
 
 });
 
@@ -902,4 +811,7 @@ function renderInputBox() {
 
 	$("#danmu_dialog").hide();
 
+	//1.0.35
+	$("#twideo_Table").load(chrome.extension.getURL("twideoTable.html"));
+	$("#twideo_Table").hide();
 }

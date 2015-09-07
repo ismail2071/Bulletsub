@@ -55,7 +55,9 @@
 	<img id = "settingImgId"  alt="Setting" height="16" width="16">
 	<div><img id = "histogramImgId"  alt="Setting" height="16" width="16"></div>
 	<input type="checkbox" id="danMuDisplay" value="display" class="displayCheckbox"  >
+	<div><img id = "commentSideImgId"  alt="Switch Comment" height="17" width="17"></div>
 </div>
+
 
 
 <!-- <div id='danmu_upper'>
@@ -250,12 +252,14 @@ $(function () {
 			
 	 var prevImgUrl =chrome.extension.getURL("home.png");
 	 var histogramImgUrl =chrome.extension.getURL("bar-chart-hi.png");
+	 var commentSideImgUrl =chrome.extension.getURL("comment_side.png");
 	  
 	 //console.log ('danMuMainWinHeight: ' + danMuMainWinHeight + 'danMuMainWinWidth: ' + danMuMainWinWidth);
 	$('.testsel').SumoSelect({okCancelInMulti:false });
 	  $("#prevImgId").attr("src",prevImgUrl);
 	  $("#prevImgId2").attr("src",prevImgUrl);
 	  $("#histogramImgId").attr("src",histogramImgUrl);
+	  $("#commentSideImgId").attr("src",commentSideImgUrl);
 	  
 	 $("#prevImgId").click(function () {
 
