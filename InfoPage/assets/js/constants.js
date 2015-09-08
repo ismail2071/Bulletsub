@@ -1,41 +1,41 @@
 ﻿// Language Constants
 // 繁體中文
-var znTwHome = "主頁";
-var znTwHowToUseText = "使用教學";
-var znTwFaqText = "FAQ";
-var znTwTeamText = "關於我們";
-var znTwDonationText = "贊助";
-var znTwShortSentenceText = "在影片中推文吧!";
-var znTwLongSentenceText = "支援所有html5影片 (iFrame除外)";
-var znTwStep1Text = "在html5影片中按右鍵";
-var znTwStep2Text = "在Twidéo的主視窗發送評論吧!";
-var znTwStep1img = "en_1.jpg";
-var znTwStep2img = "ch_2.jpg";
-var znTwFaqQ1Text = "Q: 為什麼按了右鍵沒有出現選單?";
-var znTwFaqA1Text = "A: 如果影片是Flash的話，很可惜他已經不被支援了。如果是html5，那麼他一定是用了iFrame嵌入影片，如果是youtube的話，請連結到原本的youtube頁面發表評論。";
-var znTwFaqQ2Text = "Q: 為什麼統計數據沒有更新?";
-var znTwFaqA2Text = "A: 請關掉Twidéo主視窗並重新開啟一次。";
-var znTwWhyNeedDonate = "為什麼我們需要贊助?";
-var znTwWhyNeedDonateContent = "我們使用amazon的服務來儲存影片的評論，只要超過了使用流量限制，amazon就會開始收費。所以我們需要你的幫忙，幫助我們可以維護這套服務，感謝您!";
+var zhTwHome = "主頁";
+var zhTwHowToUseText = "使用教學";
+var zhTwFaqText = "FAQ";
+var zhTwTeamText = "關於我們";
+var zhTwDonationText = "贊助";
+var zhTwShortSentenceText = "在影片中推文吧!";
+var zhTwLongSentenceText = "支援所有html5影片 (iFrame除外)";
+var zhTwStep1Text = "在html5影片中按右鍵";
+var zhTwStep2Text = "在Twidéo的主視窗發送評論吧!";
+var zhTwStep1img = "en_1.jpg";
+var zhTwStep2img = "ch_2.jpg";
+var zhTwFaqQ1Text = "Q: 為什麼按了右鍵沒有出現選單?";
+var zhTwFaqA1Text = "A: 如果影片是Flash的話，很可惜他已經不被支援了。如果是html5，那麼他一定是用了iFrame嵌入影片，如果是youtube的話，請連結到原本的youtube頁面發表評論。";
+var zhTwFaqQ2Text = "Q: 為什麼統計數據沒有更新?";
+var zhTwFaqA2Text = "A: 請關掉Twidéo主視窗並重新開啟一次。";
+var zhTwWhyNeedDonate = "為什麼我們需要贊助?";
+var zhTwWhyNeedDonateContent = "我們使用amazon的服務來儲存影片的評論，只要超過了使用流量限制，amazon就會開始收費。所以我們需要你的幫忙，幫助我們可以維護這套服務，感謝您!";
 
 //簡體中文
-var znChHome = "主页";
-var znChHowToUseText = "使用教学";
-var znChFaqText = "FAQ";
-var znChTeamText = "关于我们";
-var znChDonationText = "贊助";
-var znChShortSentenceText = "在影片中发弹幕吧!";
-var znChLongSentenceText = "支援所有html5影片 (iFrame除外)";
-var znChStep1Text = "在html5影片中按右键";
-var znChStep2Text = "在Twidéo的主视窗发弹幕吧!";
-var znChStep1img = "ch_1.jpg";
-var znChStep2img = "ch_2.jpg";
-var znChFaqQ1Text = "Q: 为什麽按了右键没有出现选单?";
-var znChFaqA1Text = "A: 如果影片是Flash的话，很可惜他已经不被支援了。如果是html5，那麽他一定是用了iFrame嵌入影片，如果是youtube的话，请连结到原本的youtube页面发表评论。";
-var znChFaqQ2Text = "Q: 为什麽统计数据没有更新?";
-var znChFaqA2Text = "A: 请关掉Twidéo主视窗并重新开启一次。";
-var znChWhyNeedDonate = "为什麽我们需要贊助?";
-var znChWhyNeedDonateContent = "我们使用amazon的服务来储存影片的弹幕，只要超过了使用流量限制，amazon就会开始收费。所以我们需要你的帮忙，帮助我们可以维护这套服务，感谢您!";
+var zhChHome = "主页";
+var zhChHowToUseText = "使用教学";
+var zhChFaqText = "FAQ";
+var zhChTeamText = "关于我们";
+var zhChDonationText = "贊助";
+var zhChShortSentenceText = "在影片中发弹幕吧!";
+var zhChLongSentenceText = "支援所有html5影片 (iFrame除外)";
+var zhChStep1Text = "在html5影片中按右键";
+var zhChStep2Text = "在Twidéo的主视窗发弹幕吧!";
+var zhChStep1img = "ch_1.jpg";
+var zhChStep2img = "ch_2.jpg";
+var zhChFaqQ1Text = "Q: 为什麽按了右键没有出现选单?";
+var zhChFaqA1Text = "A: 如果影片是Flash的话，很可惜他已经不被支援了。如果是html5，那麽他一定是用了iFrame嵌入影片，如果是youtube的话，请连结到原本的youtube页面发表评论。";
+var zhChFaqQ2Text = "Q: 为什麽统计数据没有更新?";
+var zhChFaqA2Text = "A: 请关掉Twidéo主视窗并重新开启一次。";
+var zhChWhyNeedDonate = "为什麽我们需要贊助?";
+var zhChWhyNeedDonateContent = "我们使用amazon的服务来储存影片的弹幕，只要超过了使用流量限制，amazon就会开始收费。所以我们需要你的帮忙，帮助我们可以维护这套服务，感谢您!";
 
 
 
@@ -77,7 +77,20 @@ var enFaqA2Text = "A: Please try to re-open the Twidéo main window.";
 var enWhyNeedDonate = "Why we need donation?";
 var enWhyNeedDonateContent = "We using amazon’s service which cost us money when data access exceeds it’s limit, so your donation is a great help us to maintain these services.";
 
-var language = "znTw";
+
+var language = window.navigator.language;
+if(language.toLowerCase().indexOf("tw") != -1){
+	language = "zhTw";
+}else if(language.toLowerCase().indexOf("cn") != -1){
+	language = "zhCn";
+}else if(language.toLowerCase().indexOf("en") != -1){
+	language = "en";
+}else if(language.toLowerCase().indexOf("jp") != -1){
+	language = "jp";
+}
+
+
+//var language = "zhTw";
 //var language = "jp";
 //var language = "en";
 var languagePackage = {};
@@ -122,25 +135,25 @@ if (language == "en") {
 		whyNeedDonation : jpWhyNeedDonate,
 		whyNeedDonationContent : jpWhyNeedDonateContent,
 	};
-}else if (language == "znTw") {
+}else if (language == "zhTw") {
 	languagePackage = {
-		homeText : znTwHome,
-		howToUseText : znTwHowToUseText,
-		faqText : znTwFaqText,
-		teamText : znTwTeamText,
-		donationText : znTwDonationText,
-		shortSentenceText : znTwShortSentenceText,
-		longSentenceText : znTwLongSentenceText,
-		step1Text : znTwStep1Text,
-		step2Text : znTwStep2Text,
-		step1Jpg : znTwStep1img,
-		step2Jpg : znTwStep2img,
-		faqQ1Text : znTwFaqQ1Text,
-		faqA1Text : znTwFaqA1Text,
-		faqQ2Text : znTwFaqQ2Text,
-		faqA2Text : znTwFaqA2Text,
-		whyNeedDonation : znTwWhyNeedDonate,
-		whyNeedDonationContent : znTwWhyNeedDonateContent,
+		homeText : zhTwHome,
+		howToUseText : zhTwHowToUseText,
+		faqText : zhTwFaqText,
+		teamText : zhTwTeamText,
+		donationText : zhTwDonationText,
+		shortSentenceText : zhTwShortSentenceText,
+		longSentenceText : zhTwLongSentenceText,
+		step1Text : zhTwStep1Text,
+		step2Text : zhTwStep2Text,
+		step1Jpg : zhTwStep1img,
+		step2Jpg : zhTwStep2img,
+		faqQ1Text : zhTwFaqQ1Text,
+		faqA1Text : zhTwFaqA1Text,
+		faqQ2Text : zhTwFaqQ2Text,
+		faqA2Text : zhTwFaqA2Text,
+		whyNeedDonation : zhTwWhyNeedDonate,
+		whyNeedDonationContent : zhTwWhyNeedDonateContent,
 	};
 }
 
