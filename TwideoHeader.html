@@ -1,0 +1,54 @@
+<style type="text/css">
+	
+	
+</style>
+
+<body>
+	<div id="twideoHeaderDivId" style ="background-color: #6EA0EB; margin-top: -6px; padding-bottom: 7px; width: 110%; margin-left:-15px; " > 
+		<!-- <input type="text" class ="twideoUserInput" id="twideoUserCommand"> -->
+		<img id = "headerLogoId" style =" margin-left: 7px;" alt="Header" height="32" width="32"> 
+		<div style ="margin-left: 52px; margin-top: -27px;"> 
+			<font style=" font-size: 20px;"> Twidéo </font>
+			<img id = "languageId" style ="margin-left: 50px; margin-top: -27px;" alt="Header" height="16" width="16"> 
+			<img id = "statisticsId" style ="margin-left: 7px; " alt="Header" height="16" width="16"> 
+			<img id = "showCommentId" style ="margin-left: 7px; " alt="Header" height="16" width="16"> 
+			<img id = "tableId" style ="margin-left: 7px; " alt="Header" height="16" width="16"> 
+			<img id = "closeDialogId" style ="margin-left: 7px; " alt="Header" height="16" width="16"> 
+		</div> 
+		<!-- <img id = "headerImgId" style="background-color: red;" alt="Header" height="16" width="100%"> -->
+	</div > 
+</body>
+
+
+<script type="text/javascript">
+	// load icons
+	//headerIcon = chrome.extension.getURL("image/icons/header.png");
+	//$("#headerImgId").attr("src", headerIcon);
+	
+	headerLogo = chrome.extension.getURL("icon.png");
+	$("#headerLogoId").attr("src", headerLogo);
+	
+	/*headerLogoTextImg = chrome.extension.getURL("image/icons/logoText.png");
+	$("#headerLogoTextId").attr("src", headerLogoTextImg);*/
+	
+	languageImg = chrome.extension.getURL("image/icons/language.png");
+	$("#languageId").attr("src", languageImg);
+	
+	statisticsImg = chrome.extension.getURL("image/icons/statistics.png");
+	$("#statisticsId").attr("src", statisticsImg);
+	
+	showCommentsImg = chrome.extension.getURL("image/icons/showComments.png");
+	$("#showCommentId").attr("src", showCommentsImg);
+	
+	tableImg = chrome.extension.getURL("image/icons/table.png");
+	$("#tableId").attr("src", tableImg);	
+	
+	closeImg = chrome.extension.getURL("image/icons/close.png");
+	$("#closeDialogId").attr("src", closeImg);
+	
+	$( "#languageId" ).click(function() {
+	  $("#twideoContentDivId").load(chrome.extension.getURL("TwideoLanguage.html"));
+	});
+	
+	
+</script>

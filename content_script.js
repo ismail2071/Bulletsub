@@ -217,7 +217,7 @@ $("body").mousedown(function (e) {
 		$(".custom-twideo-menu").remove();
 		var videoObj = e.target;
 
-		console.dir(videoObj);
+		//console.dir(videoObj);
     	//console.log(window.location.href );
 
 //		if ((videoObj.nodeName.toUpperCase() == "video".toUpperCase()) || (videoObj.getAttribute('type') == 'application/x-shockwave-flash')) {
@@ -225,9 +225,15 @@ $("body").mousedown(function (e) {
 			rect = videoObj.getBoundingClientRect();
 
 			videoProps.obj = videoObj;
-			videoProps.type = (videoObj.nodeName.toUpperCase() == "video".toUpperCase()) ? 'html5' : 'flash';
-			videoProps.target = (videoProps.type == 'html5') ? $(videoObj) : $(videoObj.nodeName + "[type='application/x-shockwave-flash']");
+			if(videoObj.nodeName.toUpperCase() == "video".toUpperCase()){
+				videoProps.type = 'html5';
+			}
+			//videoProps.type = (videoObj.nodeName.toUpperCase() == "video".toUpperCase()) ? 'html5' : 'flash';
+			//videoProps.target = (videoProps.type == 'html5') ? $(videoObj) : $(videoObj.nodeName + "[type='application/x-shockwave-flash']");
 
+			if(videoProps.type == 'html5'){
+				videoProps.target = videoObj;
+			}
 //			if (videoProps.type == "flash")
 //				convertVideos(videoObj.nodeName);
 			// 1.0.11
@@ -245,7 +251,7 @@ $("body").mousedown(function (e) {
 
 			else
 			{
-			console.log("test2");
+			
 			videoProps.target.bind('contextmenu', function () {
 				//event.preventDefault();
 
@@ -306,7 +312,7 @@ var updateVideoPosTimerFlag = false;
 function updateVideoPosTimeClock() {
 	if (currentRightClickVideo) {
 
-		var tmpOffset = parseInt(videoProps.target.offset().top);
+		var tmpOffset = parseInt(videoProps.target.offsetTop);
 		rect = currentRightClickVideo.getBoundingClientRect();
 
 		tmpRectLeft = parseInt(rect.left);
@@ -463,17 +469,20 @@ $(function () {
 					$("#danmu_dialog").dialog({
 						height : mainWindowHeight,
 						width : mainWindowWidth
+						
 					});
 
 
 					$('#danmu_dialog').dialog('option', 'title', 'Twidéo - ' + tmpNumDanmu + " comments.");
 					$('#danmu_dialog').dialog('option', 'dialogClass', 'twideoDialogClass');
 					
+					
 					// 1.0.33
 					var closePngUrl = 'url(' + chrome.extension.getURL("close.png") + ')';
 					var tmpCss ='  background: url(http://manual.mahara.org/en/15.04/_images/close.png);background-size: 20px 20px;background-repeat: no-repeat;margin-right: 5px;margin-top: -10px;';
-					$('.twideoDialogClass  .ui-dialog-titlebar-close').css({'background': closePngUrl, 'background-size': '20px 20px'});
-
+					$('.twideoDialogClass  .ui-dialog-titlebar ').css({'display': 'none'});
+					$('#danmu_dialog').dialog({draggable: false}).parent().draggable();
+					
 					$("#histogramImgId").click(function () {
 						$('#danmu_dialog').dialog({
 							height : histogramWindowHeight,
@@ -649,7 +658,7 @@ $(function () {
 				//1.0.14
 				// rect.top is a dynamic value means the distance from object to current view top
 				// #! we don't need to plus it with offset, offset is just sufficient
-				var offset = videoProps.target.offset().top;
+				var offset = videoProps.target.offsetTop;
 				//console.log(offset + "+" + rect.top);
 
 				//1.0.20
@@ -723,6 +732,7 @@ $(function () {
 					$("#danmu_dialog").dialog('close');
 					danmuWindowExist = false;
 				}
+				
 				$("#danmu_dialog").dialog();
 				danmuWindowExist = true;
 
@@ -780,7 +790,8 @@ document.addEventListener("msfullscreenchange", function (e) {
 //1.0.18
 function renderInputBox() {
 
-	$("#danmu_dialog").load(chrome.extension.getURL("danMu.html"), function () {
+	//$("#danmu_dialog").load(chrome.extension.getURL("danMu.html"), function () {
+	$("#danmu_dialog").load(chrome.extension.getURL("TwideoMainWindow.html"), function () {
 		$('#danMuUserText').keypress(function (e) {
 			if (e.keyCode == 13) {
 				sendDanmuFunc();

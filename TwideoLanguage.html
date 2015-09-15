@@ -1,0 +1,128 @@
+<div>
+    <img id="prevImgId" style="float: right;" alt="Prev Page" height="16" width="16">
+    <ul style="margin-top: 5px">
+        <li>● Your Language:
+    </ul>
+</div>
+<div  style="margin-top: 7px; margin-left: 15px">
+            <select id="languageSelect"></select>
+</div>
+
+
+<div>
+    <ul style="margin-top: 5px">
+        <li>● Display Language:
+    </ul>
+</div>
+<div style="margin-top: 7px; margin-left: 15px">
+    <select multiple="multiple" placeholder="Multi-Select" class="languageDisplaySelect" id="languageDisplaySelect">
+    </select>
+</div>
+
+
+
+<script>
+var language = [{
+    code: "zh-CN",
+    text: "简体中文"
+}, {
+    code: "zh-TW",
+    text: "繁體中文"
+}, {
+    code: "en",
+    text: "English"
+}, {
+    code: "jp",
+    text: "日本語"
+}];
+
+var languageSetting = language.map(function(langObj) {
+    var selected = ''
+    if (window.navigator.language == langObj.code) {
+        selected = 'selected="selected"';		
+    }
+    return ('<option value=' + langObj.code + ' ' + selected + '>' + langObj.text + '</option><BR>');
+
+});
+
+
+$("#languageSelect").append(languageSetting);
+
+
+$("#languageDisplaySelect").append(languageSetting);
+
+
+$('#danMuUserLgBtn').prop('title', languageSetting);
+$('#danMuUserLgBtn').tooltipster({
+    contentAsHTML: true,
+
+    'interactive': true,
+    'autoClose': true,
+    functionReady: function() {
+        $('.tooltipster-default .langSet').on('click', function(e) {
+            e.preventDefault();
+            console.dir(e.target.id);
+            console.dir(e.target.innerText);
+            $("#danMuUserLgBtn").text(e.target.innerText);
+            $("#danMuUserLgBtn").val(e.target.id);
+            $('body').click();
+        });
+    }
+});
+
+var prevImgUrl = chrome.extension.getURL("home.png");
+
+var languageDisplaySelect= $('.languageDisplaySelect');
+
+languageDisplaySelect.SumoSelect({
+    okCancelInMulti: false,
+    selectAll:true
+});
+
+languageDisplaySelect.change(function() {
+
+	language.map(function(lan){
+		$(".damnulan_"+lan.code).css("visibility","hidden");
+	});
+
+if (languageDisplaySelect.val()!=null){
+
+	console.log(languageDisplaySelect.val());
+	languageDisplaySelect.val().map(
+
+	function(displayLan){
+		$(".damnulan_"+displayLan).css("visibility","visible");
+	});
+
+}
+
+
+
+});
+
+/*
+	language.map(function(lan){
+		$(".damnulan_"+lan.code).css("display":"None");
+	});
+*/
+
+
+
+
+$("#prevImgId").attr("src", prevImgUrl);
+
+$("#prevImgId").click(function() {
+    $('#danmuSettingDivId').hide();
+    $('#danmuStatisticsDivId').hide();
+    $('#mainDanMuDivId').show();
+    $("#danmu_dialog").dialog({
+        height: mainWindowHeight,
+        width: mainWindowWidth
+    });
+});
+
+
+
+
+
+</script>

@@ -1,0 +1,8 @@
+.no-titlebar .ui-dialog-titlebar {
+    display: none;
+}
+
+.twideoDialogClass{
+	#opacity: 0.85;
+	#background-color: black;
+}
