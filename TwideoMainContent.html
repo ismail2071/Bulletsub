@@ -13,23 +13,45 @@
 </style>
 
 <div id="mainInputDiv"> 
+
+<text id="twideoUserColor" style="display:none"></text>
+<text id="twideoUserTextSize" style="display:none"></text>
+<text id="twideoUserPosition" style="display:none"></text>
+
 	<div style ="margin-top: 20px;">
-		<input type="text"  class ="twideoUserInput" id="twideoUserCommand">
+		<input type="text"  class ="twideoUserInput" id="twideoUserCommand" placeholder="Comment here!!">
 		<img id = "sendUserCommandId" style="float: right; margin-top: 3px; margin-right: 35px;" alt="Send" height="30" width="30">
-		<img id ="test" style="float: right; margin-top: 6px; background-color: red; margin-right: -69px;" height="23" width="25">
-		<img id = "testSettingId" style="float: right; margin-top: 3px;  margin-right: -70px;" alt="Text" height="30" width="30">
+		<img id ="textColor" style="float: right; margin-top: 6px; background-color: red; margin-right: -69px;" height="23"	 width="25" >
+		<img id = "testSettingId" style="float: right; margin-top: 3px;  margin-right: -70px;" alt="Text" height="30" 	width="30">
+	
 	</div > 
 </div > 
 
 <script type="text/javascript">
 	// load icons
-	sendCommandIcon = chrome.extension.getURL("image/icons/send.png");
+	var sendCommandIcon = chrome.extension.getURL("image/icons/send.png");
 	$("#sendUserCommandId").attr("src", sendCommandIcon);
 	
-	textSettingIcon = chrome.extension.getURL("image/icons/textSetting.png");
+	var textSettingIcon = chrome.extension.getURL("image/icons/textSetting.png");
 	$("#testSettingId").attr("src", textSettingIcon);
 	
-	test = chrome.extension.getURL("image/icons/blank.png");
-	$("#test").attr("src", test);
+	var textColorPic = chrome.extension.getURL("image/icons/blank.png");
+	$("#textColor").attr("src", textColorPic);
+
+	
+	var that = this;
+	var textSettinghtml = $.get(chrome.extension.getURL("TwideoTextSet.html"),function(data){
+			$('#textColor').prop('title', data);
+			$('#textColor').tooltipster({
+				contentAsHTML: true,
+    			'interactive': true,
+    			'autoClose': true});
+		});
+	
+	
+
+
+
+
 
 </script>

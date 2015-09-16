@@ -792,13 +792,14 @@ function renderInputBox() {
 
 	//$("#danmu_dialog").load(chrome.extension.getURL("danMu.html"), function () {
 	$("#danmu_dialog").load(chrome.extension.getURL("TwideoMainWindow.html"), function () {
-		$('#danMuUserText').keypress(function (e) {
+		$('#twideoUserCommand').keypress(function (e) {
 			if (e.keyCode == 13) {
 				sendDanmuFunc();
 			}
 		});
 
-		$("#danMuUserBtn").click(function () {
+		$("#sendUserCommandId").click(function () {
+			console.log("test");
 			sendDanmuFunc(); // v1.0.2.1
 		});
 
