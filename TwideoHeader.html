@@ -46,8 +46,14 @@
 	closeImg = chrome.extension.getURL("image/icons/close.png");
 	$("#closeDialogId").attr("src", closeImg);
 	
+	// on icon click
+	
 	$( "#languageId" ).click(function() {
 	  $("#twideoContentDivId").load(chrome.extension.getURL("TwideoLanguage.html"));
+	});
+	
+	$( "#closeDialogId" ).click(function() {
+	  $('#danmu_dialog').dialog('close');
 	});
 	
 	
