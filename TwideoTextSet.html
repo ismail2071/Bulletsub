@@ -97,6 +97,43 @@ function(typeObj){
 
 });
 
+// var colors=[["White","Red","Orange"],["Blue","Navy","Purple"],["Green","Yellow","Black"]];
+$('#Orange').click(function() {
+	  $('#textColor').css("background-color","orange");
+	});$('#White').click(function() {
+	  $('#textColor').css("background-color","white");
+	});$('#Red').click(function() {
+	  $('#textColor').css("background-color","red");
+	});$('#Blue').click(function() {
+	  $('#textColor').css("background-color","blue");
+	});$('#Navy').click(function() {
+	  $('#textColor').css("background-color","navy");
+	});$('#Purple').click(function() {
+	  $('#textColor').css("background-color","purple");
+	});$('#Green').click(function() {
+	  $('#textColor').css("background-color","green");
+	});$('#Yellow').click(function() {
+	  $('#textColor').css("background-color","yellow");
+	});$('#Black').click(function() {
+	  $('#textColor').css("background-color","black");
+	});
+
+if ($('#twideoIsFirstOpen').val()=="1"){
+	$('#twideoIsFirstOpen').val("0");
+	$('#Red').css("border-color","white");
+	$('#Red').css("border-width","2px");
+	$('#twideoUserColor').val("Red");
+
+	// default Size Large
+	$('#Large').css("border-color","red");
+	$('#Large').css("border-width","2px");
+	$('#twideoUserTextSize').val("1");
+
+	// default pos random
+	$('#Random').css("border-color","red");
+	$('#Random').css("border-width","2px");
+	$('#twideoUserPosition').val("0");
+}
 
 
 </script>

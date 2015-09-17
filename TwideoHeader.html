@@ -17,6 +17,10 @@
 		</div> 
 		<!-- <img id = "headerImgId" style="background-color: red;" alt="Header" height="16" width="100%"> -->
 	</div > 
+	<text id="twideoUserColor" style="display:none"></text>
+	<text id="twideoUserTextSize" style="display:none"></text>
+	<text id="twideoUserPosition" style="display:none"></text>
+	<text id="twideoIsFirstOpen" style="display:none"></text>
 </body>
 
 
@@ -48,13 +52,30 @@
 	
 	// on icon click
 	
+	$( "#headerLogoId" ).click(function() {
+	
+	  $("#danmu_dialog").dialog({height: mainWindowHeight, width: mainWindowWidth});
+	  $("#twideoContentDivId").load(chrome.extension.getURL("TwideoMainContent.html"));
+	});
+	
+	
 	$( "#languageId" ).click(function() {
+	  $("#danmu_dialog").dialog({height: languageWindowHeight, width: languageWindowWidth});
 	  $("#twideoContentDivId").load(chrome.extension.getURL("TwideoLanguage.html"));
 	});
 	
 	$( "#closeDialogId" ).click(function() {
 	  $('#danmu_dialog').dialog('close');
 	});
+	
+	
+	
+	// default text size, color, position
+	
+	$('#twideoUserColor').val("Red");
+	$('#twideoUserTextSize').val("1");
+	$('#twideoUserPosition').val("0");
+	$('#twideoIsFirstOpen').val("1");
 	
 	
 </script>

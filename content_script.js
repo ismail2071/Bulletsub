@@ -39,15 +39,13 @@
 1.0.35		2015/09/08  ismail	    comment side bar
  */
 
- 
- 
 /*
-    background: url(http://manual.mahara.org/en/15.04/_images/close.png);
-    background-size: 20px 20px;
-    background-repeat: no-repeat;
-    margin-right: 5px;
-    margin-top: -10px;
-*/
+background: url(http://manual.mahara.org/en/15.04/_images/close.png);
+background-size: 20px 20px;
+background-repeat: no-repeat;
+margin-right: 5px;
+margin-top: -10px;
+ */
 
 //1.0.1
 //var myFirebaseRef = new Firebase("https://popchrome.firebaseio.com/");
@@ -121,10 +119,10 @@ function alignTimeLine(clearFlag) {
 	}
 
 	//if (Math.floor(tmpTime / 10) != Math.floor(tmpVideoUpdateTime / 10)) {
-		//tmpVideoUpdateTime = Math.floor(tmpTime / 10) * 10;
-		//console.log("danmu time: " + $('#danmu').data("nowtime") + ", " + "影片: " + tmpTime);
-		$('#danmu').danmu("danmu_updateDanmuTimeLine", tmpTime);
-		//$('#danmu').data("nowtime",tmpTime);
+	//tmpVideoUpdateTime = Math.floor(tmpTime / 10) * 10;
+	//console.log("danmu time: " + $('#danmu').data("nowtime") + ", " + "影片: " + tmpTime);
+	$('#danmu').danmu("danmu_updateDanmuTimeLine", tmpTime);
+	//$('#danmu').data("nowtime",tmpTime);
 	//}
 
 }
@@ -140,22 +138,22 @@ var videoProps = {};
 var allDanmu = {};
 var currentRightClickVideo;
 
-
 function sendDanmuFunc() {
-	var text = document.getElementById('danMuUserText').value;
+	
+	var text = document.getElementById('twideoUserCommand').value;
 	if (!text || text.length == 0) {
 		return;
 	}
 	
+	$('#twideoUserCommand').val("");
 	// title bar danmu add 1
 	// 1.0.34
 	var tmpTitle = $('#danmu_dialog').dialog('option', 'title');
 	var danmuCnt = parseInt(tmpTitle.split("-")[1].split(" ")[1], 10) + 1;
 	$('#danmu_dialog').dialog('option', 'title', 'Twidéo - ' + danmuCnt + " comments.");
-	
-	
-	var color = document.getElementById('danMuUserColor').value;
-	var position = document.getElementById('danMuUserPosition').value;
+
+	var color = document.getElementById('twideoUserColor').value;
+	var position = document.getElementById('twideoUserPosition').value;
 	var videoUri = getInsertUrl(videoProps.obj.src); //ytVidId(videoProps.obj.baseURI) ? videoProps.obj.baseURI : ;
 	var time = Math.round(($('#danmu').data("nowtime")));
 	if (isNaN(time)) {
@@ -165,13 +163,13 @@ function sendDanmuFunc() {
 	}
 
 	if (!isNaN(time)) {
-		var size = document.getElementById('danMuUserTextSize').value;
+		var size = document.getElementById('twideoUserTextSize').value;
 		var text_obj = '{ "text":"' + text + '","color":"' + color + '","size":"' + size + '","position":"' + position + '","time":' + time + '}';
 		//$.post("stone.php",{danmu:text_obj});
 		var text_obj = '{ "text":"' + text + '","color":"' + color + '","size":"' + size + '","position":"' + position + '","time":' + time + ',"isnew":""}';
 		var new_obj = eval('(' + text_obj + ')');
-		var language = $("#languageSelect option:selected" ).val()==null?window.navigator.language:$("#languageSelect option:selected" ).val();
-	
+		var language = $("#languageSelect option:selected").val() == null ? window.navigator.language : $("#languageSelect option:selected").val();
+
 		var a_danmu = {
 			"text" : text,
 			"color" : color,
@@ -180,11 +178,11 @@ function sendDanmuFunc() {
 			"time" : time.toString(),
 			"isnew" : " ",
 			"from" : "self",
-			"language":language
+			"language" : language
 		};
 		console.log("send danmu: " + text + ", at time: " + time);
 		$('#danmu').danmu("add_danmu", a_danmu);
-		document.getElementById('danMuUserText').value = '';
+		
 		//1.0.24
 		//1.0.28
 		sendToMongo(a_danmu, videoUri);
@@ -218,40 +216,35 @@ $("body").mousedown(function (e) {
 		var videoObj = e.target;
 
 		//console.dir(videoObj);
-    	//console.log(window.location.href );
+		//console.log(window.location.href );
 
-//		if ((videoObj.nodeName.toUpperCase() == "video".toUpperCase()) || (videoObj.getAttribute('type') == 'application/x-shockwave-flash')) {
-			currentRightClickVideo = videoObj;
-			rect = videoObj.getBoundingClientRect();
+		//		if ((videoObj.nodeName.toUpperCase() == "video".toUpperCase()) || (videoObj.getAttribute('type') == 'application/x-shockwave-flash')) {
+		currentRightClickVideo = videoObj;
+		rect = videoObj.getBoundingClientRect();
 
-			videoProps.obj = videoObj;
-			if(videoObj.nodeName.toUpperCase() == "video".toUpperCase()){
-				videoProps.type = 'html5';
-			}
-			//videoProps.type = (videoObj.nodeName.toUpperCase() == "video".toUpperCase()) ? 'html5' : 'flash';
-			//videoProps.target = (videoProps.type == 'html5') ? $(videoObj) : $(videoObj.nodeName + "[type='application/x-shockwave-flash']");
+		videoProps.obj = videoObj;
+		if (videoObj.nodeName.toUpperCase() == "video".toUpperCase()) {
+			videoProps.type = 'html5';
+		}
+		//videoProps.type = (videoObj.nodeName.toUpperCase() == "video".toUpperCase()) ? 'html5' : 'flash';
+		//videoProps.target = (videoProps.type == 'html5') ? $(videoObj) : $(videoObj.nodeName + "[type='application/x-shockwave-flash']");
 
-			if(videoProps.type == 'html5'){
-				videoProps.target = videoObj;
-			}
-//			if (videoProps.type == "flash")
-//				convertVideos(videoObj.nodeName);
-			// 1.0.11
+		if (videoProps.type == 'html5') {
+			videoProps.target = videoObj;
+		}
+		//			if (videoProps.type == "flash")
+		//				convertVideos(videoObj.nodeName);
+		// 1.0.11
 
-			
 
-			if ($(".ytp-menu")!=undefined && ytVidId())
-			{
-					console.log("test youtube");
-					
-				$("<div class='ytp-menuitem custom-twideo-menu' aria-haspopup='false' tabindex='38' role='menuitem'><div class='ytp-menuitem-label custom-twideo-menu'><span><img src="+chrome.extension.getURL("icon.png")+" height='28' width='28'/></span>Open Twidéo Window !!!!</div><div class='ytp-menuitem-content'></div></div>")
-				.appendTo(".ytp-menu");
+		if ($(".ytp-menu") != undefined && ytVidId()) {
+			console.log("test youtube");
 
-			}
+			$("<div class='ytp-menuitem custom-twideo-menu' aria-haspopup='false' tabindex='38' role='menuitem'><div class='ytp-menuitem-label custom-twideo-menu'><span><img src=" + chrome.extension.getURL("icon.png") + " height='28' width='28'/></span>Open Twidéo Window !!!!</div><div class='ytp-menuitem-content'></div></div>")
+			.appendTo(".ytp-menu");
 
-			else
-			{
-			
+		} else {
+
 			videoProps.target.bind('contextmenu', function () {
 				//event.preventDefault();
 
@@ -263,7 +256,7 @@ $("body").mousedown(function (e) {
 					top : event.pageY + "px",
 					left : event.pageX + "px"
 				});
-				
+
 				//1.0.26
 				if (isFullScreenFlag) {
 					if (ytVidId()) {
@@ -278,21 +271,19 @@ $("body").mousedown(function (e) {
 
 				}
 
-
 				$(".custom-twideo-menu").css("z-index", "2147483647");
 				$(".custom-twideo-menu").css("position", "absolute");
 				$(".custom-twideo-menu").css("background-color", "#C0C0C0");
 				//$(".custom-popchrome-menu").css("background-color","#C0C0C0");
 				$(".custom-twideo-menu").css("border", "1px solid black");
-				
 
 				$(".custom-twideo-menu").css("padding", "2px");
 				$(".custom-twideo-menu").css("height", "20");
 				return false;
 			});
-			}
 		}
-//	}
+	}
+	//	}
 
 });
 
@@ -356,7 +347,7 @@ function displayDanmu(flag) {
 	$("#danMuDisplay").prop("checked", flag);
 	for (i in document.styleSheets[0].rules) {
 		if (document.styleSheets[0].rules[i].selectorText == ".flying") {
-			
+
 			displayText = "block";
 			if (!flag) {
 				displayText = "none";
@@ -368,27 +359,23 @@ function displayDanmu(flag) {
 
 $(function () {
 
-
 	//1.0.26
 	insertRule(document.styleSheets[0], ".flying", "display: block", 0);
 
 	$("body").append("<div id='danmu' style='z-index:2147483647;position:absolute;' </div>");
 	$("body").prepend("<div id='danmu_dialog' style='z-index:2147483647;' title='Twidéo''>");
 	$("body").append("<div id='twideo_Table' style='z-index:2147483647;' title='Twidéo comments'' ></div>");
-	
 
 	renderInputBox();
 
 	$(document).mousedown(function (event) {
 		if (event.which == 1) {
 
-
 			var clickClassName = event.target.className;
 			var clickClassPosition = clickClassName.search(/custom-twideo-menu/i);
-			
 
-			var classType = (clickClassPosition==0)?".custom-twideo-menu":".ytp-menuitem.custom-twideo-menu";
-			if (event.target.className.search(/custom-twideo-menu/i)>-1) {
+			var classType = (clickClassPosition == 0) ? ".custom-twideo-menu" : ".ytp-menuitem.custom-twideo-menu";
+			if (event.target.className.search(/custom-twideo-menu/i) > -1) {
 
 				removeDanmuArray(); // remove danmu before load //1.0.31
 				histogramDrew = false;
@@ -428,7 +415,7 @@ $(function () {
 				console.log("Danmu is loading from server now...");
 				function callback(response) {
 					console.log("Danmu is loading done:");
-					
+
 					var tmpNumDanmu = 0;
 					if (response.answer.length > 0) {
 						tmpNumDanmu = response.answer.length;
@@ -436,53 +423,54 @@ $(function () {
 
 						var data = response.answer.map(function (item) {
 
-							delete item.isnew;
-							if (item.language==null)
-								item.language=window.navigator.language;
-							$('#danmu').danmu("add_danmu", item);
-							return [toHHMMSS(item.time),item.text];
-							
+								delete item.isnew;
+								if (item.language == null)
+									item.language = window.navigator.language;
+								$('#danmu').danmu("add_danmu", item);
+								return [toHHMMSS(item.time), item.text];
+
+							});
+						if (typeof dataTable === 'undefined')
+							dataTable = $('#table_id').DataTable({
+									searching : false,
+									data : data,
+									paging : false,
+								});
+
+						var languageList = ["zh-CN", "zh-TW", "en", "jp"];
+
+						languageList.map(function (lan) {
+							console.log($(".damnulan_" + lan));
+							$(".damnulan_" + lan).hide();
+							if (lan == window.navigator.language)
+								$(".damnulan_" + lan).show();
+
 						});
-						if(typeof dataTable === 'undefined')
-						 dataTable = $('#table_id').DataTable({
-						 searching: false,
-						 data:data,
-						paging: false,
-    					});
-
-					var languageList = ["zh-CN","zh-TW","en","jp"];
-
-					languageList.map(function(lan){
-						console.log($(".damnulan_"+lan));
-						$(".damnulan_"+lan).hide();
-						if (lan == window.navigator.language)
-							$(".damnulan_"+lan).show();
-						
-					});
 
 					}
 
-					
-					
 					//$('#loadingStatusLabel').text("Status: Loaded " + tmpNumDanmu + " danmus.");
 
 					$("#danmu_dialog").dialog({
 						height : mainWindowHeight,
 						width : mainWindowWidth
-						
-					});
 
+					});
 
 					$('#danmu_dialog').dialog('option', 'title', 'Twidéo - ' + tmpNumDanmu + " comments.");
 					$('#danmu_dialog').dialog('option', 'dialogClass', 'twideoDialogClass');
-					
-					
+
 					// 1.0.33
 					var closePngUrl = 'url(' + chrome.extension.getURL("close.png") + ')';
-					var tmpCss ='  background: url(http://manual.mahara.org/en/15.04/_images/close.png);background-size: 20px 20px;background-repeat: no-repeat;margin-right: 5px;margin-top: -10px;';
-					$('.twideoDialogClass  .ui-dialog-titlebar ').css({'display': 'none'});
-					$('#danmu_dialog').dialog({draggable: false}).parent().draggable();
-					
+					var tmpCss = '  background: url(http://manual.mahara.org/en/15.04/_images/close.png);background-size: 20px 20px;background-repeat: no-repeat;margin-right: 5px;margin-top: -10px;';
+					$('.twideoDialogClass  .ui-dialog-titlebar ').css({
+						'display' : 'none'
+					});
+					$('#danmu_dialog').dialog({
+						draggable : false,
+						closeOnEscape: true
+					}).parent().draggable();
+
 					$("#histogramImgId").click(function () {
 						$('#danmu_dialog').dialog({
 							height : histogramWindowHeight,
@@ -508,7 +496,7 @@ $(function () {
 							});
 
 							var videoLen = currentRightClickVideo.duration;
-							$('#videoDurationTextId').html(toHHMMSS(videoLen)) ;
+							$('#videoDurationTextId').html(toHHMMSS(videoLen));
 							var histoInterval = 50;
 							for (i = 1; i <= videoLen; i++) {
 								s2 = [];
@@ -556,7 +544,7 @@ $(function () {
 												angle : 30,
 												formatString : '%s'
 											},
-											
+
 											rendererOptions : {
 												drawBaseline : false
 											}
@@ -586,22 +574,21 @@ $(function () {
 							$('#chart1').bind('jqplotDataClick',
 								function (ev, seriesIndex, pointIndex, data) {
 								//$('#info1').html('series: ' + seriesIndex + ', point: ' + pointIndex + ', data: ' + data);
-								if($('.danmuOnoffswitch-checkbox').is(':checked')){
-									currentRightClickVideo.currentTime = pointIndex;	
+								if ($('.danmuOnoffswitch-checkbox').is(':checked')) {
+									currentRightClickVideo.currentTime = pointIndex;
 								}
-								
+
 								//plot1.series[seriesIndex].seriesColors[pointIndex] = "#000"; // FFF is white, you could add any color here to change it
 								//plot1.redraw();
 							});
-
 
 							setInterval(function () {
 								var tmpCurrentTime = Math.round(currentRightClickVideo.currentTime);
 								var tmpColor = histogramPastColor;
 								for (i = 0; i < videoLen; i++) {
-									
-									if(i> tmpCurrentTime){
-										  tmpColor = histogramNotPastColor;
+
+									if (i > tmpCurrentTime) {
+										tmpColor = histogramNotPastColor;
 									}
 									plot1.series[0].seriesColors[i] = tmpColor;
 								}
@@ -616,19 +603,23 @@ $(function () {
 
 					});
 
-		
 					//1.0.35
-						$("#twideo_Table").dialog({
-							height : mainWindowHeight*1.6,
-							width : mainWindowWidth*1.3,
-							position: { my: "center+100%", at: "center", of: window  },
-							 close: function() { $('#twideo_Table').toggle() }
-						});
-						$("#twideo_Table").dialog('close');
-						
+					$("#twideo_Table").dialog({
+						height : mainWindowHeight * 1.6,
+						width : mainWindowWidth * 1.3,
+						position : {
+							my : "center+100%",
+							at : "center",
+							of : window
+						},
+						close : function () {
+							$('#twideo_Table').toggle()
+						}
+					});
+					$("#twideo_Table").dialog('close');
 
 					$("#commentSideImgId").click(function () {
-						($( "#twideo_Table" ).dialog( "isOpen" ))?$("#twideo_Table").dialog('close'):$("#twideo_Table").dialog('open');
+						($("#twideo_Table").dialog("isOpen")) ? $("#twideo_Table").dialog('close') : $("#twideo_Table").dialog('open');
 					});
 
 				}
@@ -636,7 +627,7 @@ $(function () {
 				//chrome.runtime.sendMessage({doyourjob: "needFuckingToken",comment:videoProps.obj.baseURI},callback);
 
 				//
-				
+
 				var port = chrome.runtime.connect({
 						name : "needFuckingToken"
 					});
@@ -732,17 +723,16 @@ $(function () {
 					$("#danmu_dialog").dialog('close');
 					danmuWindowExist = false;
 				}
-				
+
 				$("#danmu_dialog").dialog();
 				danmuWindowExist = true;
 
 			}
 		}
 
-		$(".ytp-popup.ytp-contextmenu").css("display","none");
+		$(".ytp-popup.ytp-contextmenu").css("display", "none");
 		$(classType).remove();
 	});
-
 
 });
 
@@ -791,6 +781,15 @@ document.addEventListener("msfullscreenchange", function (e) {
 function renderInputBox() {
 
 	//$("#danmu_dialog").load(chrome.extension.getURL("danMu.html"), function () {
+
+	$("#danmu_dialog").parent().keyup(function (e) {
+		// ESC key
+		if (e.keyCode === 27) {
+			// custom action
+			$('#danmu_dialog').dialog('close');
+		}
+	});
+
 	$("#danmu_dialog").load(chrome.extension.getURL("TwideoMainWindow.html"), function () {
 		$('#twideoUserCommand').keypress(function (e) {
 			if (e.keyCode == 13) {

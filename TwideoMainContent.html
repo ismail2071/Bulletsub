@@ -14,9 +14,7 @@
 
 <div id="mainInputDiv"> 
 
-<text id="twideoUserColor" style="display:none"></text>
-<text id="twideoUserTextSize" style="display:none"></text>
-<text id="twideoUserPosition" style="display:none"></text>
+
 
 	<div style ="margin-top: 20px;">
 		<input type="text"  class ="twideoUserInput" id="twideoUserCommand" placeholder="Comment here!!">
@@ -47,11 +45,18 @@
     			'interactive': true,
     			'autoClose': true});
 		});
+		
+	$('#twideoUserCommand').keypress(function (e) {
+			if (e.keyCode == 13) {
+				sendDanmuFunc();
+				
+			}
+		});
 	
-	
-
-
-
+	$('#sendUserCommandId').click(function() {
+	  sendDanmuFunc();
+	  
+	});
 
 
 </script>
