@@ -28,7 +28,8 @@
    "comment_on.png","comment_off.png","language.png","close.png","icon.png","btn_donateCC_LG.gif",
    "comment_side.png","image/icons/close.png","image/icons/language.png","image/icons/showComments.png",
    "image/icons/statistics.png","image/icons/textSetting.png","image/icons/send.png","image/icons/blank.png",
-   "image/icons/logoText.png","image/icons/header.png","image/icons/table.png","TwideoTextSet.html"],
+   "image/icons/logoText.png","image/icons/header.png","image/icons/table.png","TwideoTextSet.html",
+   "TwideoStatistics.html"],
 
    "icons": {  "16":"icon.png", 
                 "48":"icon.png", 

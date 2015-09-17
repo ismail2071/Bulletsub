@@ -64,6 +64,11 @@
 	  $("#twideoContentDivId").load(chrome.extension.getURL("TwideoLanguage.html"));
 	});
 	
+	$( "#statisticsId" ).click(function() {
+	  $("#danmu_dialog").dialog({height: histogramWindowHeight, width: histogramWindowWidth});
+	  $("#twideoContentDivId").load(chrome.extension.getURL("TwideoStatistics.html"));
+	});
+	
 	$( "#closeDialogId" ).click(function() {
 	  $('#danmu_dialog').dialog('close');
 	});

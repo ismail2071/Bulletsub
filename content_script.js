@@ -481,7 +481,7 @@ $(function () {
 						$('#mainDanMuDivId').hide();
 
 						//  Statistics Page:
-						if (!histogramDrew) {
+						/* if (!histogramDrew) {
 							$.jqplot.config.enablePlugins = true;
 
 							s1 = [];
@@ -599,7 +599,7 @@ $(function () {
 							$(".jqplot-xaxis-tick").hide();
 
 							histogramDrew = true;
-						}
+						} */
 
 					});
 
