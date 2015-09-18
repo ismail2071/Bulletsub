@@ -499,9 +499,6 @@ $(function () {
 					});
 					$("#twideo_Table").dialog('close');
 
-					$("#commentSideImgId").click(function () {
-						($("#twideo_Table").dialog("isOpen")) ? $("#twideo_Table").dialog('close') : $("#twideo_Table").dialog('open');
-					});
 
 				}
 

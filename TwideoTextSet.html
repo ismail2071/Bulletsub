@@ -1,27 +1,21 @@
-<style type="text/css">
-  
-  #twideoTextSetUpper  {
-  display: inline-block;
-}
 
-</style>
 
 
 <div id='twideoTextSetUpper'>
-<label>SIZE</label>
-  <table id="twideosize" style="border-collapse:separate;border-spacing:4px;"><tbody>
+<label>Comment Size</label>
+  <table id="twideosize" style="border-collapse:separate;border-spacing:4px;"><tbody><tr></tr>
   </tbody></table>
 </div>
 
 <div id='twideoTextSetUpper'>
-<label>POSITION</label>
-  <table id="pos" style="border-collapse:separate;border-spacing:4px;"><tbody>
+<label>Comment Position</label>
+  <table id="pos" style="border-collapse:separate;border-spacing:4px;"><tbody><tr></tr>
   </tbody></table>
 </div>
 
 <div id='twideoTextSetUpper'>
-<label>COLOR</label>
-  <table id="Palette" style="border-collapse:separate;border-spacing:4px;"><tbody>
+<label>Comment Color</label>
+  <table id="Palette" style="border-collapse:separate;border-spacing:4px;"><tbody><tr></tr>
   </tbody></table>
 </div>
 
@@ -29,22 +23,45 @@
 <script type="text/javascript">
 	
   function cssstyle (color,size) {
-  		var def1= "background-color:"+color+";padding:5px;font-size:"+ size+";border-style:solid;color:black;";
-  		var def2= "background-color:"+color+";padding:5px;font-size:"+ size+";border-style:solid;color:black;border-color:Red;border-width:2px;";
+  		var def1= "background-color:"+color+";padding:5px;font-size:"+ size+";border-style:solid;color:white;";
+  		var def2= "background-color:"+color+";padding:5px;font-size:"+ size+";border-style:solid;color:white;border-color:Red;border-width:2px;";
   		defaultStyle = [def1,def2];
         return defaultStyle;
   }
+var colorslist=["White","Red","Orange","Blue","Navy","Purple","Green","Yellow","Black"];
 
-  var colors=[["White","Red","Orange"],["Blue","Navy","Purple"],["Green","Yellow","Black"]];
+  //var colors=[["White","Red","Orange"],["Blue","Navy","Purple"],["Green","Yellow","Black"]];
   var size =[{"text":'Large','size':'25px','value':'1'},{"text":'small','size':'8px','value':'0'}];
   var pos =[["Random","0"],["Upper","1"],["Lower","2"]];
   var type = [["Palette","twideoUserColor"],["twideosize","twideoUserTextSize"],["pos","twideoUserPosition"]];
        
 
 
-for (var i = 0; i <3; i++) {
-  $("#Palette").append("<tr>");
-  colors[i].map(
+
+
+  size.map(
+  function(sizeObj){
+    var styleStr = cssstyle("",sizeObj.size);
+      var selected = 0;
+    if ($("#twideoUserTextSize").val() == sizeObj.value)
+    	selected=1;
+
+	$("#twideosize tbody").append("<td id="+sizeObj.text+" style="+styleStr[selected]+" class="+sizeObj.value+" >"+sizeObj.text+"</td>"); 
+  });
+
+
+  pos.map(
+  function(postext){
+    var styleStr = cssstyle("",'8px');
+      var selected = 0;
+     if ($("#twideoUserPosition").val() == postext[1])
+     	selected=1;
+    $("#pos tbody").append("<td id="+postext[0]+" style="+styleStr[selected]+" border-color:red; border-width:2px; class="+postext[1]+" >"+postext[0]+"</td>"); 
+
+  });
+
+
+  colorslist.map(
   function(color){
     var styleStr = cssstyle(color,'8px');
     var selected = 0;
@@ -54,37 +71,16 @@ for (var i = 0; i <3; i++) {
     $("#Palette tbody").append("<td id="+color+" style="+styleStr[selected]+" class="+color+" >&nbsp;</td>");
      
   });
-$("#Palette").append("</tr>");
-};
-
-  size.map(
-  function(sizeObj){
-    var styleStr = cssstyle("White",sizeObj.size);
-      var selected = 0;
-    if ($("#twideoUserTextSize").val() == sizeObj.value)
-    	selected=1;
-
-	$("#twideosize tbody").append("<tr><td id="+sizeObj.text+" style="+styleStr[selected]+" class="+sizeObj.value+" >"+sizeObj.text+"</td></tr>"); 
-  });
 
 
-  pos.map(
-  function(postext){
-    var styleStr = cssstyle("White",'8px');
-      var selected = 0;
-     if ($("#twideoUserPosition").val() == postext[1])
-     	selected=1;
-    $("#pos tbody").append("<tr><td id="+postext[0]+" style="+styleStr[selected]+" border-color:red; border-width:2px; class="+postext[1]+" >"+postext[0]+"</td></tr>"); 
-
-  });
 
 
 type.map(
 function(typeObj){
 
     $("#"+typeObj[0]+" tbody td").click(function() {     // function_td
-		$("#"+typeObj[0]+" tbody td").css("border-color","black");
-		$("#"+typeObj[0]+" tbody td").css("border-width","1px");
+		//$("#"+typeObj[0]+" tbody td").css("border-color","");
+		$("#"+typeObj[0]+" tbody td").css("border-width","0px");
 		if($(this)[0].id =="Red"){
 			$(this).css("border-color","white");
 		}else{
@@ -97,7 +93,6 @@ function(typeObj){
 
 });
 
-var colorslist=["White","Red","Orange","Blue","Navy","Purple","Green","Yellow","Black"];
 
 colorslist.map(function(colorText){
 
