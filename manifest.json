@@ -29,7 +29,7 @@
    "comment_side.png","image/icons/close.png","image/icons/language.png","image/icons/showComments.png",
    "image/icons/statistics.png","image/icons/textSetting.png","image/icons/send.png","image/icons/blank.png",
    "image/icons/logoText.png","image/icons/header.png","image/icons/table.png","TwideoTextSet.html",
-   "TwideoStatistics.html"],
+   "TwideoStatistics.html","image/icons/hideComments.png"],
 
    "icons": {  "16":"icon.png", 
                 "48":"icon.png", 

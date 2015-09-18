@@ -11,8 +11,8 @@
 			<font style=" font-size: 20px;"> Twidéo </font>
 			<img id = "languageId" style ="margin-left: 50px; margin-top: -27px;" alt="Header" height="16" width="16"> 
 			<img id = "statisticsId" style ="margin-left: 7px; " alt="Header" height="16" width="16"> 
-			<img id = "showCommentId" style ="margin-left: 7px; " alt="Header" height="16" width="16"> 
-			<img id = "tableId" style ="margin-left: 7px; " alt="Header" height="16" width="16"> 
+			<img id = "showCommentId" style ="margin-left: 7px; " alt="Header" height="16" width="16">
+			<img id = "tableCommentId" style ="margin-left: 7px; " alt="Header" height="16" width="16"> 
 			<img id = "closeDialogId" style ="margin-left: 7px; " alt="Header" height="16" width="16"> 
 		</div> 
 		<!-- <img id = "headerImgId" style="background-color: red;" alt="Header" height="16" width="100%"> -->
@@ -42,15 +42,29 @@
 	$("#statisticsId").attr("src", statisticsImg);
 	
 	showCommentsImg = chrome.extension.getURL("image/icons/showComments.png");
-	$("#showCommentId").attr("src", showCommentsImg);
-	
-	tableImg = chrome.extension.getURL("image/icons/table.png");
-	$("#tableId").attr("src", tableImg);	
+	hideCommentsImg = chrome.extension.getURL("image/icons/hideComments.png");
+
+	$("#showCommentId").attr("src",showCommentsImg);
+
+	tableCommandImg = chrome.extension.getURL("image/icons/table.png");
+	$("#tableCommentId").attr("src", tableCommandImg);	
 	
 	closeImg = chrome.extension.getURL("image/icons/close.png");
 	$("#closeDialogId").attr("src", closeImg);
-	
-	// on icon click
+
+
+
+	// icon event 
+
+	$('#showCommentId').click(function(){
+
+		$("#danmu").toggle(
+			function(){
+				$("#showCommentId").attr("src",hideCommentsImg);
+			},function(){
+				$("#showCommentId").attr("src",showCommentsImg);
+			});
+	});
 	
 	$( "#headerLogoId" ).click(function() {
 	
@@ -73,7 +87,14 @@
 	  $('#danmu_dialog').dialog('close');
 	});
 	
-	
+
+	$("#tableCommentId").click(function () {
+		($("#twideo_Table").dialog("isOpen")) ? $("#twideo_Table").dialog('close') : $("#twideo_Table").dialog('open');
+	});	
+
+	//1.0.35
+	$("#twideo_Table").load(chrome.extension.getURL("twideoTable.html"));
+	$("#twideo_Table").hide();
 	
 	// default text size, color, position
 	

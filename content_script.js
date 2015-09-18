@@ -480,126 +480,7 @@ $(function () {
 						$('#danmuStatisticsDivId').show();
 						$('#mainDanMuDivId').hide();
 
-						//  Statistics Page:
-						/* if (!histogramDrew) {
-							$.jqplot.config.enablePlugins = true;
 
-							s1 = [];
-							s3 = [];
-
-							sTmp = [];
-							$.each($('#danmu').data("danmu_array"), function (key, value) {
-								//alert(key + ": " + value);
-								var tmpSec = parseInt(Math.floor(key / 10));
-								sTmp[tmpSec] = value.length;
-
-							});
-
-							var videoLen = currentRightClickVideo.duration;
-							$('#videoDurationTextId').html(toHHMMSS(videoLen));
-							var histoInterval = 50;
-							for (i = 1; i <= videoLen; i++) {
-								s2 = [];
-								s2.push(i);
-								var tmpValue = sTmp[i];
-								if (tmpValue) {
-									s2.push(tmpValue);
-									histoInterval++;
-								} else {
-									s2.push(0)
-								}
-
-								s1.push(s2);
-								s3.push(histogramNotPastColor);
-							}
-							if (histoInterval > videoLen) {
-								histoInterval = videoLen;
-							}
-
-							plot1 = $.jqplot('chart1', [s1], {
-									// Only animate if we're not using excanvas (not in IE 7 or IE 8)..
-									//animate: !$.jqplot.use_excanvas,
-									seriesColors : s3,
-									seriesDefaults : {
-										renderer : $.jqplot.BarRenderer,
-										rendererOptions : {
-											varyBarColor : true,
-											barPadding : 0,
-											barMargin : 0
-										},
-										pointLabels : {
-											show : false
-										}
-									},
-									axes : {
-										xaxis : {
-											renderer : $.jqplot.CategoryAxisRenderer,
-											//ticks: ticks
-											showTicks : false,
-											autoscale : true,
-											numberTicks : histoInterval,
-											tickOptions : {
-												showGridline : false,
-												show : true,
-												angle : 30,
-												formatString : '%s'
-											},
-
-											rendererOptions : {
-												drawBaseline : false
-											}
-										},
-										yaxis : {
-											//renderer: $.jqplot.CategoryAxisRenderer,
-											//ticks: ticks
-											autoscale : true,
-											tickOptions : {
-												showGridline : false,
-												show : false
-											}
-										}
-									},
-									grid : {
-										drawGridLines : false, // wether to draw lines across the grid or not.
-										background : 'transparent',
-										borderWidth : 0.0,
-									},
-
-									highlighter : {
-										show : false,
-
-									}
-								});
-
-							$('#chart1').bind('jqplotDataClick',
-								function (ev, seriesIndex, pointIndex, data) {
-								//$('#info1').html('series: ' + seriesIndex + ', point: ' + pointIndex + ', data: ' + data);
-								if ($('.danmuOnoffswitch-checkbox').is(':checked')) {
-									currentRightClickVideo.currentTime = pointIndex;
-								}
-
-								//plot1.series[seriesIndex].seriesColors[pointIndex] = "#000"; // FFF is white, you could add any color here to change it
-								//plot1.redraw();
-							});
-
-							setInterval(function () {
-								var tmpCurrentTime = Math.round(currentRightClickVideo.currentTime);
-								var tmpColor = histogramPastColor;
-								for (i = 0; i < videoLen; i++) {
-
-									if (i > tmpCurrentTime) {
-										tmpColor = histogramNotPastColor;
-									}
-									plot1.series[0].seriesColors[i] = tmpColor;
-								}
-								plot1.redraw();
-
-							}, 1000);
-
-							$(".jqplot-xaxis-tick").hide();
-
-							histogramDrew = true;
-						} */
 
 					});
 
@@ -802,27 +683,10 @@ function renderInputBox() {
 			sendDanmuFunc(); // v1.0.2.1
 		});
 
-		//1.0.24 check to query db danmu
-
-		$(".class_checkbox").click(function () {
-			if (!$("#danMuDisplay").prop("checked")) {
-				console.log("checked (close danMu)");
-				$('#danmu').hide();
-				checkBoxImgUrl = chrome.extension.getURL("comment_off.png");
-
-			} else {
-				$("#danmu").show();
-				checkBoxImgUrl = chrome.extension.getURL("comment_on.png");
-			}
-			$("#danMudisplayIMG").attr("src", checkBoxImgUrl);
-
-		});
 
 	});
 
 	$("#danmu_dialog").hide();
 
-	//1.0.35
-	$("#twideo_Table").load(chrome.extension.getURL("twideoTable.html"));
-	$("#twideo_Table").hide();
+
 }

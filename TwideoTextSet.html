@@ -97,26 +97,16 @@ function(typeObj){
 
 });
 
-// var colors=[["White","Red","Orange"],["Blue","Navy","Purple"],["Green","Yellow","Black"]];
-$('#Orange').click(function() {
-	  $('#textColor').css("background-color","orange");
-	});$('#White').click(function() {
-	  $('#textColor').css("background-color","white");
-	});$('#Red').click(function() {
-	  $('#textColor').css("background-color","red");
-	});$('#Blue').click(function() {
-	  $('#textColor').css("background-color","blue");
-	});$('#Navy').click(function() {
-	  $('#textColor').css("background-color","navy");
-	});$('#Purple').click(function() {
-	  $('#textColor').css("background-color","purple");
-	});$('#Green').click(function() {
-	  $('#textColor').css("background-color","green");
-	});$('#Yellow').click(function() {
-	  $('#textColor').css("background-color","yellow");
-	});$('#Black').click(function() {
-	  $('#textColor').css("background-color","black");
+var colorslist=["White","Red","Orange","Blue","Navy","Purple","Green","Yellow","Black"];
+
+colorslist.map(function(colorText){
+
+	$('#'+colorText).click(function() {
+	  $('#textColor').css("background-color",colorText);
 	});
+
+});
+
 
 if ($('#twideoIsFirstOpen').val()=="1"){
 	$('#twideoIsFirstOpen').val("0");
