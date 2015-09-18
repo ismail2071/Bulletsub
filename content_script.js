@@ -392,7 +392,7 @@ $(function () {
 					return;
 				} else {
 					$("#danMuDisplay").prop("checked", true);
-
+					$('#twideoIsHideComment').val("0");
 					displayDanmu(true);
 				}
 

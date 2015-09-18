@@ -21,6 +21,7 @@
 	<text id="twideoUserTextSize" style="display:none"></text>
 	<text id="twideoUserPosition" style="display:none"></text>
 	<text id="twideoIsFirstOpen" style="display:none"></text>
+	<text id="twideoIsHideComment" style="display:none"></text>
 </body>
 
 
@@ -58,12 +59,22 @@
 
 	$('#showCommentId').click(function(){
 
-		$("#danmu").toggle(
+		if($('#twideoIsHideComment').val()=="0"){
+			$("#showCommentId").attr("src",hideCommentsImg);
+			$('#twideoIsHideComment').val("1");
+			displayDanmu(false);
+		}else{
+			$("#showCommentId").attr("src",showCommentsImg);
+			$('#twideoIsHideComment').val("0");
+			displayDanmu(true);
+		}
+		/*$("#danmu").toggle(
 			function(){
 				$("#showCommentId").attr("src",hideCommentsImg);
+				alert("test");
 			},function(){
 				$("#showCommentId").attr("src",showCommentsImg);
-			});
+			});*/
 	});
 	
 	$( "#headerLogoId" ).click(function() {
@@ -102,6 +113,7 @@
 	$('#twideoUserTextSize').val("1");
 	$('#twideoUserPosition').val("0");
 	$('#twideoIsFirstOpen').val("1");
+	$('#twideoIsHideComment').val("0");
 	
 	
 </script>
