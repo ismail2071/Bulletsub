@@ -58,7 +58,7 @@ var histogramDrew = false;
 var histogramPastColor = "#FF9900"; // orange
 var histogramNotPastColor = "#17BDB8"; // light blue
 var histogramMouseColor = "#FF0000" // red
-
+	var commentOverFlowNum = 999;
 
 function toHHMMSS(input) {
 	var sec_num = parseInt(input, 10); // don't forget the second param
@@ -139,18 +139,29 @@ var allDanmu = {};
 var currentRightClickVideo;
 
 function sendDanmuFunc() {
-	
+
 	var text = document.getElementById('twideoUserCommand').value;
 	if (!text || text.length == 0) {
 		return;
 	}
-	
+
 	$('#twideoUserCommand').val("");
 	// title bar danmu add 1
 	// 1.0.34
-	var tmpTitle = $('#danmu_dialog').dialog('option', 'title');
-	var danmuCnt = parseInt(tmpTitle.split("-")[1].split(" ")[1], 10) + 1;
-	$('#danmu_dialog').dialog('option', 'title', 'Twidéo - ' + danmuCnt + " comments.");
+	//var tmpTitle = $('#danmu_dialog').dialog('option', 'title');
+	//danmuCnt = commentOverFlowNum;
+	tmpTitle = $('#headerNumId').text();
+	if (tmpTitle.indexOf("+") == -1) {
+		tmpTitle++;
+		
+		if (tmpTitle >= commentOverFlowNum) {
+			tmpTitle = commentOverFlowNum+"+";
+		}
+		$('#headerNumId').text(tmpTitle);
+	}
+
+	//tmpNumDanmu= isNaN(tmpCnt) ? commentOverFlowNum+"+": tmpCnt;
+
 
 	var color = document.getElementById('twideoUserColor').value;
 	var position = document.getElementById('twideoUserPosition').value;
@@ -159,7 +170,7 @@ function sendDanmuFunc() {
 	if (isNaN(time)) {
 		console.log("time is NaN, retry.");
 		time = Math.round(($('#danmu').data("nowtime")));
-		alert("Time is NaN! please resend a danmu. time: " + time + ", nowtime" + $('#danmu').data("nowtime"));
+		alert("Time is NaN! please resend a comment again. time: " + time + ", nowtime" + $('#danmu').data("nowtime"));
 	}
 
 	if (!isNaN(time)) {
@@ -182,7 +193,7 @@ function sendDanmuFunc() {
 		};
 		console.log("send danmu: " + text + ", at time: " + time);
 		$('#danmu').danmu("add_danmu", a_danmu);
-		
+
 		//1.0.24
 		//1.0.28
 		sendToMongo(a_danmu, videoUri);
@@ -457,7 +468,12 @@ $(function () {
 
 					});
 
-					$('#danmu_dialog').dialog('option', 'title', 'Twidéo - ' + tmpNumDanmu + " comments.");
+					if (tmpNumDanmu >= commentOverFlowNum) {
+						tmpNumDanmu = commentOverFlowNum + "+";
+					}
+					tmpNumDanmu = 998;
+					$('#headerNumId').text(tmpNumDanmu);
+					//$('#danmu_dialog').dialog('option', 'title', 'Twidéo - ' + tmpNumDanmu + " comments.");
 					$('#danmu_dialog').dialog('option', 'dialogClass', 'twideoDialogClass');
 
 					// 1.0.33
@@ -468,10 +484,10 @@ $(function () {
 					});
 					$('#danmu_dialog').dialog({
 						draggable : false,
-						closeOnEscape: true
+						closeOnEscape : true
 					}).parent().draggable();
 
-					$("#histogramImgId").click(function () {
+					/*$("#histogramImgId").click(function () {
 						$('#danmu_dialog').dialog({
 							height : histogramWindowHeight,
 							width : histogramWindowWidth
@@ -480,9 +496,7 @@ $(function () {
 						$('#danmuStatisticsDivId').show();
 						$('#mainDanMuDivId').hide();
 
-
-
-					});
+					});*/
 
 					//1.0.35
 					$("#twideo_Table").dialog({
@@ -498,7 +512,6 @@ $(function () {
 						}
 					});
 					$("#twideo_Table").dialog('close');
-
 
 				}
 
@@ -680,10 +693,8 @@ function renderInputBox() {
 			sendDanmuFunc(); // v1.0.2.1
 		});
 
-
 	});
 
 	$("#danmu_dialog").hide();
-
 
 }
