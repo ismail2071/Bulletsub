@@ -5,4 +5,5 @@
 .twideoDialogClass{
 	#opacity: 0.85;
 	#background-color: black;
+	overflow: hidden;
 }

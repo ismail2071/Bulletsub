@@ -7,7 +7,7 @@
 <div id="danmuStatisticsDivId">
 	
 	 <div> 
-		<div id="leftThing" style="margin-top: 0px; float: left; width:42%; margin-top: 12px;">Click to Jump: </div>
+		<div id="leftThing" style=" float: left; width:42%; margin-top: 8px;">Click to Jump: </div>
 		
 		<div style="margin-top: 10px; float: left; width:50%; ">
 			<div class="danmuOnoffswitch"> 
@@ -23,7 +23,7 @@
 	
 	<div id = "videoDurationTextId" style="float: right; margin-top: 25px; "  >  </div> 
 	<div>
-		<div id="twideoHistogram" style=" float: left;  margin-left:0px; width:270px; height:100px;"></div>
+		<div id="twideoHistogram" style=" float: left;  margin-left:5px; margin-top:20px; width:270px; height:100px;"></div>
 	</div> 
 	
 </div>
@@ -34,7 +34,7 @@
 <script type="text/javascript">
 
 
-if (!histogramDrew) {
+//if (!plot1) {
 	$.jqplot.config.enablePlugins = true;
 
 	s1 = [];
@@ -45,10 +45,14 @@ if (!histogramDrew) {
 		//alert(key + ": " + value);
 		var tmpSec = parseInt(Math.floor(key / 10));
 		sTmp[tmpSec] = value.length;
-		console.log("danmu_array: tmpSec: " + tmpSec );
+		//console.log("danmu_array: tmpSec: " + tmpSec );
 	});
 
 	var videoLen = currentRightClickVideo.duration;
+	var tmpDurationTxt = toHHMMSS(videoLen);
+	if(tmpDurationTxt.indexOf("NaN")){
+		tmpDurationTxt ="";
+	}
 	$('#videoDurationTextId').html(toHHMMSS(videoLen));
 	var histoInterval = 50;
 	for (i = 1; i <= videoLen; i++) {
@@ -152,7 +156,7 @@ if (!histogramDrew) {
 	$(".jqplot-xaxis-tick").hide();
 
 	histogramDrew = true;
-}
+//}
 </script>
 
 

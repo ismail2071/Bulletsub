@@ -24,6 +24,7 @@
 	<text id="twideoUserPosition" style="display:none"></text>
 	<text id="twideoIsFirstOpen" style="display:none"></text>
 	<text id="twideoIsHideComment" style="display:none"></text>
+	<text id="twideoIsHistogramLoaded" style="display:none"></text>
 </body>
 
 
@@ -83,17 +84,31 @@
 	
 	  $("#danmu_dialog").dialog({height: mainWindowHeight, width: mainWindowWidth});
 	  $("#twideoContentDivId").load(chrome.extension.getURL("TwideoMainContent.html"));
+	  console.log("twideoHistogram exist?" + $("#twideoHistogram").length);
 	});
 	
 	
 	$( "#languageId" ).click(function() {
 	  $("#danmu_dialog").dialog({height: languageWindowHeight, width: languageWindowWidth});
 	  $("#twideoContentDivId").load(chrome.extension.getURL("TwideoLanguage.html"));
+	  console.log("twideoHistogram exist?" + $("#twideoHistogram").length);
 	});
 	
 	$( "#statisticsId" ).click(function() {
-	  $("#danmu_dialog").dialog({height: histogramWindowHeight, width: histogramWindowWidth});
-	  $("#twideoContentDivId").load(chrome.extension.getURL("TwideoStatistics.html"));
+		
+		
+		
+		if ( $("#twideoHistogram").length==0){
+			//you can now reuse  $myDiv here, without having to select it again.
+			$("#danmu_dialog").dialog({height: histogramWindowHeight, width: histogramWindowWidth});
+		$("#twideoContentDivId").load(chrome.extension.getURL("TwideoStatistics.html"));
+		}
+	
+	   
+		
+		console.log("twideoHistogram exist?" + $("#twideoHistogram").length);
+	  
+	  //console.log($('#videoDurationTextId').html());
 	});
 	
 	$( "#closeDialogId" ).click(function() {
@@ -116,6 +131,7 @@
 	$('#twideoUserPosition').val("0");
 	$('#twideoIsFirstOpen').val("1");
 	$('#twideoIsHideComment').val("0");
+	//$('#twideoIsHistogramLoaded').val("0");
 	
 	
 </script>

@@ -464,14 +464,15 @@ $(function () {
 
 					$("#danmu_dialog").dialog({
 						height : mainWindowHeight,
-						width : mainWindowWidth
+						width : mainWindowWidth,
+						resizable: false
 
 					});
 
 					if (tmpNumDanmu >= commentOverFlowNum) {
 						tmpNumDanmu = commentOverFlowNum + "+";
 					}
-					tmpNumDanmu = 998;
+					//tmpNumDanmu = 998;
 					$('#headerNumId').text(tmpNumDanmu);
 					//$('#danmu_dialog').dialog('option', 'title', 'Twidéo - ' + tmpNumDanmu + " comments.");
 					$('#danmu_dialog').dialog('option', 'dialogClass', 'twideoDialogClass');
@@ -484,7 +485,8 @@ $(function () {
 					});
 					$('#danmu_dialog').dialog({
 						draggable : false,
-						closeOnEscape : true
+						closeOnEscape : true,
+						resizable: false
 					}).parent().draggable();
 
 					/*$("#histogramImgId").click(function () {
