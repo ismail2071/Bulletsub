@@ -61,6 +61,9 @@
 	// icon event 
 
 	$('#showCommentId').click(function(){
+	
+		
+		  //alert("Top: " + o.top + " Left : " + o.left);
 
 		if($('#twideoIsHideComment').val()=="0"){
 			$("#showCommentId").attr("src",hideCommentsImg);
@@ -82,6 +85,8 @@
 	
 	$( "#headerLogoId" ).click(function() {
 	
+		var o = $("#danmu_dialog").dialog("open").closest('.ui-dialog').offset();
+		$( "#danmu_dialog" ).dialog( "option", "position", [o.left,o.top] );
 	  $("#danmu_dialog").dialog({height: mainWindowHeight, width: mainWindowWidth});
 	  $("#twideoContentDivId").load(chrome.extension.getURL("TwideoMainContent.html"));
 	  console.log("twideoHistogram exist?" + $("#twideoHistogram").length);
@@ -89,6 +94,8 @@
 	
 	
 	$( "#languageId" ).click(function() {
+		var o = $("#danmu_dialog").dialog("open").closest('.ui-dialog').offset();
+		$( "#danmu_dialog" ).dialog( "option", "position", [o.left,o.top] );
 	  $("#danmu_dialog").dialog({height: languageWindowHeight, width: languageWindowWidth});
 	  $("#twideoContentDivId").load(chrome.extension.getURL("TwideoLanguage.html"));
 	  console.log("twideoHistogram exist?" + $("#twideoHistogram").length);
@@ -99,7 +106,9 @@
 		
 		
 		if ( $("#twideoHistogram").length==0){
-			//you can now reuse  $myDiv here, without having to select it again.
+		
+			var o = $("#danmu_dialog").dialog("open").closest('.ui-dialog').offset();
+		$( "#danmu_dialog" ).dialog( "option", "position", [o.left,o.top] );
 			$("#danmu_dialog").dialog({height: histogramWindowHeight, width: histogramWindowWidth});
 		$("#twideoContentDivId").load(chrome.extension.getURL("TwideoStatistics.html"));
 		}
