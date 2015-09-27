@@ -58,7 +58,7 @@ var histogramDrew = false;
 var histogramPastColor = "#FF9900"; // orange
 var histogramNotPastColor = "#17BDB8"; // light blue
 var histogramMouseColor = "#FF0000" // red
-	var commentOverFlowNum = 999;
+	var commentOverFlowNum = 9999999;
 
 function toHHMMSS(input) {
 	var sec_num = parseInt(input, 10); // don't forget the second param
@@ -251,7 +251,7 @@ $("body").mousedown(function (e) {
 		if ($(".ytp-menu") != undefined && ytVidId()) {
 			console.log("test youtube");
 
-			$("<div class='ytp-menuitem custom-twideo-menu' aria-haspopup='false' tabindex='38' role='menuitem'><div class='ytp-menuitem-label custom-twideo-menu'><span><img src=" + chrome.extension.getURL("icon.png") + " height='28' width='28'/></span>Open Twidéo Panel</div><div class='ytp-menuitem-content'></div></div>")
+			$("<div class='ytp-menuitem custom-twideo-menu' aria-haspopup='false' tabindex='38' role='menuitem'><div class='ytp-menuitem-label custom-twideo-menu'><span><img src=" + chrome.extension.getURL("icon.png") + " height='28' width='28'/></span>   Open Twidéo Panel</div><div class='ytp-menuitem-content'></div></div>")
 			.appendTo(".ytp-menu");
 
 		} else {

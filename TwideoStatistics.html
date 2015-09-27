@@ -50,10 +50,11 @@
 
 	var videoLen = currentRightClickVideo.duration;
 	var tmpDurationTxt = toHHMMSS(videoLen);
-	if(tmpDurationTxt.indexOf("NaN")){
+	if(tmpDurationTxt.indexOf("NaN") > -1){
 		tmpDurationTxt ="";
 	}
-	$('#videoDurationTextId').html(toHHMMSS(videoLen));
+
+	$('#videoDurationTextId').html(tmpDurationTxt);
 	var histoInterval = 50;
 	for (i = 1; i <= videoLen; i++) {
 		s2 = [];
