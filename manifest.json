@@ -1,9 +1,9 @@
  {
- "manifest_version": 3,
+ "manifest_version": 2,
 
   "name": "Twidéo",
   "description": "Live Comment on the Videos!!",
-  "version": "1.0",
+  "version": "0.9.1",
  "background":  {"page":"background.html"
   },
   "browser_action": {
@@ -15,12 +15,8 @@
   "content_scripts":[{
   "matches": [ "<all_urls>"],
   "css": ["css/jquery-ui.css","css/Twideo.css","js/sumoSelect/sumoselect.css","css/ProtoIoOnOff.css","js/jqplot/jquery.jqplot.min.css","css/tooltipster.css","css/jquery.dataTables.css"],
-  "js":["DanmuConstant.js","lib/jquery-2.1.3.min.js","lib/bootstrap.min.js","js/jquery-ui.js", "js/jquery.danmu.js","content_script.js","js/sumoSelect/jquery.sumoselect.min.js","js/jqplot/jquery.jqplot.min.js","js/jqplot/plugins/jqplot.barRenderer.min.js","js/jqplot/plugins/jqplot.categoryAxisRenderer.min.js","js/jquery.tooltipster.min.js","js/jquery.dataTables.min.js"]//,
-  //"all_frames": true
+  "js":["DanmuConstant.js","lib/jquery-2.1.3.min.js","lib/bootstrap.min.js","js/jquery-ui.js", "js/jquery.danmu.js","content_script.js","js/sumoSelect/jquery.sumoselect.min.js","js/jqplot/jquery.jqplot.min.js","js/jqplot/plugins/jqplot.barRenderer.min.js","js/jqplot/plugins/jqplot.categoryAxisRenderer.min.js","js/jquery.tooltipster.min.js","js/jquery.dataTables.min.js"]
   }],
-  
-
-  //using chrome API chrome.extension.getURL to separate dialog html view
    "web_accessible_resources": ["danMu.html","TwideoMainWindow.html",
    "TwideoHeader.html","TwideoMainContent.html","twideoTable.html",
    "lib/jquery-2.1.3.min.js","home.png","setting.png","bar-chart-hi.png",
@@ -30,14 +26,6 @@
    "image/icons/statistics.png","image/icons/textSetting.png","image/icons/send.png","image/icons/blank.png",
    "image/icons/logoText.png","image/icons/header.png","image/icons/table.png","TwideoTextSet.html",
    "TwideoStatistics.html","image/icons/hideComments.png"],
-
-   "icons": {  "16":"icon.png", 
-                "48":"icon.png", 
-                "128":"icon.png"  },
-
-  //in manifest version 3 must add this to access facebook external script
-  "content_security_policy": "script-src 'self' https://graph.facebook.com; object-src 'self'"
-
-
-  
+   "icons": {  "16":"icon.png","48":"icon.png","128":"icon.png"  },
+   "content_security_policy": "script-src 'self' https://graph.facebook.com; object-src 'self'"
 }
