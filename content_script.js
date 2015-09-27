@@ -251,7 +251,7 @@ $("body").mousedown(function (e) {
 		if ($(".ytp-menu") != undefined && ytVidId()) {
 			console.log("test youtube");
 
-			$("<div class='ytp-menuitem custom-twideo-menu' aria-haspopup='false' tabindex='38' role='menuitem'><div class='ytp-menuitem-label custom-twideo-menu'><span><img src=" + chrome.extension.getURL("icon.png") + " height='28' width='28'/></span>Open Twidéo Window !!!!</div><div class='ytp-menuitem-content'></div></div>")
+			$("<div class='ytp-menuitem custom-twideo-menu' aria-haspopup='false' tabindex='38' role='menuitem'><div class='ytp-menuitem-label custom-twideo-menu'><span><img src=" + chrome.extension.getURL("icon.png") + " height='28' width='28'/></span>Open Twidéo Panel</div><div class='ytp-menuitem-content'></div></div>")
 			.appendTo(".ytp-menu");
 
 		} else {

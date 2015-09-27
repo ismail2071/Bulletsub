@@ -127,6 +127,24 @@
 
 			}
 		});
+		
+		var tmpDurationTxt = toHHMMSS(videoLen);
+	tmpInterval = 1000;
+	
+	if(tmpDurationTxt!=""){
+		//console.log("tmpDurationTxt: " + tmpDurationTxt);
+		var tmpS = tmpDurationTxt.split(":");
+		tmpHr = parseInt(tmpS[0],10);
+		tmpMin = parseInt(tmpS[1],10);
+		tmpTotalMin = tmpHr * 60 + tmpMin;
+		tmpPlusInterval = parseInt( (tmpTotalMin / 30) , 10)* 2000;
+		tmpInterval = tmpInterval + tmpPlusInterval;
+		
+		console.log("tmpInterval:" + tmpInterval);
+		
+		
+	
+	}
 
 	$('#twideoHistogram').bind('jqplotDataClick',
 		function (ev, seriesIndex, pointIndex, data) {
@@ -139,19 +157,23 @@
 		//plot1.redraw();
 	});
 
+	/**/
+	
+	
 	setInterval(function () {
 		var tmpCurrentTime = Math.round(currentRightClickVideo.currentTime);
 		var tmpColor = histogramPastColor;
 		for (i = 0; i < videoLen; i++) {
 
-			if (i > tmpCurrentTime) {
-				tmpColor = histogramNotPastColor;
+				if (i > tmpCurrentTime) {
+					tmpColor = histogramNotPastColor;
+				}
+				plot1.series[0].seriesColors[i] = tmpColor;
 			}
-			plot1.series[0].seriesColors[i] = tmpColor;
-		}
-		plot1.redraw();
+			plot1.redraw();
 
-	}, 1000);
+		}, parseInt(tmpInterval,10));
+	
 
 	$(".jqplot-xaxis-tick").hide();
 
