@@ -13,12 +13,12 @@ TO-LIST
 (2) Nice to have functions
 ------------------------------------------------
 
-- [ ] not to load danmu to cuurent video twice
-- [ ] load danmu array, not single one
-- [ ] consider using iframe to implement and optimize danmu windows (more fashion danmu window)
-- [ ] survey context menu
-- [ ] special case (instagram) 
-- [ ] donation survey (popup.html)
+- [ø] not to load danmu to cuurent video twice
+- [O] load danmu array, not single one
+- [O] consider using iframe to implement and optimize danmu windows (more fashion danmu window)
+- [O] survey context menu
+- [O] special case (instagram) 
+- [O] donation survey (popup.html)
 
 
 
