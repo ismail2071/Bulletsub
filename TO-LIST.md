@@ -16,10 +16,10 @@ TO-LIST
 - [X] not to load danmu to cuurent video twice
 - [X] load danmu array, not single one
 - [X] consider using iframe to implement and optimize danmu windows (more fashion danmu window)
-- [ ] survey context menu
-- [ ] special case (instagram) 
-- [ ] donation survey (popup.html)
-- [ ] f__k lin_a l__o
+- [ˆ] survey context menu
+- [X] special case (instagram) 
+- [ø] donation survey (popup.html)
+- [ø] f__k lin_a l__o
 
 
 ------------------------------------------------
