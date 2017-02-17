@@ -20,6 +20,10 @@ TO-LIST
 - [O] survey context menu
 - [O] special case (instagram) 
 - [O] donation survey (popup.html)
+- [O] donation survey (popup.html)
+- [O] donation survey (popup.html)
+- [O] donation survey (popup.html)
+- [O] donation survey (popup.html)
 
 
 
